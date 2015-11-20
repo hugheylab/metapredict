@@ -1,0 +1,108 @@
+---
+title: "Guidelines for preparing data for a gene expression meta-analysis"
+author: "Jake Hughey"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Guidelines for preparing data for a gene expression meta-analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+This vignette describes the guidelines for preparing data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full).
+
+## Find relevant datasets
+
+The first step is to find microarray datasets relevant to what you're interested in. Most datasets will be on NCBI GEO or ArrayExpress, but not all, so it's a good idea to also search the published literature.
+
+## Create the table of study metadata
+
+The study metadata should be a comma-delimited text file, with one row for each study and at least the following columns:
+
+| Name            | Description                                                                    |
+|:----------------|:-------------------------------------------------------------------------------|
+| `study`         | Name of the study, which must be unique.                                       |
+| `studyDataType` | Indicates how the expression data is stored (see below for details).           |
+| `platformInfo`  | Microarray platform, used for mapping probes to genes (see below for details). |
+
+There are currently five options for `studyDataType`:
+
+| `studyDataType`      | Description                                                                         |
+|:---------------------|:------------------------------------------------------------------------------------|
+| `affy_geo`           | Raw Affymetrix data from a GEO study.                                               |
+| `affy_custom`        | Raw Affymetrix data from a non-GEO study (e.g., ArrayExpress).                      |
+| `affy_series_matrix` | Normalized, untransformed, probe-level Affymetrix data in a GEO series matrix file. |
+| `series_matrix`      | Normalized, log-transformed (or equivalent) data in a GEO series matrix file.       |
+| `eset_rds`           | Normalized, log-transformed (or equivalent) data, already mapped to Entrez Gene IDs, saved as an `ExpressionSet` in an RDS file. |
+
+The options for `platformInfo` depend on the `studyDataType`:
+
+| `studyDataType`                                    | `platformInfo`                              |
+|:---------------------------------------------------|:--------------------------------------------|
+| `affy_geo`, `affy_custom`, or `affy_series_matrix` | Name of corresponding BrainArray custom cdf |
+| `series_matrix`                                    | Corresponding GPL identifier                |
+| `eset_rds`                                         | `ready`                                     |
+
+## Download the gene expression data
+
+The format of the gene expression data for each study should correspond to its `studyDataType`. All the folders and/or files with expression data should be in one parent folder.
+
+| `studyDataType`                         | Format of expression data if name of study is `GSE98765`   |
+|:----------------------------------------|:-----------------------------------------------------------|
+| `affy_geo` or `affy_custom`             | Folder named `GSE98765` containing cel or cel.gz files.    |
+| `affy_series_matrix` or `series_matrix` | File from GEO named `GSE98765_series_matrix.txt`.          |
+| `eset_rds`                              | RDS file named `GSE98765.rds` containing a Bioconductor `ExpressionSet`. |
+
+## If necessary, download packages and files for mapping Affy probe sets to Entrez Gene IDs
+
+For each study with `studyDataType` of `affy_geo` or `affy_custom`:
+
+1. Go the the [download page](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp) for BrainArray custom CDFs.
+1. Click on the link for the latest version (as of Nov. 2015, [Version 19](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
+1. Click on the link for "*ENTREZG*" that says "*Click Me*" (as of Nov. 2015, [here](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
+1. Download the R source package that corresponds to the study's `platformInfo`. The link should say "*C*" and the file should end in "*entrezgcdf_nn.0.0.tar.gz*", where `nn` refers to the version number. The part of the file name prior to "*_nn.0.0.tar.gz*" should match the study's `platformInfo`. 
+1. Open R and execute the following command, after replacing "*<path to custom CDF file>*" as appropriate.
+    ```{r, eval = FALSE}
+    install.packages('<path to custom CDF file>', repos=NULL, type='source')
+    ```
+
+For each study wth `studyDataType` of `affy_series_matrix`:
+
+1. Click on the link for the latest version (as of Nov. 2015, [Version 19](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
+1. Click on the link for "*ENTREZG*" that says "*Click Me*" (as of Nov. 2015, [here](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
+1. Download the zip file that corresponds to the study's `platformInfo` and whose link says "*Z*", which should be under the column "*Zip of CDF, Seq, Map, Desc*".
+1. Unzip the file and move the file that ends in "*_mapping.txt*" to the folder than contains the gene expression data. The part of the file name prior to "*_mapping.txt*" should match the study's `platformInfo`.
+
+## Check that all studies whose `studyDataType=='series_matrix'` are supported
+
+1. Open R and execute the following commands.
+    ```{r, eval=FALSE}
+    studyMetadata = read.csv('<path to study metadata file>', stringsAsFactors=FALSE)
+    metapredict::getUnsupportedPlatforms(studyMetadata)
+    ```
+1. If any platforms are not supported but you still want to include those studies in the meta-analysis, you will need to edit the source of the metapredict package.
+	1. In the `getStudyData` function, add another `else if` statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.
+	1. Add the GPL for the microarray platform to the character vector of supported platforms in the `getSupportedPlatforms` function.
+	1. Submit a pull request to <https://github.com/jakejh/metapredict>, so other people can analyze data from that platform without going through the same hassle!
+
+## Create the table of sample metadata
+
+The sample metadata should be a comma-delimited text file, with one row for each sample and at least the following columns:
+
+| Name                                     | Description                                                  |
+|:-----------------------------------------|:-------------------------------------------------------------|
+| `study`                                  | Name of the corresponding study.                             |
+| `sample`                                 | Name of the sample, which must be unique across all studies. |
+| `outcome`, `class`, or something similar | Variable that the meta-analysis will be trying to predict.   |
+
+The format of the sample names depends on the `studyDataType`:
+
+| `studyDataType`                         | Format of sample names                                             |
+|:----------------------------------------|:-------------------------------------------------------------------|
+| `affy_geo` or `affy_custom`             | Names of the .cel or .cel.gz files (excluding the file extension). |
+| `affy_series_matrix` or `series_matrix` | Names of the GSM identifiers from the series matrix file.          |
+| `eset_rds`                              | colnames of the expression matrix in the `ExpressionSet`.          |

@@ -1,0 +1,8 @@
+*.DS_Store
+*.Rproj.user
+*.Rproj
+*.Rbuildignore
+*.Rhistory
+*.RData
+inst/doc
+*expression_data*
