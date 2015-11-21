@@ -9,7 +9,7 @@ metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha,
   className = "class", type = "response", ...)
 }
 \arguments{
-\item{ematList}{.}
+\item{ematList}{Named list of expression matrices.}
 
 \item{studyMetadata}{data.frame of study metadata.}
 
