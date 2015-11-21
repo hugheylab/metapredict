@@ -1,10 +1,10 @@
 ---
-title: "Guidelines for preparing data for a gene expression meta-analysis"
+title: "Guide to preparing data for a gene expression meta-analysis"
 author: "Jake Hughey"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Guidelines for preparing data for a gene expression meta-analysis}
+  %\VignetteIndexEntry{Guide to preparing data for a gene expression meta-analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-This vignette describes the guidelines for preparing data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full).
+This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full).
 
 ## Find relevant datasets
 

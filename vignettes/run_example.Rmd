@@ -13,7 +13,9 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full). Before running this meta-analysis, you'll need to download the data and install the custom cdf packages as described [here](prepare_example.html). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
+This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
+
+Before running the meta-analysis, you'll need to download the data and install the custom cdf packages as described at `file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))`.
 
 ## Introduction
 The meta-analysis will use data from the following four studies:

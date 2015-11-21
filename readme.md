@@ -5,16 +5,29 @@
 ## Installation
 
 ```R
-source('http://bioconductor.org/biocLite.R')
-biocLite(c('affy', 'annotate', 'GEOquery', 'org.Hs.eg.db', 'org.Mm.eg.db', 'impute', 'sva'))
+source('https://bioconductor.org/biocLite.R')
+biocLite('BiocInstaller')
 
-install.packages(c('cba', 'devtools', 'dplyr', 'foreach', 'glmnet', 'gridExtra', 'pheatmap', 'RColorBrewer', 'reshape2', 'matrixStats'))
+install.packages('devtools')
 
 devtools::install_github('hadley/ggplot2')
 
-devtools::install_github('jakejh/metapredict')
+devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos())
 ```
 
 ## Getting started
 
-First download and prepare the data for the example meta-analysis: `vignette('prepare_example', package='metapredict')`. Then run the example meta-analysis: `vignette('run_example', package='metapredict')`. For detailed instructions about running your own meta-analysis, please read `vignette('guidelines', package='metapredict')`.
+First follow the instructions to download and prepare the data for the example meta-analysis.
+```R
+file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))`
+```
+
+Then work through the example meta-analysis.
+```R
+file.show(system.file('extdata', 'run_example.html', package='metapredict'))`
+```
+
+Finally, consult the detailed guide to running your own meta-analysis.
+```R
+file.show(system.file('extdata', 'guide.html', package='metapredict'))
+```

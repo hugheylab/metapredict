@@ -7,11 +7,10 @@ Authors@R: person('Jake', 'Hughey', email='jakejhughey@gmail.com', role=c('aut',
 License: GPL-2
 URL: https://github.com/jakejh/metapredict
 LazyData: TRUE
-Depends: R (>= 3.2.2)
+Depends: R (>= 3.2.1)
 Imports:
     affy (>= 1.48.0),
     annotate (>= 1.48.0),
-    AnnotationDbi (>= 1.32.0),
     cba (>= 0.2-15),
     dplyr (>= 0.4.3),
     foreach (>= 1.4.3),
@@ -22,7 +21,7 @@ Imports:
     impute (>= 1.44.0),
     magrittr (>= 1.5),
     matrixStats (>= 0.15.0),
-    methods (>= 3.2.2),
+    methods (>= 3.2.1),
     org.Hs.eg.db (>= 3.2.3),
     org.Mm.eg.db (>= 3.2.3),
     pheatmap (>= 1.0.7),
