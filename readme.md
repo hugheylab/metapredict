@@ -6,12 +6,8 @@
 
 ```R
 source('https://bioconductor.org/biocLite.R')
-biocLite('BiocInstaller')
-
 install.packages('devtools')
-
 devtools::install_github('hadley/ggplot2')
-
 devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos())
 ```
 
@@ -19,12 +15,12 @@ devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallR
 
 First follow the instructions to download and prepare the data for the example meta-analysis.
 ```R
-file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))`
+file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))
 ```
 
 Then work through the example meta-analysis.
 ```R
-file.show(system.file('extdata', 'run_example.html', package='metapredict'))`
+file.show(system.file('extdata', 'run_example.html', package='metapredict'))
 ```
 
 Finally, consult the detailed guide to running your own meta-analysis.
