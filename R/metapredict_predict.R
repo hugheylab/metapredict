@@ -78,7 +78,7 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 #' 	for the samples in the respective validation dataset. This function
 #' 	is a wrapper around glmnet.
 #'
-#' @param ematList .
+#' @param ematList Named list of expression matrices.
 #' @param studyMetadata data.frame of study metadata.
 #' @param sampleMetadata data.frame of sample metadata.
 #' @param discoveryStudyNames vector of study names for training.
