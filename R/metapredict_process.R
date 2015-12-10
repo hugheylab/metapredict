@@ -85,9 +85,9 @@ calcExprsByGene = function(eset, mapping) {
 #'
 #' @export
 getSupportedPlatforms = function() {
-	return(c('GPL180', 'GPL885', 'GPL887', 'GPL962', 'GPL1053', 'GPL1073', 'GPL1291', 'GPL1293', 'GPL1390', 'GPL1708', 'GPL5645',
-				'GPL6254', 'GPL6333', 'GPL6480', 'GPL6880', 'GPL6884', 'GPL6885', 'GPL6887', 'GPL6947', 'GPL7015', 'GPL7202',
-				'GPL10379', 'GPL15331'))}
+	return(c('GPL180', 'GPL885', 'GPL887', 'GPL962', 'GPL1053', 'GPL1073', 'GPL1291', 'GPL1293', 'GPL1390', 'GPL1708',
+				'GPL5645', 'GPL6254', 'GPL6333', 'GPL6480', 'GPL6865', 'GPL6880', 'GPL6884', 'GPL6885', 'GPL6887', 'GPL6947',
+				'GPL7015', 'GPL7202', 'GPL10332', 'GPL10379', 'GPL13607', 'GPL15331', 'GPL18721'))}
 
 
 #' Get the GPLs for unsupported microarray platforms.
@@ -200,6 +200,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6480') {
 			mapping = getGeneProbeMappingDirect(featureDf, geneColname='GENE')
+		} else if (platformInfo=='GPL6865') {
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='rep_name')
 		} else if (platformInfo=='GPL6880') {
 			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
@@ -219,10 +221,17 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_LIST')
 		} else if (platformInfo=='GPL7202') {
 			mapping = getGeneProbeMappingDirect(featureDf, geneColname='GENE')
+		} else if (platformInfo=='GPL10332') {
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_ACC')
 		} else if (platformInfo=='GPL10379') {
 			mapping = getGeneProbeMappingDirect(featureDf, geneColname='EntrezGeneID')
+		} else if (platformInfo=='GPL13607') {
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_ACC')
 		} else if (platformInfo=='GPL15331') {
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_ACC')
+		} else if (platformInfo=='GPL18721') {
+			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
 		} else {
 			warning(sprintf('Study %s not loaded, because platform %s is not currently supported.', studyName, platformInfo))
 			return(NA)}
