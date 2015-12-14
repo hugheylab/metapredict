@@ -13,7 +13,8 @@ mergeMatchStudyData(ematAtomicList, studyMetadataAtomic, sampleMetadataAtomic,
 \item{studyMetadataAtomic}{data.frame for study metadata,
 with columns for study and sample names.}
 
-\item{sampleMetadataAtomic}{data.frame for sample metadata.}
+\item{sampleMetadataAtomic}{data.frame for sample metadata,
+with rownames corresponding to sample names.}
 
 \item{matchColname}{column in sampleMetadata used to match samples.}
 

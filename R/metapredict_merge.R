@@ -16,7 +16,8 @@ makeMatchSampleMapping = function(metadata, subStudyNames, matchColname) {
 #' @param ematAtomicList list of expression matrices.
 #' @param studyMetadataAtomic data.frame for study metadata,
 #' 	with columns for study and sample names.
-#' @param sampleMetadataAtomic data.frame for sample metadata.
+#' @param sampleMetadataAtomic data.frame for sample metadata,
+#' 	with rownames corresponding to sample names.
 #' @param matchColname column in sampleMetadata used to match samples.
 #' @param mergeFunc function to summarize multiple gene expression values.
 #'
@@ -87,7 +88,8 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 #' 	using ComBat.
 #'
 #' @param ematList list of expression matrices.
-#' @param sampleMetadata data.frame for sample metadata.
+#' @param sampleMetadata data.frame for sample metadata, with rownames
+#' 	corresponding to sample names.
 #' @param batchColname column in sampleMetadata containing
 #' 	batch information for ComBat.
 #' @param covariateName column in sampleMetadata containing
@@ -102,6 +104,10 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 #' @export
 mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covariateName=NA, batchCorrection=TRUE,
 								  parPrior=TRUE) {
+	sampleNames = do.call(c, lapply(ematList, colnames))
+	if (!all(sampleNames %in% rownames(sampleMetadata))) {
+		stop('sampleMetadata must have rownames corresponding to the colnames of each matrix in ematList.', call.=FALSE)}
+
 	geneIds = Reduce(intersect, lapply(ematList, function(x) rownames(x)))
 	ematList2 = foreach(studyName=names(ematList)) %do% {ematNow = ematList[[studyName]][geneIds,]}
 	if (batchCorrection) {

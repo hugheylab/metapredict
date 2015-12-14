@@ -27,7 +27,8 @@ makeGlmnetArgs = function(metadata, foldidColname='study') {
 #' 	studies. This function is a wrapper around cv.glmnet.
 #'
 #' @param ematMerged matrix of gene expression for genes by samples.
-#' @param sampleMetadata data.frame of sample metadata.
+#' @param sampleMetadata data.frame of sample metadata,
+#' 	with rownames corresponding to sample names.
 #' @param weights vector of weights.
 #' @param alpha vector of values for alpha, the elastic net mixing parameter.
 #' @param nFolds number of folds. Ignored, if foldid is not NA.
@@ -80,7 +81,8 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 #'
 #' @param ematList Named list of expression matrices.
 #' @param studyMetadata data.frame of study metadata.
-#' @param sampleMetadata data.frame of sample metadata.
+#' @param sampleMetadata data.frame of sample metadata,
+#' 	with rownames corresponding to sample names.
 #' @param discoveryStudyNames vector of study names for training.
 #' @param alpha value of alpha for the elastic net mixing parameter.
 #' @param lambda value of regularization parameter.

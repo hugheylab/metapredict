@@ -13,7 +13,8 @@ metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha,
 
 \item{studyMetadata}{data.frame of study metadata.}
 
-\item{sampleMetadata}{data.frame of sample metadata.}
+\item{sampleMetadata}{data.frame of sample metadata,
+with rownames corresponding to sample names.}
 
 \item{discoveryStudyNames}{vector of study names for training.}
 

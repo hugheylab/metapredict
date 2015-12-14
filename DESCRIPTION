@@ -2,12 +2,14 @@ Package: metapredict
 Version: 0.0.0.9000
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
-Description: Predictive modeling based on merging multiple datasets of genome-wide gene expression.
+Description: Predictive modeling based on merging multiple datasets of genome-
+    wide gene expression.
 Authors@R: person('Jake', 'Hughey', email='jakejhughey@gmail.com', role=c('aut', 'cre'))
 License: GPL-2
 URL: https://github.com/jakejh/metapredict
 LazyData: TRUE
-Depends: R (>= 3.2.1)
+Depends:
+    R (>= 3.2.1)
 Imports:
     affy (>= 1.48.0),
     annotate (>= 1.48.0),
@@ -27,7 +29,8 @@ Imports:
     pheatmap (>= 1.0.7),
     reshape2 (>= 1.4.1),
     sva (>= 3.18.0)
-RoxygenNote: 5.0.0
-Suggests: knitr,
+RoxygenNote: 5.0.1
+Suggests:
+    knitr,
     rmarkdown
 VignetteBuilder: knitr

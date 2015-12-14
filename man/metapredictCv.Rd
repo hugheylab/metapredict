@@ -11,7 +11,8 @@ metapredictCv(ematMerged, sampleMetadata, weights, alpha, nFolds = 10,
 \arguments{
 \item{ematMerged}{matrix of gene expression for genes by samples.}
 
-\item{sampleMetadata}{data.frame of sample metadata.}
+\item{sampleMetadata}{data.frame of sample metadata,
+with rownames corresponding to sample names.}
 
 \item{weights}{vector of weights.}
 
