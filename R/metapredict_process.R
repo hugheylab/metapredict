@@ -24,7 +24,7 @@ fixGeoSampleNames = function(sampleNames) {
 	regexResult = regexpr('^GSM[0-9]+[^0-9]', sampleNames)
 	sampleNamesNew = mapply(function(sampleName, matchLength) substr(sampleName, 1, matchLength-1), sampleNames,
 									attr(regexResult, 'match.length'))
-	return(sampleNamesNew)}
+	return(unname(sampleNamesNew))}
 
 
 fixCelSampleNames = function(sampleNames) {
