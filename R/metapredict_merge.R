@@ -120,7 +120,7 @@ mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covari
 			covariateInfo = model.matrix(~sampleMetadata[colnames(ematMerged), covariateName])}
 
 		if (length(unique(sampleMetadata[colnames(ematMerged), batchColname]))>1) {
-			ematMergedNorm = sva::ComBat(ematMerged, batch=sampleMetadata[colnames(ematMerged), batchColname],
+			ematMergedNorm = sva::ComBat(ematMerged, batch=as.character(sampleMetadata[colnames(ematMerged), batchColname]),
 												  mod=covariateInfo, par.prior=parPrior)
 		} else {
 			ematMergedNorm = ematMerged}
