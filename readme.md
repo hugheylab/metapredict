@@ -8,7 +8,7 @@
 source('https://bioconductor.org/biocLite.R')
 install.packages('devtools')
 devtools::install_github('hadley/ggplot2')
-devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos())
+devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos(), type='source')
 ```
 
 ## Getting started
