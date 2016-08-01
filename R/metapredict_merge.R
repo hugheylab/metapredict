@@ -112,12 +112,12 @@ mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covari
 	ematList2 = foreach(studyName=names(ematList)) %do% {ematNow = ematList[[studyName]][geneIds,]}
 	if (batchCorrection) {
 		# if both one-color and two-color data is present, ComBat can fail catastrophically, if data is not scaled beforehand
-		ematListScaled = lapply(ematList2, function(emat) (emat - mean(emat)) / sd(emat))
+		ematListScaled = lapply(ematList2, function(emat) (emat - mean(emat)) / stats::sd(emat))
 		ematMerged = do.call(cbind, ematListScaled)
 		if (is.na(covariateName) || length(unique(sampleMetadata[colnames(ematMerged), covariateName]))<2) {
-			covariateInfo = model.matrix(~rep_len(1, ncol(ematMerged)))
+			covariateInfo = stats::model.matrix(~rep_len(1, ncol(ematMerged)))
 		} else {
-			covariateInfo = model.matrix(~sampleMetadata[colnames(ematMerged), covariateName])}
+			covariateInfo = stats::model.matrix(~sampleMetadata[colnames(ematMerged), covariateName])}
 
 		if (length(unique(sampleMetadata[colnames(ematMerged), batchColname]))>1) {
 			ematMergedNorm = sva::ComBat(ematMerged, batch=as.character(sampleMetadata[colnames(ematMerged), batchColname]),

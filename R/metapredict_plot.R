@@ -67,12 +67,10 @@ plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
 #' \code{pheatmap::pheatmap}.
 #' @param clusterTogether logical indicating whether to cluster the samples
 #' from each dataset together or separately.
-#' @param geneIdOrder Order of genes in the heatmap. If \code{NA} (default), order
-#' of genes is determined by \code{cba::order.optimal}.
-#' @param className column in sampleMetadata containing values of the response variable.
-#' @param classLevels Order of classes for the column annotations.
 #' @param geneIdOrder Optional character array of Entrez Gene IDs specifying the order
 #' of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.
+#' @param className column in sampleMetadata containing values of the response variable.
+#' @param classLevels Order of classes for the column annotations.
 #' @param org Name of package for mapping Entrez Gene IDs to gene symbols,
 #' passed to \code{data} argument of \code{annotate::lookUp}.
 #' @param maxVal Maximum absolute value of scaled and centered gene expression, used
@@ -93,23 +91,23 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 
 	# order the samples
 	if (clusterTogether) {
-		d = dist(t(emat))
-		co = cba::order.optimal(d, hclust(d)$merge)
+		d = stats::dist(t(emat))
+		co = cba::order.optimal(d, stats::hclust(d)$merge)
 		emat = emat[,co$order]
 	} else {
 		if (is.na(classLevels[1])) {
 			classLevels = unique(sampleMetadata[colnames(ematMerged), className])}
 		ematSmallList = foreach(classLevel=classLevels) %do% {
 			x = emat[,colnames(emat) %in% sampleMetadata[sampleMetadata[,className]==classLevel, 'sample']]
-			d = dist(t(x))
-			co = cba::order.optimal(d, hclust(d)$merge)
+			d = stats::dist(t(x))
+			co = cba::order.optimal(d, stats::hclust(d)$merge)
 			x = x[,co$order]}
 		emat = do.call(cbind, ematSmallList)}
 
 	# order the genes
 	if (is.na(geneIdOrder[1])) {
-		d = dist(emat)
-		co = cba::order.optimal(d, hclust(d)$merge)
+		d = stats::dist(emat)
+		co = cba::order.optimal(d, stats::hclust(d)$merge)
 		emat = emat[co$order,]
 		rownames(emat) = geneTexts[co$order]
 	} else {
@@ -126,7 +124,7 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 		if (!is.na(annoLevels[[annoName]][1])) {
 			annotation[,annoName] = factor(annotation[,annoName], levels=annoLevels[[annoName]])}}
 
-	p = pheatmap::pheatmap(emat, color=colorRampPalette(rev(RColorBrewer::brewer.pal(n=7, name='RdBu')))(100),
+	p = pheatmap::pheatmap(emat, color=grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n=7, name='RdBu')))(100),
 								  breaks=seq(-maxVal, maxVal, length.out=101), cluster_rows=FALSE, cluster_cols=FALSE,
 								  treeheight_row=0, treeheight_col=0, show_colnames=FALSE, border_color=NA, annotation=annotation,
 								  annotation_colors=annoColors, ...)

@@ -55,7 +55,7 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 		x = scale(t(ematMerged), center=TRUE, scale=FALSE)
 	} else {
 		addlFeatureTmp = data.frame(lapply(sampleMetadata[colnames(ematMerged), addlFeatureColnames], factor))
-		addlFeatureDummy = model.matrix(~ 0 + ., data=addlFeatureTmp)
+		addlFeatureDummy = stats::model.matrix(~ 0 + ., data=addlFeatureTmp)
 		x = cbind(scale(t(ematMerged), center=TRUE, scale=FALSE), addlFeatureDummy)}
 
 	if (is.na(foldid[1])) {
@@ -113,7 +113,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
 
 		fitResult = glmnet::glmnet(t(ematMergedDisc), sampleMetadata[discoverySampleNames, className], alpha=alpha,
 											lambda=lambda, weights=weights[discoverySampleNames], standardize=FALSE, ...)
-		preds = predict(fitResult, newx=t(ematMergedDiscVal[,validationSampleNames]), s=lambda, type=type)}
+		preds = glmnet::predict.glmnet(fitResult, newx=t(ematMergedDiscVal[,validationSampleNames]), s=lambda, type=type)}
 
 	names(predsList) = validationStudyNames
 	return(predsList)}
@@ -133,7 +133,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
 #'
 #' @export
 makeCoefDf = function(fitResult, lambda, decreasing=TRUE, classLevels=NA) {
-	coefResult = coef(fitResult, s=lambda)
+	coefResult = glmnet::coef.glmnet(fitResult, s=lambda)
 
 	if (is.list(coefResult)) {
 		coefResultNonzero = foreach(coefSparse=coefResult) %do% {

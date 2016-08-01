@@ -29,8 +29,8 @@ list must be a vector of values found in that particular column.}
 \item{clusterTogether}{logical indicating whether to cluster the samples
 from each dataset together or separately.}
 
-\item{geneIdOrder}{Order of genes in the heatmap. If \code{NA} (default), order
-of genes is determined by \code{cba::order.optimal}.}
+\item{geneIdOrder}{Optional character array of Entrez Gene IDs specifying the order
+of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.}
 
 \item{className}{column in sampleMetadata containing values of the response variable.}
 
@@ -43,9 +43,6 @@ passed to \code{data} argument of \code{annotate::lookUp}.}
 to control dynamic range of color in the heatmap.}
 
 \item{...}{Additional arguments passed to \code{pheatmap::pheatmap}.}
-
-\item{geneIdOrder}{Optional character array of Entrez Gene IDs specifying the order
-of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.}
 }
 \value{
 A pheatmap object.

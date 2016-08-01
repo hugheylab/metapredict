@@ -8,6 +8,8 @@ calcConfusionValidation(predsList, lambda, sampleMetadata,
   className = "class", classLevels = NA, each = TRUE)
 }
 \arguments{
+\item{predsList}{list of predictions from \code{metapredict}.}
+
 \item{lambda}{value of lambda at which to use predictions.}
 
 \item{sampleMetadata}{data.frame of sample metadata.}
@@ -19,8 +21,6 @@ then the function uses the order in \code{cvFit}.}
 
 \item{each}{logical indicating whether to calculate a confusion matrix for each validation
 dataset (default) or one confusion matrix including all datasets.}
-
-\item{cvFit}{cv.glmnet object from \code{metapredictCv}.}
 }
 \value{
 If \code{each==TRUE}, a list of objects of class \code{table}. Otherwise,

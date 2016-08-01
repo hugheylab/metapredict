@@ -7,12 +7,14 @@
 #' @importMethodsFrom AnnotationDbi mappedkeys
 #' @importMethodsFrom Biobase experimentData
 #' @importMethodsFrom Biobase exprs
+#' @importMethodsFrom Biobase exprs<-
 #' @importMethodsFrom Biobase featureData
 #' @importMethodsFrom Biobase pData
 #' @importMethodsFrom Biobase phenoData
-#' @importMethodsFrom Biobase sampleNames
 #' @importMethodsFrom BiocGenerics as.list
 NULL
+
+globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'))
 
 
 fixCustomCdfGeneIds = function(geneIds) {
@@ -33,7 +35,7 @@ fixCelSampleNames = function(sampleNames) {
 
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
-	mapping = read.table(mappingFilePath, sep='\t', header=TRUE, stringsAsFactors=FALSE)
+	mapping = utils::read.table(mappingFilePath, sep='\t', header=TRUE, stringsAsFactors=FALSE)
 	mappingUnique = unique(mapping[,c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
 	mappingUnique = mappingUnique[apply(mappingUnique, MARGIN=1, function(r) !any(is.na(r))),]
 	rownames(mappingUnique) = NULL
@@ -69,7 +71,7 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
 
 calcExprsByGene = function(eset, mapping) {
 	geneIds = unique(mapping[,'geneId'])
-	exprsByGene = matrix(nrow=length(geneIds), ncol=ncol(eset), dimnames=list(geneIds, sampleNames(eset)))
+	exprsByGene = matrix(nrow=length(geneIds), ncol=ncol(eset), dimnames=list(geneIds, Biobase::sampleNames(eset)))
 	for (geneId in geneIds) {
 		exprsTmp = exprs(eset)[mapping[mapping[,'geneId']==geneId, 'probeSet'],, drop=FALSE]
 		if (nrow(exprsTmp)==1) {
@@ -139,11 +141,11 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 		} else {
 			stop(sprintf('Folder %s does not exist.', folderPath))}
 
-		featureNames(eset) = fixCustomCdfGeneIds(featureNames(eset))
+		Biobase::featureNames(eset) = fixCustomCdfGeneIds(Biobase::featureNames(eset))
 		if (studyDataType=='affy_geo') {
-			sampleNames(eset) = fixGeoSampleNames(sampleNames(eset))
+			Biobase::sampleNames(eset) = fixGeoSampleNames(Biobase::sampleNames(eset))
 		} else {
-			sampleNames(eset) = fixCelSampleNames(sampleNames(eset))}
+			Biobase::sampleNames(eset) = fixCelSampleNames(Biobase::sampleNames(eset))}
 
 	} else if (studyDataType=='affy_series_matrix') {
 		mapping = getGeneProbeMappingAffy(file.path(parentFolderPath, paste0(platformInfo, '_mapping.txt')))

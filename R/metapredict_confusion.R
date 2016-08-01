@@ -32,7 +32,7 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata, className=
 #' \code{calcConfusionCv} calculates confusion matrices based on predictions
 #' for validation datasets from \code{metapredict}.
 #'
-#' @param cvFit cv.glmnet object from \code{metapredictCv}.
+#' @param predsList list of predictions from \code{metapredict}.
 #' @param lambda value of lambda at which to use predictions.
 #' @param sampleMetadata data.frame of sample metadata.
 #' @param className name of column in \code{sampleMetadata} containing the true labels.

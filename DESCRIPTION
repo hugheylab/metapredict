@@ -1,5 +1,5 @@
 Package: metapredict
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
 Description: Predictive modeling based on merging multiple datasets of genome-
@@ -13,6 +13,9 @@ Depends:
 Imports:
     affy (>= 1.48.0),
     annotate (>= 1.48.0),
+    AnnotationDbi (>= 1.34.4),
+    Biobase (>= 2.32.0),
+    BiocGenerics (>= 0.18.0),
     cba (>= 0.2-15),
     dplyr (>= 0.4.3),
     foreach (>= 1.4.3),
@@ -28,6 +31,7 @@ Imports:
     org.Hs.eg.db (>= 3.2.3),
     org.Mm.eg.db (>= 3.2.3),
     pheatmap (>= 1.0.7),
+    RColorBrewer (>= 1.1-2),
     reshape2 (>= 1.4.1),
     sva (>= 3.18.0)
 RoxygenNote: 5.0.1
