@@ -8,7 +8,6 @@
 source('https://bioconductor.org/biocLite.R')
 biocLite(c('org.Hs.eg.db', 'org.Mm.eg.db', 'org.Dr.eg.db'))
 install.packages('devtools')
-devtools::install_github('hadley/ggplot2')
 devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos())
 ```
 
