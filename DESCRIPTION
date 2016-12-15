@@ -13,9 +13,9 @@ Depends:
 Imports:
     affy (>= 1.48.0),
     annotate (>= 1.48.0),
-    AnnotationDbi (>= 1.34.4),
-    Biobase (>= 2.32.0),
-    BiocGenerics (>= 0.18.0),
+    AnnotationDbi (>= 1.32.3),
+    Biobase (>= 2.30.0),
+    BiocGenerics (>= 0.16.1),
     cba (>= 0.2-15),
     dplyr (>= 0.4.3),
     foreach (>= 1.4.3),
