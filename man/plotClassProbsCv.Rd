@@ -32,4 +32,3 @@ A gtable from \code{gridExtra::arrangeGrob}.
 ggplots, one for each dataset used in cross-validation. Within each
 class, samples are sorted by the probability of the true class.
 }
-

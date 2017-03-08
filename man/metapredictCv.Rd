@@ -39,4 +39,3 @@ A list of cv.glmnet objects.
 	response variable from gene expression data across multiple
 	studies. This function is a wrapper around cv.glmnet.
 }
-

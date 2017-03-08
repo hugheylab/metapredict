@@ -1,5 +1,5 @@
 Package: metapredict
-Version: 0.0.0.9005
+Version: 0.0.0.9006
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
 Description: Predictive modeling based on merging multiple datasets of genome-
@@ -34,7 +34,7 @@ Imports:
     RColorBrewer (>= 1.1-2),
     reshape2 (>= 1.4.1),
     sva (>= 3.18.0)
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests:
     knitr,
     rmarkdown

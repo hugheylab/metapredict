@@ -28,4 +28,3 @@ A gtable from \code{gridExtra::arrangeGrob}.
 ggplots, one for each validation dataset. Within each class, samples are
 sorted by the probability of the true class.
 }
-

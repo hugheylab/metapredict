@@ -20,4 +20,3 @@ A named list.
 \code{makeGlmnetArgs} makes vectors for foldid and weights to be
 	used for leave-one-study-out cross-validation with glmnet.
 }
-

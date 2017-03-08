@@ -34,4 +34,3 @@ A matrix of expression for genes by samples.
 	dataset, then optionally performs cross-study normalization
 	using ComBat.
 }
-

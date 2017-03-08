@@ -17,4 +17,3 @@ A named list of matrices.
 \description{
 Extract the expression matrices containing the desired samples.
 }
-

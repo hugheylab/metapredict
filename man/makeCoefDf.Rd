@@ -22,4 +22,3 @@ A data.frame.
 \code{makeCoefDf} makes a sorted data.frame of the non-zero
 	coefficients of a logistic or multinomial glmnet model.
 }
-

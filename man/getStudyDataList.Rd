@@ -19,4 +19,3 @@ A named list of ExpressionSets.
 \description{
 \code{getStudyDataList} runs \code{getStudyData} for multiple studies.
 }
-

@@ -23,4 +23,3 @@ An ExpressionSet, unless the platform or data type is not supported, then NA.
 	maps probes to Entrez Gene IDs, and normalizes and transforms
 	the expression values.
 }
-

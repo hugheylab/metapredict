@@ -32,4 +32,3 @@ A ggplot object.
 from a glmnet object trained on a gene expression meta-analysis
 (either logistic or multinomial classification).
 }
-

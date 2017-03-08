@@ -14,4 +14,3 @@ getUnsupportedPlatforms(studyMetadata)
 whose \code{studyDataType=='series_matrix'} have \code{platformInfo}
 that is not supported.
 }
-

@@ -28,4 +28,3 @@ An object of class \code{table}.
 \code{calcConfusionCv} calculates a confusion matrix of cross-validation
 results from \code{metapredictCv}.
 }
-

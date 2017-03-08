@@ -51,4 +51,3 @@ A pheatmap object.
 \code{plotExpressionHeatmap} generates a heatmap of gene expression
 from multiple datasets. This function calls \code{pheatmap::pheatmap}.
 }
-

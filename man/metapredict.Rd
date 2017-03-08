@@ -46,4 +46,3 @@ A named list of objects from \code{predict.glmnet}.
 	for the samples in the respective validation dataset. This function
 	is a wrapper around glmnet.
 }
-

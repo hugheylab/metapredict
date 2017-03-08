@@ -30,4 +30,3 @@ an object of class \code{table}.
 \code{calcConfusionCv} calculates confusion matrices based on predictions
 for validation datasets from \code{metapredict}.
 }
-

@@ -29,4 +29,3 @@ A named list.
 \description{
 Merge gene expression from different platforms that was measured on the same biological samples.
 }
-

@@ -12,4 +12,3 @@ A character array of currently supported GPLs.
 \description{
 Get the GPLs for microarray platforms that are currently supported.
 }
-
