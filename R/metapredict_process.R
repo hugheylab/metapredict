@@ -91,7 +91,7 @@ getSupportedPlatforms = function() {
 				'GPL1291', 'GPL1293', 'GPL1390', 'GPL1708', 'GPL3921', 'GPL5645', 'GPL6254', 'GPL6333',
 				'GPL6480', 'GPL6865', 'GPL6880', 'GPL6884', 'GPL6885', 'GPL6887', 'GPL6947', 'GPL7015',
 				'GPL7202', 'GPL8177', 'GPL10332', 'GPL10379', 'GPL10687', 'GPL13607', 'GPL15331', 'GPL15450',
-				'GPL18721'))}
+				'GPL18721', 'GPL20769'))}
 
 
 #' Get the GPLs for unsupported microarray platforms.
@@ -250,6 +250,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 		} else if (platformInfo=='GPL18721') {
 			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
+		} else if (platformInfo=='GPL20769') {
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egSYMBOL2EG', interName='ORF')
 		} else {
 			warning(sprintf('Study %s not loaded, because platform %s is not currently supported.', studyName, platformInfo))
 			return(NA)}
