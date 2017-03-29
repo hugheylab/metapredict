@@ -218,17 +218,17 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6884') {
-			mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez_Gene_ID')
+			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6885') {
-			#mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez_Gene_ID')
-			featureDf[,'RefSeq'] = sapply(featureDf[,'RefSeq_ID'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6887') {
-			#mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez_Gene_ID')
-			featureDf[,'RefSeq'] = sapply(featureDf[,'RefSeq_ID'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6947') {
-			mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez_Gene_ID')
+			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL7015') {
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_LIST')
 		} else if (platformInfo=='GPL7202') {
