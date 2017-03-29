@@ -218,16 +218,15 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6884') {
-			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
-			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
+			mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez_Gene_ID')
 		} else if (platformInfo=='GPL6885') {
-			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6887') {
-			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL6947') {
-			featureDf[,'RefSeq'] = sapply(featureDf[,'Accession'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
+			featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='RefSeq')
 		} else if (platformInfo=='GPL7015') {
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_LIST')
