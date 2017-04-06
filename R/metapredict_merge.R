@@ -1,13 +1,18 @@
 makeMatchSampleMapping = function(metadata, subStudyNames, matchColname) {
-	metadataNow = metadata[metadata[,'study'] %in% subStudyNames, c('study', 'sample', matchColname)]
-	metadataNow = metadataNow[order(metadataNow[,'study'], decreasing=is.unsorted(subStudyNames)), c('sample', matchColname)]
-	headFunc = function(x) x[1]
+	if (is.unsorted(subStudyNames)) {
+		arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
+	} else {
+		arrangeFunc = dplyr::arrange}
+	metadataNow = metadata %>%
+		dplyr::filter(study %in% subStudyNames) %>%
+		dplyr::select_(study, sample, .dots=matchColname) %>%
+		arrangeFunc(study)
 	mappingDf = metadataNow %>%
-		dplyr::group_by_(.dots=list(matchColname)) %>%
-		dplyr::summarise_each(dplyr::funs(headFunc)) %>%
-		data.frame(check.names=FALSE)
-	mapping = mappingDf[,'sample']
-	names(mapping) = mappingDf[,matchColname]
+		dplyr::group_by_(.dots=matchColname) %>%
+		dplyr::slice(1) %>%
+		dplyr::ungroup()
+	mapping = mappingDf$sample
+	names(mapping) = mappingDf[[matchColname]]
 	return(mapping)}
 
 
@@ -32,48 +37,48 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 	ematList = list()
 	sampleMetadataList = list()
 
-	for (matchStudyName in unique(studyMetadataAtomic[,'matchStudy'])) {
-		if (sum(studyMetadataAtomic[,'matchStudy']==matchStudyName)==1) {
+	for (matchStudyName in unique(studyMetadataAtomic$matchStudy)) {
+		if (sum(studyMetadataAtomic$matchStudy==matchStudyName)==1) {
 			ematList[[matchStudyName]] = ematAtomicList[[matchStudyName]]
-			sampleMetadataList[[matchStudyName]] = sampleMetadataAtomic[sampleMetadataAtomic[,'study']==matchStudyName,]
+			sampleMetadataList[[matchStudyName]] = dplyr::filter(sampleMetadataAtomic, study==matchStudyName)
 
-		} else if (sum(studyMetadataAtomic[,'matchStudy']==matchStudyName)>1) {
+		} else if (sum(studyMetadataAtomic$matchStudy==matchStudyName)>1) {
 			atomicStudyNames = studyMetadataAtomic[studyMetadataAtomic[,'matchStudy']==matchStudyName, 'study']
+			atomicStudyNames = dplyr::filter(studyMetadataAtomic, matchStudy==matchStudyName)$study
 			edfListNow = list()
 			for (atomicStudyName in atomicStudyNames) {
 				edf = data.frame(rownames(ematAtomicList[[atomicStudyName]]), ematAtomicList[[atomicStudyName]])
 				rownames(edf) = NULL
-				colnames(edf) = c('geneId', sampleMetadataAtomic[colnames(edf)[2:ncol(edf)], matchColname])
+				matchNames = tibble::tibble(sample = colnames(edf)[2:ncol(edf)]) %>%
+					dplyr::inner_join(sampleMetadataAtomic, by='sample') %>%
+					.[[matchColname]]
+				colnames(edf) = c('geneId', matchNames)
 				edfListNow[[atomicStudyName]] = edf}
 
 			edfMerged = suppressWarnings(dplyr::bind_rows(edfListNow)) %>%
-				dplyr::group_by_(.dots=list('geneId')) %>%
+				dplyr::group_by(geneId) %>%
 				dplyr::summarise_each(dplyr::funs(mergeFunc)) %>%
 				data.frame(check.names=FALSE)
-			rownames(edfMerged) = edfMerged[,'geneId']
+			rownames(edfMerged) = edfMerged$geneId
 			edfMerged = edfMerged[,-1]
 
 			mapping = makeMatchSampleMapping(sampleMetadataAtomic, atomicStudyNames, matchColname)
 			colnames(edfMerged) = mapping[colnames(edfMerged)]
 			ematList[[matchStudyName]] = as.matrix(edfMerged)
 
-			idx = (sampleMetadataAtomic[,'study'] %in% atomicStudyNames) &
-				(sampleMetadataAtomic[,'sample'] %in% colnames(edfMerged))
+			idx = (sampleMetadataAtomic$study %in% atomicStudyNames) &
+				(sampleMetadataAtomic$sample %in% colnames(edfMerged))
 			sampleMetadataList[[matchStudyName]] = sampleMetadataAtomic[idx,]
-			sampleMetadataList[[matchStudyName]][,'study'] = matchStudyName}}
+			sampleMetadataList[[matchStudyName]]$study = matchStudyName}}
 
-	headFunc = function(x) x[1]
 	studyMetadata = studyMetadataAtomic %>%
-		dplyr::group_by_(.dots=list('matchStudy')) %>%
-		dplyr::summarise_each(dplyr::funs(headFunc)) %>%
-		data.frame(check.names=FALSE)
-	studyMetadata = studyMetadata[,colnames(studyMetadata)!='study']
-	colnames(studyMetadata)[colnames(studyMetadata)=='matchStudy'] = 'study'
-	rownames(studyMetadata) = studyMetadata[,'study']
-	studyMetadata[,'matchStudy'] = studyMetadata[,'study']
+		dplyr::group_by(matchStudy) %>%
+		dplyr::slice(1) %>%
+		dplyr::ungroup() %>%
+		dplyr::mutate(study = matchStudy) %>%
+		dplyr::select(-matchStudy)
 
-	sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList)) %>% data.frame(check.names=FALSE)
-	rownames(sampleMetadata) = sampleMetadata[,'sample']
+	sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
 
 	result = list(ematList, studyMetadata, sampleMetadata)
 	names(result) = c('ematList', 'studyMetadata', 'sampleMetadata')
@@ -88,8 +93,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 #' 	using ComBat.
 #'
 #' @param ematList list of expression matrices.
-#' @param sampleMetadata data.frame for sample metadata, with rownames
-#' 	corresponding to sample names.
+#' @param sampleMetadata data.frame for sample metadata.
 #' @param batchColname column in sampleMetadata containing
 #' 	batch information for ComBat.
 #' @param covariateName column in sampleMetadata containing
@@ -102,25 +106,31 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 #' @return A matrix of expression for genes by samples.
 #'
 #' @export
-mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covariateName=NA, batchCorrection=TRUE,
-								  parPrior=TRUE) {
+mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covariateName=NA,
+								  batchCorrection=TRUE, parPrior=TRUE) {
 	sampleNames = do.call(c, lapply(ematList, colnames))
-	if (!all(sampleNames %in% rownames(sampleMetadata))) {
-		stop('sampleMetadata must have rownames corresponding to the colnames of each matrix in ematList.', call.=FALSE)}
+	if (!all(sampleNames %in% sampleMetadata$sample)) {
+		stop('sampleMetadata must have samples corresponding to the colnames of each matrix in ematList.',
+			  call.=FALSE)}
 
 	geneIds = Reduce(intersect, lapply(ematList, function(x) rownames(x)))
 	ematList2 = foreach(studyName=names(ematList)) %do% {ematNow = ematList[[studyName]][geneIds,]}
+
 	if (batchCorrection) {
-		# if both one-color and two-color data is present, ComBat can fail catastrophically, if data is not scaled beforehand
+		# if both one-color and two-color data is present and data is not scaled beforehand,
+		# ComBat can fail catastrophically
 		ematListScaled = lapply(ematList2, function(emat) (emat - mean(emat)) / stats::sd(emat))
 		ematMerged = do.call(cbind, ematListScaled)
-		if (is.na(covariateName) || length(unique(sampleMetadata[colnames(ematMerged), covariateName]))<2) {
+		sm = tibble::tibble(sample = colnames(ematMerged)) %>%
+			dplyr::inner_join(sampleMetadata, by='sample')
+
+		if (is.na(covariateName) || length(unique(sm[[covariateName]])) < 2) {
 			covariateInfo = stats::model.matrix(~rep_len(1, ncol(ematMerged)))
 		} else {
-			covariateInfo = stats::model.matrix(~sampleMetadata[colnames(ematMerged), covariateName])}
+			covariateInfo = stats::model.matrix(~sm[[covariateName]])}
 
-		if (length(unique(sampleMetadata[colnames(ematMerged), batchColname]))>1) {
-			ematMergedNorm = sva::ComBat(ematMerged, batch=as.character(sampleMetadata[colnames(ematMerged), batchColname]),
+		if (length(unique(sm[[batchColname]]))>1) {
+			ematMergedNorm = sva::ComBat(ematMerged, batch=as.character(sm[[batchColname]]),
 												  mod=covariateInfo, par.prior=parPrior)
 		} else {
 			ematMergedNorm = ematMerged}

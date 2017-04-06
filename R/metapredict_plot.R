@@ -96,9 +96,14 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 		emat = emat[,co$order]
 	} else {
 		if (is.na(classLevels[1])) {
-			classLevels = unique(sampleMetadata[colnames(ematMerged), className])}
+			sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
+			classLevels = unique(sm[[className]])}
+
 		ematSmallList = foreach(classLevel=classLevels) %do% {
-			x = emat[,colnames(emat) %in% sampleMetadata[sampleMetadata[,className]==classLevel, 'sample']]
+			sampleNames1 = sampleMetadata %>%
+				dplyr::filter_(lazyeval::interp(~ a==classLevel, a=as.name(className))) %>%
+				.$sample
+			x = emat[,colnames(emat) %in% sampleNames1]
 			d = stats::dist(t(x))
 			co = cba::order.optimal(d, stats::hclust(d)$merge)
 			x = x[,co$order]}
@@ -119,7 +124,10 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 	emat[emat>maxVal] = maxVal
 	emat[emat<(-maxVal)] = -maxVal
 
-	annotation = sampleMetadata[colnames(ematMerged), names(annoLevels), drop=FALSE]
+	annotation = tibble(sample = colnames(ematMerged)) %>%
+		dplyr::inner_join(sampleMetadata, by='sample') %>%
+		dplyr::select_(.dots=names(annoLevels))
+
 	for (annoName in names(annoLevels)) {
 		if (!is.na(annoLevels[[annoName]][1])) {
 			annotation[,annoName] = factor(annotation[,annoName], levels=annoLevels[[annoName]])}}
@@ -149,32 +157,35 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 #' @return A gtable from \code{gridExtra::arrangeGrob}.
 #'
 #' @export
-plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className='class', classLevels=NA, size=1.5,
-									 ggplotArgs=NA) {
+plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className='class', classLevels=NA,
+									 size=1.5, ggplotArgs=NA) {
 
 	sampleNames = colnames(ematMerged)
-	studyNames = sort(unique(sampleMetadata[sampleNames, 'study']))
+	sm = tibble::tibble(sample = sampleNames) %>%
+		dplyr::inner_join(sampleMetadata, by='sample')
+	studyNames = sort(unique(sm$study))
+
 	if (is.na(classLevels[1])) {
-		classLevels = sort(unique(sampleMetadata[sampleNames, className]))}
+		classLevels = sort(unique(sm[[className]]))}
 
 	cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
 	pList = list()
 	for (studyName in studyNames) {
-		sampleNamesNow = sampleNames[sampleMetadata[sampleNames, 'study']==studyName]
-		df = data.frame(cvProbs[sampleMetadata[sampleNames, 'study']==studyName,])
+		sampleNamesNow = filter(sm, study==studyName)$sample
+		df = tibble::as_tibble(cvProbs[sm$study==studyName,])
 		colnames(df) = names(cvFit$glmnet.fit$beta)
-		df[,'study'] = studyName
-		df[,'sample'] = sampleNamesNow
-		df[,'trueClass'] = factor(sampleMetadata[sampleNamesNow, className], levels=classLevels)
-		df[,'trueClassProb'] = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
+		df$study = studyName
+		df$sample = sampleNamesNow
+		df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
+		df$trueClassProb = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
 
-		df = df[order(df[,'trueClass'], -df[,'trueClassProb']),]
-		df = do.call(rbind, lapply(classLevels, function(x) df[df[,'trueClass']==x,]))
+		df = df[order(df$trueClass, -df$trueClassProb),]
+		df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass==x,]))
 
 		idxTmp = c()
 		for (classLevel in classLevels) {
 			if (any(df[,'trueClass']==classLevel)) {
-				idxTmp = c(idxTmp, 1:(sum(df[,'trueClass']==classLevel)))}}
+				idxTmp = c(idxTmp, 1:(sum(df$trueClass==classLevel)))}}
 		df[,'idx'] = idxTmp
 		dfMolten = reshape2::melt(df, measure.vars=classLevels, variable.name='probClass', value.name='prob')
 
@@ -212,19 +223,21 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className, classL
 	pList = list()
 	for (validationStudyName in names(predsList)) {
 		df = data.frame(predsList[[validationStudyName]][,,1])
-		df[,'study'] = sampleMetadata[rownames(df), 'study']
-		df[,'sample'] = rownames(df)
-		df[,'trueClass'] = factor(sampleMetadata[rownames(df), className], levels=classLevels)
-		df[,'trueClassProb'] = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
+		sm = tibble::tibble(sample = rownames(df)) %>%
+			dplyr::inner_join(sampleMetadata, by='sample')
+		df$study = sm$study
+		df$sample = rownames(df)
+		df$trueClass = factor(sm[[className]], levels=classLevels)
+		df$trueClassProb = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
 
-		df = df[order(df[,'trueClass'], -df[,'trueClassProb']),]
-		df = do.call(rbind, lapply(classLevels, function(x) df[df[,'trueClass']==x,]))
+		df = df[order(df$trueClass, -df$trueClassProb),]
+		df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass==x,]))
 
 		idxTmp = c()
 		for (classLevel in classLevels) {
-			if (any(df[,'trueClass']==classLevel)) {
-				idxTmp = c(idxTmp, 1:(sum(df[,'trueClass']==classLevel)))}}
-		df[,'idx'] = idxTmp
+			if (any(df$trueClass==classLevel)) {
+				idxTmp = c(idxTmp, 1:(sum(df$trueClass==classLevel)))}}
+		df$idx = idxTmp
 		rownames(df) = NULL
 
 		dfMolten = reshape2::melt(df, measure.vars=classLevels, variable.name='probClass', value.name='prob')

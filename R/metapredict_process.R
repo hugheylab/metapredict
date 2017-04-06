@@ -104,8 +104,10 @@ getSupportedPlatforms = function() {
 #'
 #' @export
 getUnsupportedPlatforms = function(studyMetadata) {
-	platformInfos = studyMetadata[studyMetadata[,'studyDataType']=='series_matrix', 'platformInfo']
-	unsupportedPlatforms = sort(unique(platformInfos[!(platformInfos %in% getSupportedPlatforms())]))
+	unsupportedPlatforms = studyMetadata %>%
+		dplyr::filter(studyDataType=='series_matrix',
+						  !(platformInfo %in% getSupportedPlatforms())) %>%
+		.$platformInfo
 	if (length(unsupportedPlatforms)==0) {
 		cat("Whew, all microarray platforms for studies whose studyDataType=='series_matrix' are supported.\n")
 	} else {
@@ -296,20 +298,19 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 #'
 #' @param parentFolderPath Path to the folder that contains the data.
 #' @param studyMetadata A data.frame where each row corresponds to one study.
-#' 	rownames should correspond to study names, with columns for
-#' 	studyDataType and platformInfo.
+#' 	Should have columns for study, studyDataType, and platformInfo.
 #'
 #' @return A named list of ExpressionSets.
 #'
 #' @export
 getStudyDataList = function(parentFolderPath, studyMetadata) {
-	esetList = foreach(studyName=rownames(studyMetadata)) %do% {
-		if (any(is.na(studyMetadata[studyName,]))) {
+	esetList = foreach(ii=1:nrow(studyMetadata)) %do% {
+		if (any(is.na(studyMetadata[ii,]))) {
 			NA
 		} else {
-			getStudyData(parentFolderPath, studyName, studyMetadata[studyName, 'studyDataType'],
-							 studyMetadata[studyName, 'platformInfo'])}}
-	names(esetList) = rownames(studyMetadata)
+			getStudyData(parentFolderPath, studyMetadata$study[ii], studyMetadata$studyDataType[ii],
+							 studyMetadata$platformInfo[ii])}}
+	names(esetList) = studyMetadata$study
 	return(esetList[!is.na(esetList)])}
 
 
@@ -323,7 +324,8 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 #' @export
 extractExpressionData = function(esetList, sampleMetadata) {
 	ematList = foreach(studyName=names(esetList)) %do% {
-		keepIdx = colnames(esetList[[studyName]]) %in% sampleMetadata[sampleMetadata[,'study']==studyName, 'sample']
+		sampleNamesNow = dplyr::filter(sampleMetadata, study==studyName)$sample
+		keepIdx = colnames(esetList[[studyName]]) %in% sampleNamesNow
 		exprs(esetList[[studyName]])[,keepIdx]}
 	names(ematList) = names(esetList)
 	return(ematList)}

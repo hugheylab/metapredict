@@ -10,8 +10,7 @@ getStudyDataList(parentFolderPath, studyMetadata)
 \item{parentFolderPath}{Path to the folder that contains the data.}
 
 \item{studyMetadata}{A data.frame where each row corresponds to one study.
-rownames should correspond to study names, with columns for
-studyDataType and platformInfo.}
+Should have columns for study, studyDataType, and platformInfo.}
 }
 \value{
 A named list of ExpressionSets.

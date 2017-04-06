@@ -5,15 +5,16 @@
 #'
 #' @param metadata data.frame containing a row for each observation.
 #' @param foldidColname column to use for grouping observations.
+#' @param sampleColname column that contains sample names.
 #'
 #' @return A named list.
 #' \item{foldid}{vector of integers}
 #' \item{weights}{vector of weights, such that each study is weighted equally.}
 #'
 #' @export
-makeGlmnetArgs = function(metadata, foldidColname='study') {
-	foldid = as.numeric(factor(metadata[,foldidColname], labels=1:length(unique(metadata[,foldidColname]))))
-	names(foldid) = rownames(metadata)
+makeGlmnetArgs = function(metadata, foldidColname='study', sampleColname='sample') {
+	foldid = as.numeric(factor(metadata[[foldidColname]], labels=1:length(unique(metadata[[foldidColname]]))))
+	names(foldid) = metadata[[sampleColname]]
 	weights = length(unique(foldid)) /
 		do.call(c, sapply(sapply(unique(foldid), function(x) sum(foldid==x)), function(n) rep_len(n, n), simplify=FALSE))
 	names(weights) = rownames(metadata)
@@ -42,19 +43,24 @@ makeGlmnetArgs = function(metadata, foldidColname='study') {
 #' @return A list of cv.glmnet objects.
 #'
 #' @export
-metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, foldid=NA, nRepeats=3, yName='class',
-								 addlFeatureColnames=NA, ...) {
+metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, foldid=NA, nRepeats=3,
+								 yName='class', addlFeatureColnames=NA, ...) {
 	args = list(...)
-	if (!is.null(args[['family']]) & args[['family']]=='cox') {
-		y = as.matrix(sampleMetadata[colnames(ematMerged), yName])
+	sm = tibble::tibble(sample = colnames(ematMerged)) %>%
+		dplyr::inner_join(sampleMetadata, by='sample')
+
+	if (!is.null(args$family) & args$family=='cox') {
+		y = sm %>%
+			dplyr::select_(.dots=yName) %>%
+			as.matrix()
 		colnames(y) = c('time', 'status')
 	} else {
-		y = sampleMetadata[colnames(ematMerged), yName]}
+		y = sm[[yName]]}
 
 	if (is.na(addlFeatureColnames[1])) {
 		x = scale(t(ematMerged), center=TRUE, scale=FALSE)
 	} else {
-		addlFeatureTmp = data.frame(lapply(sampleMetadata[colnames(ematMerged), addlFeatureColnames], factor))
+		addlFeatureTmp = data.frame(lapply(dplyr::select_(sm, .dots=addlFeatureColnames), factor))
 		addlFeatureDummy = stats::model.matrix(~ 0 + ., data=addlFeatureTmp)
 		x = cbind(scale(t(ematMerged), center=TRUE, scale=FALSE), addlFeatureDummy)}
 
@@ -63,11 +69,12 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 		for (ii in 1:nRepeats) {
 			foldid = sample(rep(seq(nFolds), length=ncol(ematMerged)))
 			cvFitList[[ii]] = foreach(alpha=alpha) %do% {
-				glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)], foldid=foldid, alpha=alpha, standardize=FALSE, ...)}}
+				glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)], foldid=foldid, alpha=alpha,
+										standardize=FALSE, ...)}}
 	} else {
 		cvFitList = foreach(alpha=alpha) %do% {
-			glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)], foldid=foldid[colnames(ematMerged)], alpha=alpha,
-									standardize=FALSE, ...)}}
+			glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)], foldid=foldid[colnames(ematMerged)],
+									alpha=alpha, standardize=FALSE, ...)}}
 	return(cvFitList)}
 
 
@@ -101,18 +108,22 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda, weights,
 							  batchColname='study', covariateName=NA, className='class', type='response', ...) {
 
-	discoverySampleNames = sampleMetadata[sampleMetadata[,'study'] %in% discoveryStudyNames, 'sample']
-	validationStudyNames = setdiff(sort(unique(sampleMetadata[,'study'])), discoveryStudyNames)
+	discoverySampleNames = dplyr::filter(sampleMetadata, study %in% discoveryStudyNames)$sample
+	validationStudyNames = setdiff(sort(unique(sampleMetadata$study)), discoveryStudyNames)
 
 	predsList = foreach(validationStudyName=validationStudyNames) %do% {
-		validationSampleNames = sampleMetadata[sampleMetadata[,'study']==validationStudyName, 'sample']
+		validationSamplenames = dplyr::filter(sampleMetadata, study==validationStudyName)$sample
 
 		ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
 		ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata, batchColname=batchColname, covariateName=covariateName)
 		ematMergedDisc = ematMergedDiscVal[,discoverySampleNames]
 
-		fitResult = glmnet::glmnet(t(ematMergedDisc), sampleMetadata[discoverySampleNames, className], alpha=alpha,
-											lambda=lambda, weights=weights[discoverySampleNames], standardize=FALSE, ...)
+		y = tibble::tibble(sample = discoverySampleNames) %>%
+			dplyr::inner_join(sampleMetadata, by='sample') %>%
+			select_(.dots=className) %>%
+			as.matrix()
+		fitResult = glmnet::glmnet(t(ematMergedDisc), y, alpha=alpha, lambda=lambda,
+											weights=weights[discoverySampleNames], standardize=FALSE, ...)
 		preds = glmnet::predict.glmnet(fitResult, newx=t(ematMergedDiscVal[,validationSampleNames]), s=lambda, type=type)}
 
 	names(predsList) = validationStudyNames

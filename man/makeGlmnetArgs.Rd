@@ -4,12 +4,14 @@
 \alias{makeGlmnetArgs}
 \title{Make arguments for glmnet.}
 \usage{
-makeGlmnetArgs(metadata, foldidColname = "study")
+makeGlmnetArgs(metadata, foldidColname = "study", sampleColname = "sample")
 }
 \arguments{
 \item{metadata}{data.frame containing a row for each observation.}
 
 \item{foldidColname}{column to use for grouping observations.}
+
+\item{sampleColname}{column that contains sample names.}
 }
 \value{
 A named list.

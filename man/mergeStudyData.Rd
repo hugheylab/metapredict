@@ -10,8 +10,7 @@ mergeStudyData(ematList, sampleMetadata, batchColname = "study",
 \arguments{
 \item{ematList}{list of expression matrices.}
 
-\item{sampleMetadata}{data.frame for sample metadata, with rownames
-corresponding to sample names.}
+\item{sampleMetadata}{data.frame for sample metadata.}
 
 \item{batchColname}{column in sampleMetadata containing
 batch information for ComBat.}
