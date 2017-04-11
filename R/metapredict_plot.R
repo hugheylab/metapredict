@@ -20,30 +20,31 @@
 #' @export
 plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE, geneIdOrder=NA, org='org.Hs.eg') {
 	coefDf = makeCoefDf(fitResult, lambda, decreasing=decreasing, classLevels=classLevels)
-	coefDf = coefDf[coefDf[,'geneId']!='(Intercept)',]
+	coefDf = coefDf[coefDf$geneId!='(Intercept)',]
 
 	if (!is.na(geneIdOrder[1])) {
-		rownames(coefDf) = coefDf[,'geneId']
+		rownames(coefDf) = coefDf$geneId
 		coefDf = coefDf[geneIdOrder,]
 		rownames(coefDf) = NULL}
 
 	if (ncol(coefDf)==2) {
-		geneSymbols = do.call(c, annotate::lookUp(coefDf[,'geneId'], org, 'SYMBOL', load=TRUE))
-		coefDf[,'geneId'] = factor(coefDf[,'geneId'], levels=rev(coefDf[,'geneId']),
-											labels=sprintf('%s (%s)', rev(geneSymbols), rev(coefDf[,'geneId'])))
-		p = ggplot(data=coefDf) + geom_bar(aes_string(x='geneId', y='coefficient'), stat='identity')
+		geneSymbols = do.call(c, annotate::lookUp(coefDf$geneId, org, 'SYMBOL', load=TRUE))
+		coefDf$geneId = factor(coefDf$geneId, levels=rev(coefDf$geneId),
+											labels=sprintf('%s (%s)', rev(geneSymbols), rev(coefDf$geneId)))
+		p = ggplot(coefDf) + geom_bar(aes_string(x='geneId', y='coefficient'), stat='identity')
 
 	} else {
 		if (is.na(classLevels[1])) {
 			classLevels = colnames(coefDf)[2:ncol(coefDf)]}
-		coefDfMolten = reshape2::melt(coefDf, id.vars='geneId', variable.name='class', value.name='coefficient')
-		coefDfMolten[,'class'] = factor(coefDfMolten[,'class'], levels=classLevels)
 
-		geneIds = coefDf[,'geneId']
-		geneSymbols = do.call(c, annotate::lookUp(coefDf[,'geneId'], org, 'SYMBOL', load=TRUE))
-		coefDfMolten[,'geneId'] = factor(coefDfMolten[,'geneId'], levels=rev(geneIds),
+		coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
+		coefDfMolten$class = factor(coefDfMolten$class, levels=classLevels)
+
+		geneIds = coefDf$geneId
+		geneSymbols = do.call(c, annotate::lookUp(coefDf$geneId, org, 'SYMBOL', load=TRUE))
+		coefDfMolten$geneId = factor(coefDfMolten$geneId, levels=rev(geneIds),
 													labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))
-		p = ggplot(data=coefDfMolten) + facet_wrap(~ class, ncol=ncol(coefDf)-1) +
+		p = ggplot(coefDfMolten) + facet_wrap(~ class, ncol=ncol(coefDf)-1) +
 			geom_bar(aes_string(x='geneId', y='coefficient', fill='class'), stat='identity') +
 			guides(fill=FALSE)}
 
@@ -83,7 +84,7 @@ plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
 plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, annoLevels, annoColors=NA, clusterTogether=FALSE,
 											geneIdOrder=NA, className='class', classLevels=NA, org='org.Hs.eg', maxVal=3, ...) {
 	coefDf = makeCoefDf(fitResult, lambda)
-	geneIds = coefDf[coefDf[,'geneId']!='(Intercept)', 'geneId']
+	geneIds = coefDf[coefDf$geneId!='(Intercept)', 'geneId']
 	geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load=TRUE))
 	geneTexts = sprintf('%s (%s)', geneSymbols, geneIds)
 	names(geneTexts) = geneIds
@@ -184,10 +185,10 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
 
 		idxTmp = c()
 		for (classLevel in classLevels) {
-			if (any(df[,'trueClass']==classLevel)) {
+			if (any(df$trueClass==classLevel)) {
 				idxTmp = c(idxTmp, 1:(sum(df$trueClass==classLevel)))}}
-		df[,'idx'] = idxTmp
-		dfMolten = reshape2::melt(df, measure.vars=classLevels, variable.name='probClass', value.name='prob')
+		df$idx = idxTmp
+		dfMolten = tidyr::gather_(df, key_col='probClass', value_col='prob', gather_cols=classLevels)
 
 		p = ggplot(dfMolten) +
 			facet_grid(study ~ trueClass, scales='free_x', space='free_x') +
@@ -240,7 +241,7 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className, classL
 		df$idx = idxTmp
 		rownames(df) = NULL
 
-		dfMolten = reshape2::melt(df, measure.vars=classLevels, variable.name='probClass', value.name='prob')
+		dfMolten = tidyr::gather_(df, key_col='probClass', value_col='prob', gather_cols=classLevels)
 		p = ggplot(dfMolten) +
 			facet_grid(study ~ trueClass, scales='free_x', space='free_x') +
 			geom_point(aes_string(x='idx', y='prob', color='probClass', shape='probClass'), size=size) +
