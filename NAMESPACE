@@ -2,11 +2,13 @@
 
 export(calcConfusionCv)
 export(calcConfusionValidation)
+export(downloadCustomCdfMappings)
 export(extractExpressionData)
 export(getStudyData)
 export(getStudyDataList)
 export(getSupportedPlatforms)
 export(getUnsupportedPlatforms)
+export(installCustomCdfPackages)
 export(makeCoefDf)
 export(makeGlmnetArgs)
 export(mergeMatchStudyData)

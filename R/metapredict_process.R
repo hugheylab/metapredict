@@ -17,6 +17,45 @@ NULL
 globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'))
 
 
+#' Install custom CDF packages from Brainarray.
+#'
+#' Install Brainarray custom CDFs for processing raw Affymetrix data. See
+#' \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
+#'
+#' @param pkgs character vector of package names, e.g., 'hgu133ahsentrezgcdf'
+#' @param ver integer version number (21 as of Nov. 28, 2016)
+#'
+#' @export
+installCustomCdfPackages = function(pkgs, ver=21) {
+	for (pkg in pkgs) {
+		pkgUrl = sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.tar.gz', ver, pkg, ver)
+		install.packages(pkgUrl, repos=NULL)}}
+
+
+#' Download custom CDF mapping files from Brainarray.
+#'
+#' Download Brainarray custom CDF mapping files, which are used for mapping probes to genes
+#' in datasets whose \code{studyDataType} is 'affy_series_matrix'. See
+#' \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
+#'
+#' @param cdf data frame with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ') and
+#' \code{rename} (e.g., 'mouse4302mmentrezgcdf')
+#' @param ver integer version number (21 as of Nov. 28, 2016)
+#'
+#' @export
+downloadCustomCdfMappings = function(cdf, path='.', ver=21) {
+	if (!dir.exists(path)) {
+		dir.create(path)}
+	for (ii in 1:nrow(cdf)) {
+		temp = tempfile()
+		download.file(sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.zip',
+									 ver, cdf$download[ii], ver), temp)
+		unzip(temp, files=paste0(cdf$download[ii], '_mapping.txt'), exdir=path)
+		file.rename(file.path(path, paste0(cdf$download[ii], '_mapping.txt')),
+						file.path(path, paste0(cdf$rename[ii], '_mapping.txt')))
+		unlink(temp)}}
+
+
 fixCustomCdfGeneIds = function(geneIds) {
 	return(sub('_at', '', geneIds))}
 
