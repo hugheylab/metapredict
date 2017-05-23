@@ -1,57 +1,55 @@
-makeMatchSampleMapping = function(metadata, subStudyNames, matchColname) {
+makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
 	if (is.unsorted(subStudyNames)) {
 		arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
 	} else {
 		arrangeFunc = dplyr::arrange}
 	metadataNow = metadata %>%
 		dplyr::filter(study %in% subStudyNames) %>%
-		dplyr::select_(study, sample, .dots=matchColname) %>%
+		dplyr::select_(.dots=c('study', 'sample', matchSampleColname)) %>%
 		arrangeFunc(study)
 	mappingDf = metadataNow %>%
-		dplyr::group_by_(.dots=matchColname) %>%
+		dplyr::group_by_(.dots=matchSampleColname) %>%
 		dplyr::slice(1) %>%
 		dplyr::ungroup()
 	mapping = mappingDf$sample
-	names(mapping) = mappingDf[[matchColname]]
+	names(mapping) = mappingDf[[matchSampleColname]]
 	return(mapping)}
 
 
 #' Merge gene expression from different platforms that was measured on the same biological samples.
 #'
 #' @param ematAtomicList list of expression matrices.
-#' @param studyMetadataAtomic data.frame for study metadata,
-#' 	with columns for study and sample names.
-#' @param sampleMetadataAtomic data.frame for sample metadata,
-#' 	with rownames corresponding to sample names.
-#' @param matchColname column in sampleMetadata used to match samples.
+#' @param studyMetadataAtomic data frame for study metadata.
+#' @param matchStudyColname column in studyMetadataAtomic used to match studies.
+#' @param sampleMetadataAtomic data frame for sample metadata.
+#' @param matchSampleColname column in sampleMetadataAtomic used to match samples.
 #' @param mergeFunc function to summarize multiple gene expression values.
 #'
 #' @return A named list.
 #' \item{ematList}{Named list of expression matrices.}
-#' \item{studyMetadata}{data.frame of study metadata.}
-#' \item{sampleMetadata}{data.frame of sample metadata.}
+#' \item{studyMetadata}{data frame of study metadata.}
+#' \item{sampleMetadata}{data frame of sample metadata.}
 #'
 #' @export
-mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetadataAtomic, matchColname,
-										 mergeFunc=function(x) mean(x, na.rm=TRUE)) {
+mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyColname, sampleMetadataAtomic,
+										 matchSampleColname, mergeFunc=function(x) mean(x, na.rm=TRUE)) {
 	ematList = list()
 	sampleMetadataList = list()
 
-	for (matchStudyName in unique(studyMetadataAtomic$matchStudy)) {
-		if (sum(studyMetadataAtomic$matchStudy==matchStudyName)==1) {
+	for (matchStudyName in unique(studyMetadataAtomic[[matchStudyColname]])) {
+		if (sum(studyMetadataAtomic[[matchStudyColname]]==matchStudyName)==1) {
 			ematList[[matchStudyName]] = ematAtomicList[[matchStudyName]]
 			sampleMetadataList[[matchStudyName]] = dplyr::filter(sampleMetadataAtomic, study==matchStudyName)
 
-		} else if (sum(studyMetadataAtomic$matchStudy==matchStudyName)>1) {
-			atomicStudyNames = studyMetadataAtomic[studyMetadataAtomic[,'matchStudy']==matchStudyName, 'study']
-			atomicStudyNames = dplyr::filter(studyMetadataAtomic, matchStudy==matchStudyName)$study
+		} else if (sum(studyMetadataAtomic[[matchStudyColname]]==matchStudyName)>1) {
+			atomicStudyNames = studyMetadataAtomic$study[studyMetadataAtomic[[matchStudyColname]]==matchStudyName]
 			edfListNow = list()
 			for (atomicStudyName in atomicStudyNames) {
 				edf = data.frame(rownames(ematAtomicList[[atomicStudyName]]), ematAtomicList[[atomicStudyName]])
 				rownames(edf) = NULL
 				matchNames = tibble::tibble(sample = colnames(edf)[2:ncol(edf)]) %>%
 					dplyr::inner_join(sampleMetadataAtomic, by='sample') %>%
-					.[[matchColname]]
+					.[[matchSampleColname]]
 				colnames(edf) = c('geneId', matchNames)
 				edfListNow[[atomicStudyName]] = edf}
 
@@ -62,7 +60,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 			rownames(edfMerged) = edfMerged$geneId
 			edfMerged = edfMerged[,-1]
 
-			mapping = makeMatchSampleMapping(sampleMetadataAtomic, atomicStudyNames, matchColname)
+			mapping = makeMatchSampleMapping(sampleMetadataAtomic, atomicStudyNames, matchSampleColname)
 			colnames(edfMerged) = mapping[colnames(edfMerged)]
 			ematList[[matchStudyName]] = as.matrix(edfMerged)
 
@@ -71,12 +69,13 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, sampleMetada
 			sampleMetadataList[[matchStudyName]] = sampleMetadataAtomic[idx,]
 			sampleMetadataList[[matchStudyName]]$study = matchStudyName}}
 
+	colnamesKeep = setdiff(colnames(studyMetadataAtomic), matchStudyColname)
 	studyMetadata = studyMetadataAtomic %>%
-		dplyr::group_by(matchStudy) %>%
+		dplyr::group_by_(.dots=matchStudyColname) %>%
 		dplyr::slice(1) %>%
 		dplyr::ungroup() %>%
-		dplyr::mutate(study = matchStudy) %>%
-		dplyr::select(-matchStudy)
+		dplyr::mutate_(study = lazyeval::interp(~ c1, c1=as.name(matchStudyColname))) %>%
+		dplyr::select_(.dots=colnamesKeep)
 
 	sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
 

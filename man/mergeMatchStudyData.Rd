@@ -4,27 +4,28 @@
 \alias{mergeMatchStudyData}
 \title{Merge gene expression from different platforms that was measured on the same biological samples.}
 \usage{
-mergeMatchStudyData(ematAtomicList, studyMetadataAtomic, sampleMetadataAtomic,
-  matchColname, mergeFunc = function(x) mean(x, na.rm = TRUE))
+mergeMatchStudyData(ematAtomicList, studyMetadataAtomic, matchStudyColname,
+  sampleMetadataAtomic, matchSampleColname, mergeFunc = function(x) mean(x,
+  na.rm = TRUE))
 }
 \arguments{
 \item{ematAtomicList}{list of expression matrices.}
 
-\item{studyMetadataAtomic}{data.frame for study metadata,
-with columns for study and sample names.}
+\item{studyMetadataAtomic}{data frame for study metadata.}
 
-\item{sampleMetadataAtomic}{data.frame for sample metadata,
-with rownames corresponding to sample names.}
+\item{matchStudyColname}{column in studyMetadataAtomic used to match studies.}
 
-\item{matchColname}{column in sampleMetadata used to match samples.}
+\item{sampleMetadataAtomic}{data frame for sample metadata.}
+
+\item{matchSampleColname}{column in sampleMetadataAtomic used to match samples.}
 
 \item{mergeFunc}{function to summarize multiple gene expression values.}
 }
 \value{
 A named list.
 \item{ematList}{Named list of expression matrices.}
-\item{studyMetadata}{data.frame of study metadata.}
-\item{sampleMetadata}{data.frame of sample metadata.}
+\item{studyMetadata}{data frame of study metadata.}
+\item{sampleMetadata}{data frame of sample metadata.}
 }
 \description{
 Merge gene expression from different platforms that was measured on the same biological samples.
