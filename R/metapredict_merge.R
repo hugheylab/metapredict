@@ -112,6 +112,7 @@ mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covari
 		stop('sampleMetadata must have samples corresponding to the colnames of each matrix in ematList.',
 			  call.=FALSE)}
 
+	ematList = ematList[sapply(ematList, ncol) > 0]
 	geneIds = Reduce(intersect, lapply(ematList, function(x) rownames(x)))
 	ematList2 = foreach(studyName=names(ematList)) %do% {ematNow = ematList[[studyName]][geneIds,]}
 
