@@ -126,11 +126,11 @@ calcExprsByGene = function(eset, mapping) {
 #'
 #' @export
 getSupportedPlatforms = function() {
-	return(c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962', 'GPL1053', 'GPL1073',
+	return(c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962', 'GPL1053', 'GPL1073', 'GPL1261'
 				'GPL1291', 'GPL1293', 'GPL1390', 'GPL1708', 'GPL3921', 'GPL4133', 'GPL4372', 'GPL5645', 
 				'GPL6104', 'GPL6254', 'GPL6333', 'GPL6480', 'GPL6865', 'GPL6880', 'GPL6884', 'GPL6885', 
 				'GPL6887', 'GPL6947', 'GPL7015', 'GPL7202', 'GPL8177', 'GPL10332', 'GPL10379', 'GPL10558', 
-				'GPL10687', 'GPL13607', 'GPL15331', 'GPL15450', 'GPL18721', 'GPL20769'))}
+				'GPL10687', 'GPL13607', 'GPL13730', 'GPL15331', 'GPL15450', 'GPL18721', 'GPL20769'))}
 
 
 #' Get the GPLs for unsupported microarray platforms.
@@ -234,6 +234,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 		} else if (platformInfo=='GPL1073') {
 			featureDf[,'GenBank'] = sapply(featureDf[,'GB_ACC'], function(x) strsplit(x, split='.', fixed=TRUE)[[1]][1])
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Mm.egACCNUM2EG', interName='GenBank')
+		} else if (platformInfo=='GPL1261') {
+			mapping = getGeneProbeMappingDirect(featureDf, geneColname='ENTREZ_GENE_ID')
 		} else if (platformInfo=='GPL1291') {
 			mapping = getGeneProbeMappingDirect(featureDf, geneColname='Entrez Gene ID')
 		} else if (platformInfo=='GPL1293') {
@@ -291,6 +293,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 			mapping = getGeneProbeMappingDirect(featureDf, geneColname='EntrezGeneID')
 		} else if (platformInfo=='GPL13607') {
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_ACC')
+		} else if (platformInfo=='GPL13730') {
+			mapping = getGeneProbeMappingDirect(featureDf, geneColname='ENTREZ_GENE_ID')
 		} else if (platformInfo=='GPL15331') {
 			mapping = getGeneProbeMappingAnno(featureDf, dbName='org.Hs.egREFSEQ2EG', interName='GB_ACC')
 		} else if (platformInfo=='GPL15450') {
