@@ -1,6 +1,6 @@
 # metapredict
 
-`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). For technical details, please check out the [paper](http://nar.oxfordjournals.org/content/43/12/e79.full).
+`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you plan to run your own analysis and not the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](http://nar.oxfordjournals.org/content/43/12/e79.full).
 
 ## Installation
 
