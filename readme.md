@@ -9,12 +9,12 @@ Install the package in your local version of R:
 source('https://bioconductor.org/biocLite.R')
 biocLite(c('org.Hs.eg.db', 'org.Mm.eg.db', 'org.Dr.eg.db'))
 install.packages('devtools')
-devtools::install_github('jakejh/metapredict', repos=BiocInstaller::biocinstallRepos())
+devtools::install_github('hugheylab/metapredict', repos=BiocInstaller::biocinstallRepos())
 ```
 
-Or use a pre-built [docker image](https://hub.docker.com/r/jakejh/hugheyverse), which has all dependencies already installed:
+Or use a pre-built [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies already installed:
 ```
-docker pull jakejh/hugheyverse
+docker pull hugheylab/hugheyverse
 ```
 
 ## Getting started
