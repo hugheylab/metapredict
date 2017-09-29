@@ -1,12 +1,12 @@
 Package: metapredict
-Version: 0.0.0.9017
+Version: 0.0.0.9018
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
 Description: Predictive modeling based on merging multiple datasets of genome-
     wide gene expression.
 Authors@R: person('Jake', 'Hughey', email='jakejhughey@gmail.com', role=c('aut', 'cre'))
 License: GPL-2
-URL: https://github.com/jakejh/metapredict
+URL: https://github.com/hugheylab/metapredict
 LazyData: TRUE
 Depends:
     R (>= 3.2.1)

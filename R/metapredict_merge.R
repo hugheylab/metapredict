@@ -55,7 +55,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
 
 			edfMerged = suppressWarnings(dplyr::bind_rows(edfListNow)) %>%
 				dplyr::group_by(geneId) %>%
-				dplyr::summarise_each(dplyr::funs(mergeFunc)) %>%
+				dplyr::summarize_all(mergeFunc) %>%
 				data.frame(check.names=FALSE)
 			rownames(edfMerged) = edfMerged$geneId
 			edfMerged = edfMerged[,-1]
