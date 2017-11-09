@@ -1,8 +1,6 @@
 *.DS_Store
 *.Rproj.user
-*.Rproj
 *.Rhistory
 *.RData
 inst/doc
 *expression_data*
-.Rproj.user
