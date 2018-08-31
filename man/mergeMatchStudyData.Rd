@@ -5,8 +5,8 @@
 \title{Merge gene expression from different platforms that was measured on the same biological samples.}
 \usage{
 mergeMatchStudyData(ematAtomicList, studyMetadataAtomic, matchStudyColname,
-  sampleMetadataAtomic, matchSampleColname, mergeFunc = function(x) mean(x,
-  na.rm = TRUE))
+  sampleMetadataAtomic, matchSampleColname, mergeFunc = function(x)
+  mean(x, na.rm = TRUE))
 }
 \arguments{
 \item{ematAtomicList}{list of expression matrices.}

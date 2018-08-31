@@ -13,9 +13,9 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
+This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
 
-Before running the meta-analysis, you'll need to download the data and install the custom cdf packages as described at `file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))`.
+Before running the meta-analysis, you'll need to download the data and install the custom cdf packages as described at `vignette('prepare_example', package = 'metapredict'))`.
 
 ## Introduction
 The meta-analysis will use data from the following four studies:
@@ -49,23 +49,21 @@ classLevels = c('AD', 'SQ', 'SCLC')
 ## Load the study and sample metadata
 For this meta-analysis, the files of study metadata and sample metadata have already been created.
 ```{r}
-studyMetadataPath = system.file('extdata', 'study_metadata.csv', package='metapredict')
-studyMetadata = read.csv(studyMetadataPath, stringsAsFactors=FALSE)
-rownames(studyMetadata) = studyMetadata[,'study']
+studyMetadataPath = system.file('extdata', 'study_metadata.csv', package = 'metapredict')
+studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 
-sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package='metapredict')
-sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors=FALSE)
-rownames(sampleMetadata) = sampleMetadata[,'sample']
+sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package = 'metapredict')
+sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
 ```
 
 ## Load the gene expression data
 Now we'll load the expression data for each study, performing normalization and transformation and mapping probes to genes, where necessary. Running `getStudyDataList` will take a few minutes.
 ```{r}
 if (denovo) {
-	esetList = getStudyDataList(parentFolderPath, studyMetadata)
-	saveRDS(esetList, file=expressionDataFile)
+  esetList = getStudyDataList(parentFolderPath, studyMetadata)
+  saveRDS(esetList, file = expressionDataFile)
 } else {
-	esetList = readRDS(expressionDataFile)}
+  esetList = readRDS(expressionDataFile)}
 ```
 
 ## Cross-study normalization of discovery datasets
@@ -77,13 +75,14 @@ ematDiscovery = mergeStudyData(ematList[discoveryStudyNames], sampleMetadata)
 
 ## Leave-one-study-out cross-validation
 Before running cross-validation, we'll use the sample metadata to create the `weights` and `foldid` vectors that will be passed to `cv.glmnet`. `metapredictCv` returns a list, with one element for each value of `alpha`. Since we're doing multinomial classification (AD, SQ, and SCLC), `cv.glmnet` uses the multinomial deviance as the measure of goodness of fit (the lower the better).
-```{r, fig.width=5, fig.height=4}
-glmnetArgs = makeGlmnetArgs(sampleMetadata[sampleMetadata[,'study'] %in% discoveryStudyNames,],
-							foldidColname=foldidColname)
+```{r, fig.width = 5, fig.height = 4, fig.retina = 4}
+glmnetArgs = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
+                            foldidColname = foldidColname)
 
-cvFitList = metapredictCv(ematDiscovery, sampleMetadata, yName=className,
-						  weights=glmnetArgs$weights, foldid=glmnetArgs$foldid, alpha=alpha,
-						  family=family, lambda.min.ratio=0.001, keep=TRUE)
+cvFitList = metapredictCv(ematDiscovery, sampleMetadata, yName = className,
+                          weights = glmnetArgs$weights, foldid = glmnetArgs$foldid,
+                          alpha = alpha, family = family, lambda.min.ratio = 0.001,
+                          keep = TRUE)
 cvFit = cvFitList[[1]]
 
 plot(cvFit)
@@ -91,18 +90,18 @@ plot(cvFit)
 
 ## Coefficients of the best model from cross-validation
 Let's look at the coefficients for the best model from cross-validation (ignore the warning about "Stacking not well defined..."). This plot shows which genes are used to predict lung cancer subtype. For example, increased expression of any of three keratins (KRT17, KRT5, KRT6A) increases the probability that a sample is SQ. The number in parentheses next to each gene symbol is the Entrez gene ID.
-```{r, fig.width=4, fig.height=4.5}
+```{r, fig.width = 4, fig.height = 4.5, fig.retina = 4}
 fitResult = cvFit$glmnet.fit
 lambda = cvFit$lambda.min
 
-plotCoefficients(fitResult, lambda, classLevels=classLevels) +
-	scale_fill_brewer(type='qual', palette=3) +
-	theme(axis.text.y=element_text(size=8))
+plotCoefficients(fitResult, lambda, classLevels = classLevels) +
+  scale_fill_brewer(type = 'qual', palette = 3) +
+  theme(axis.text.y = element_text(size = 8))
 ```
 
 ## Expression of selected genes in the discovery set
 We can also examine the expression of those selected genes in the merged expression data. In this heatmap, hierarchical clustering is used to determine the order of the genes and the order of the samples within each class.
-```{r, fig.width=7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4, fig.retina = 4}
 annoNames = c('study', 'class')
 annoLevels = list(discoveryStudyNames, classLevels)
 names(annoLevels) = annoNames
@@ -112,27 +111,27 @@ names(annoColors[[1]]) = annoLevels[[1]]
 names(annoColors[[2]]) = annoLevels[[2]]
 
 plotExpressionHeatmap(fitResult, lambda, ematDiscovery, sampleMetadata, annoLevels,
-					  annoColors, classLevels=classLevels, fontsize_row=7)
+                      annoColors, classLevels = classLevels, fontsize_row = 7)
 ```
 
 ## Predict subtype for samples in the validation dataset
 Now we'll test the model on the last dataset. Internally, `metapredict` runs `mergeStudyData` to combine the discovery datasets and the validation dataset, then trains a predictive model on samples from the discovery dataset and predicts the subtype for samples from the validation dataset.
 ```{r}
 predsList = metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames,
-						alpha=alpha, lambda=lambda, weights=glmnetArgs$weights, family=family)
+                        alpha = alpha, lambda = lambda, weights = glmnetArgs$weights,
+                        family = family)
 ```
 
 ## Confusion matrix for validation samples
 One way to check prediction accuracy of a multinomial classifier is with a confusion matrix. These predictions look pretty good.
 ```{r}
-calcConfusionValidation(predsList, lambda=lambda, sampleMetadata=sampleMetadata,
-						classLevels=classLevels)
+calcConfusionValidation(predsList, lambda = lambda, sampleMetadata = sampleMetadata,
+                        classLevels = classLevels)
 ```
 
 ## Class probabilities for validation samples
 Instead of looking at the single predicted subtype, we can also look at the probabilities for all four subtypes. Both the confusion matrix and this plot suggest that `metapredict` can combine data from multiple studies to learn an accurate classifier of lung cancer subtype.
-```{r, fig.width=7, fig.height=3}
-g = plotClassProbsValidation(predsList, sampleMetadata, className, classLevels, size=1.5,
-							 ggplotArgs=list(scale_color_brewer(type='qual', palette=3)))
-grid::grid.draw(g)
+```{r, fig.width = 7, fig.height = 3, fig.retina = 4}
+plotClassProbsValidation(predsList, sampleMetadata, className, classLevels, size = 1.5,
+                         ggplotArgs = list(scale_color_brewer(type = 'qual', palette = 3)))
 ```

@@ -5,7 +5,8 @@
 \title{Plot class probabilities for samples from cross-validation.}
 \usage{
 plotClassProbsCv(cvFit, lambda, ematMerged, sampleMetadata,
-  className = "class", classLevels = NA, size = 1.5, ggplotArgs = NA)
+  className = "class", classLevels = NA, size = 1.5,
+  ggplotArgs = NA)
 }
 \arguments{
 \item{cvFit}{cv.glmnet object from \code{metapredictCv}.}
@@ -25,7 +26,7 @@ plotClassProbsCv(cvFit, lambda, ematMerged, sampleMetadata,
 \item{ggplotArgs}{List of additional arguments to add to each ggplot.}
 }
 \value{
-A gtable from \code{gridExtra::arrangeGrob}.
+A ggplot object constructed by \code{cowplot::plot_grid}.
 }
 \description{
 \code{plotClassProbsCv} generates a gtable consisting of multiple

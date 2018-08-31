@@ -21,7 +21,7 @@ plotClassProbsValidation(predsList, sampleMetadata, className, classLevels,
 \item{ggplotArgs}{List of additional arguments to add to each ggplot.}
 }
 \value{
-A gtable from \code{gridExtra::arrangeGrob}.
+A ggplot object constructed by \code{cowplot::plot_grid}.
 }
 \description{
 \code{plotClassProbsValidation} generates a gtable consisting of multiple

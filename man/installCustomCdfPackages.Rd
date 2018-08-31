@@ -4,12 +4,12 @@
 \alias{installCustomCdfPackages}
 \title{Install custom CDF packages from Brainarray.}
 \usage{
-installCustomCdfPackages(pkgs, ver = 21)
+installCustomCdfPackages(pkgs, ver = 22)
 }
 \arguments{
 \item{pkgs}{character vector of package names, e.g., 'hgu133ahsentrezgcdf'}
 
-\item{ver}{integer version number (21 as of Nov. 28, 2016)}
+\item{ver}{integer version number (22 as of 21 Jun 2017)}
 }
 \description{
 Install Brainarray custom CDFs for processing raw Affymetrix data. See

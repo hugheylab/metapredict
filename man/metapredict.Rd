@@ -4,8 +4,8 @@
 \alias{metapredict}
 \title{Predict the response variable in validation datasets.}
 \usage{
-metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha,
-  lambda, weights, batchColname = "study", covariateName = NA,
+metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames,
+  alpha, lambda, weights, batchColname = "study", covariateName = NA,
   className = "class", type = "response", ...)
 }
 \arguments{

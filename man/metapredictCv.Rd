@@ -5,8 +5,8 @@
 \title{Perform cross-validation of merged gene expression data.}
 \usage{
 metapredictCv(ematMerged, sampleMetadata, weights, alpha, nFolds = 10,
-  foldid = NA, nRepeats = 3, yName = "class", addlFeatureColnames = NA,
-  ...)
+  foldid = NA, nRepeats = 3, yName = "class",
+  addlFeatureColnames = NA, ...)
 }
 \arguments{
 \item{ematMerged}{matrix of gene expression for genes by samples.}

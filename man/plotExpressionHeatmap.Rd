@@ -4,10 +4,10 @@
 \alias{plotExpressionHeatmap}
 \title{Plot heatmap of merged gene expression data.}
 \usage{
-plotExpressionHeatmap(fitResult, lambda, ematMerged, sampleMetadata, annoLevels,
-  annoColors = NA, clusterTogether = FALSE, geneIdOrder = NA,
-  className = "class", classLevels = NA, org = "org.Hs.eg", maxVal = 3,
-  ...)
+plotExpressionHeatmap(fitResult, lambda, ematMerged, sampleMetadata,
+  annoLevels, annoColors = NA, clusterTogether = FALSE,
+  geneIdOrder = NA, className = "class", classLevels = NA,
+  org = "org.Hs.eg", maxVal = 3, ...)
 }
 \arguments{
 \item{fitResult}{glmnet object.}

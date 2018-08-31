@@ -4,8 +4,8 @@
 \alias{plotCoefficients}
 \title{Plot coefficients for a gene expression meta-analysis.}
 \usage{
-plotCoefficients(fitResult, lambda, classLevels = NA, decreasing = FALSE,
-  geneIdOrder = NA, org = "org.Hs.eg")
+plotCoefficients(fitResult, lambda, classLevels = NA,
+  decreasing = FALSE, geneIdOrder = NA, org = "org.Hs.eg")
 }
 \arguments{
 \item{fitResult}{glmnet object.}

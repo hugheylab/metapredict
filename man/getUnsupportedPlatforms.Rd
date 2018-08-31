@@ -7,7 +7,8 @@
 getUnsupportedPlatforms(studyMetadata)
 }
 \arguments{
-\item{studyMetadata}{data.frame of study metadata, with columns for \code{studyDataType} and \code{platformInfo}}
+\item{studyMetadata}{data.frame of study metadata, with columns for
+\code{studyDataType} and \code{platformInfo}}
 }
 \description{
 \code{getUnsupportedPlatforms} checks if any studies in studyMetadata

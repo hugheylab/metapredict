@@ -13,9 +13,9 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-This vignette describes how to prepare the data to run a gene expression meta-analysis of lung cancer subtypes according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full). You will need an internet connection to download the expression data and the custom cdf packages.
+This vignette describes how to prepare the data to run a gene expression meta-analysis of lung cancer subtypes according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229). You will need an internet connection to download the expression data and the custom cdf packages.
 
-After completing the steps in this vignette, you can move on to run the meta-analysis described at `file.show(system.file('extdata', 'run_example.html', package='metapredict'))`.
+After completing the steps in this vignette, you can move on to run the meta-analysis described at `vignette('run_example', package = 'metapredict'))`.
 
 The meta-analysis will use data from the following four studies:
 
@@ -24,18 +24,13 @@ The meta-analysis will use data from the following four studies:
 * [GSE29016](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE29016)
 * [GSE30219](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30219)
 
-## Download custom CDF packages for mapping Affy probe sets to Entrez Gene IDs
+## Instructions
 
-1. Download [hgu95av2hsentrezgcdf](http://mbni.org/customcdf/19.0.0/entrezg.download/hgu95av2hsentrezgcdf_19.0.0.tar.gz) and [hgu133plus2hsentrezgcdf](http://mbni.org/customcdf/19.0.0/entrezg.download/hgu133plus2hsentrezgcdf_19.0.0.tar.gz).
-1. Open R and set the working directory to the folder that contains the downloaded files.
-1. Run the following commands.
-    ```{r, eval=FALSE}
-    install.packages('hgu95av2hsentrezgcdf_19.0.0.tar.gz', repos=NULL, type='source')
-    install.packages('hgu133plus2hsentrezgcdf_19.0.0.tar.gz', repos=NULL, type='source')
+1. Install the required custom CDF packages by running the following command in R.
+    ```{r, eval = FALSE}
+    metapredict::installCustomCdfPackages(c('hgu95av2hsentrezgcdf',
+                                            'hgu133plus2hsentrezgcdf'))
     ```
-
-## Download the gene expression data
-
 1. Download each of the following files (we're only downloading a subset of the Bhattacharjee data):
     * [Bhattacharjee adeno part 1](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz)
     * [Bhattacharjee adeno part 2](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part2.tar.gz)
@@ -46,7 +41,7 @@ The meta-analysis will use data from the following four studies:
     * [GSE11969](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE11nnn/GSE11969/matrix/GSE11969_series_matrix.txt.gz)
     * [GSE29016](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE29nnn/GSE29016/matrix/GSE29016_series_matrix.txt.gz)
     * [GSE30219](http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE30219&format=file)
-1. Create a folder called `metapredict_example`. Inside `metapredict_example`, create another folder called `expression_data`.
-1. Unzip the files for the Bhattacharjee dataset and move the .CEL files inside each folder to `expression_data/Bhattacharjee`.
-1. Unzip `GSE11969_series_matrix.txt.gz` and `GSE29016_series_matrix.txt.gz` and move the resulting .txt files to `expression_data`.
-1. Unzip `GSE30219_RAW.tar`, rename the resulting folder `GSE30219`, and move it to `expression_data`.
+1. Create a folder called `metapredict_example`. Inside `metapredict_example`, create a folder called `expression_data`. Inside `expression_date`, create a folder called `Bhattacharjee`.
+1. Unzip the files for the Bhattacharjee dataset and move all the .CEL files to the `Bhattacharjee` folder.
+1. Unzip `GSE11969_series_matrix.txt.gz` and `GSE29016_series_matrix.txt.gz` and move the resulting .txt files to the `expression_data` folder.
+1. Unzip `GSE30219_RAW.tar`, rename the resulting folder `GSE30219`, and move it to the `expression_data` folder.

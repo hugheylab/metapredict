@@ -1,41 +1,42 @@
 # metapredict
-`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you don't want or need to run the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](http://nar.oxfordjournals.org/content/43/12/e79.full).
+`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you don't want or need to run the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and to map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
 
-## Install using drat
+## Installation
+First install drat.
 ```R
 install.packages('drat')
-setRepositories(ind=1:5)
-drat::addRepo('hugheylab')
-install.packages('metapredict', type='source')
 ```
-You can update the package by calling `drat::addRepo('hugheylab')`, then `update.packages`.
 
-## Install using devtools
+Then add the following line to your `.Rprofile` file (located at "~/.Rprofile"), which gets run every time R starts. See [here](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup) for details.
 ```R
-install.packages('devtools')
-setRepositories(ind=1:5)
-devtools::install_github('hugheylab/metapredict')
+drat::addRepo('hugheylab')
 ```
-You can update the package using these same three lines.
 
-## Install using docker
-You can use a pre-built [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies already installed:
+Now you can install the package.
+```R
+setRepositories(ind = c(1:5, 9))
+install.packages('metapredict', type = 'source')
 ```
+You can update the package using `update.packages()`.
+
+## Docker
+You can also use a pre-built [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies installed.
+```bash
 docker pull hugheylab/hugheyverse
 ```
 
 ## Getting started
 First follow the instructions to download and prepare the data for the example meta-analysis.
 ```R
-file.show(system.file('extdata', 'prepare_example.html', package='metapredict'))
+vignette('prepare_example', package = 'metapredict'))
 ```
 
 Then work through the example meta-analysis.
 ```R
-file.show(system.file('extdata', 'run_example.html', package='metapredict'))
+vignette('run_example', package = 'metapredict'))
 ```
 
 Finally, consult the detailed guide to running your own meta-analysis.
 ```R
-file.show(system.file('extdata', 'guide.html', package='metapredict'))
+vignette('guide', package = 'metapredict'))
 ```

@@ -16,10 +16,11 @@ calcConfusionCv(cvFit, lambda, ematMerged, sampleMetadata,
 
 \item{sampleMetadata}{data.frame of sample metadata.}
 
-\item{className}{name of column in \code{sampleMetadata} containing the true labels.}
+\item{className}{name of column in \code{sampleMetadata} containing the true
+labels.}
 
-\item{classLevels}{Order of classes in the confusion matrix. If \code{NA} (default),
-then the function uses the order in \code{cvFit}.}
+\item{classLevels}{Order of classes in the confusion matrix. If \code{NA}
+(default), then the function uses the order in \code{cvFit}.}
 }
 \value{
 An object of class \code{table}.

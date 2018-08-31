@@ -14,17 +14,19 @@ calcConfusionValidation(predsList, lambda, sampleMetadata,
 
 \item{sampleMetadata}{data.frame of sample metadata.}
 
-\item{className}{name of column in \code{sampleMetadata} containing the true labels.}
+\item{className}{name of column in \code{sampleMetadata} containing the true
+labels.}
 
-\item{classLevels}{Order of classes in the confusion matrix. If \code{NA} (default),
-then the function uses the order in \code{cvFit}.}
+\item{classLevels}{Order of classes in the confusion matrix. If \code{NA}
+(default), then the function uses the order in \code{cvFit}.}
 
-\item{each}{logical indicating whether to calculate a confusion matrix for each validation
-dataset (default) or one confusion matrix including all datasets.}
+\item{each}{logical indicating whether to calculate a confusion matrix for
+each validation dataset (default) or one confusion matrix including all
+datasets.}
 }
 \value{
-If \code{each==TRUE}, a list of objects of class \code{table}. Otherwise,
-an object of class \code{table}.
+If \code{each==TRUE}, a list of objects of class \code{table}.
+Otherwise, an object of class \code{table}.
 }
 \description{
 \code{calcConfusionCv} calculates confusion matrices based on predictions

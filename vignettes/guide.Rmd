@@ -13,11 +13,11 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](http://nar.oxfordjournals.org/content/43/12/e79.full).
+This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229).
 
 ## Find relevant datasets
 
-The first step is to find microarray datasets relevant to what you're interested in. Most datasets will be on NCBI GEO or ArrayExpress, but not all, so it's a good idea to also search the published literature.
+The first step is to find microarray datasets relevant to what you're interested in. Most datasets will be on NCBI GEO or ArrayExpress, but not all, so it's a good idea to also search the literature.
 
 ## Create the table of study metadata
 
@@ -59,35 +59,27 @@ The format of the gene expression data for each study should correspond to its `
 
 ## If necessary, download packages and files for mapping Affy probe sets to Entrez Gene IDs
 
-For each study with `studyDataType` of `affy_geo` or `affy_custom`:
-
-1. Go the the [download page](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp) for BrainArray custom CDFs.
-1. Click on the link for the latest version (as of Nov. 2015, [Version 19](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
-1. Click on the link for "*ENTREZG*" that says "*Click Me*" (as of Nov. 2015, [here](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
-1. Download the R source package that corresponds to the study's `platformInfo`. The link should say "*C*" and the file should end in "*entrezgcdf_nn.0.0.tar.gz*", where `nn` refers to the version number. The part of the file name prior to "*_nn.0.0.tar.gz*" should match the study's `platformInfo`. 
-1. Open R and execute the following command, after replacing "*<path to custom CDF file>*" as appropriate.
+1. For studies whose `studyDataType` is `affy_geo` or `affy_custom`, install the custom CDF package(s). See the `installCustomCdfPackages` documentation for details.
     ```{r, eval = FALSE}
-    install.packages('<path to custom CDF file>', repos=NULL, type='source')
+    ?metapredict::installCustomCdfPackages
     ```
 
-For each study wth `studyDataType` of `affy_series_matrix`:
+1. For studies whose `studyDataType` is `affy_series_matrix`, download the custom CDF mapping(s). See the `downloadCustomCdfMappings` documentation for details.
+    ```{r, eval = FALSE}
+    ?metapredict::downloadCustomCdfMappings
+    ```
 
-1. Click on the link for the latest version (as of Nov. 2015, [Version 19](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
-1. Click on the link for "*ENTREZG*" that says "*Click Me*" (as of Nov. 2015, [here](http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/19.0.0/entrezg.asp)).
-1. Download the zip file that corresponds to the study's `platformInfo` and whose link says "*Z*", which should be under the column "*Zip of CDF, Seq, Map, Desc*".
-1. Unzip the file and move the file that ends in "*_mapping.txt*" to the folder than contains the gene expression data. The part of the file name prior to "*_mapping.txt*" should match the study's `platformInfo`.
+## Check that all studies whose `studyDataType == 'series_matrix'` are supported
 
-## Check that all studies whose `studyDataType=='series_matrix'` are supported
-
-1. Open R and execute the following commands.
-    ```{r, eval=FALSE}
-    studyMetadata = read.csv('<path to study metadata file>', stringsAsFactors=FALSE)
+1. Open R and execute the following commands, replacing "\<path to study metadata file>" as appropriate.
+    ```{r, eval = FALSE}
+    studyMetadata = read.csv('<path to study metadata file>', stringsAsFactors = FALSE)
     metapredict::getUnsupportedPlatforms(studyMetadata)
     ```
 1. If any platforms are not supported but you still want to include those studies in the meta-analysis, you will need to edit the source of the metapredict package.
 	1. In the `getStudyData` function, add another `else if` statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.
 	1. Add the GPL for the microarray platform to the character vector of supported platforms in the `getSupportedPlatforms` function.
-	1. Submit a pull request to <https://github.com/jakejh/metapredict>, so other people can analyze data from that platform without going through the same hassle!
+	1. Submit a pull request to <https://github.com/hugheylab/metapredict>, so other people can analyze data from that platform without going through the same hassle!
 
 ## Create the table of sample metadata
 
