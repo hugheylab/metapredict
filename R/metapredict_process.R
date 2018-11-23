@@ -23,10 +23,10 @@ globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'
 #' \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
 #'
 #' @param pkgs character vector of package names, e.g., 'hgu133ahsentrezgcdf'
-#' @param ver integer version number (22 as of 21 Jun 2017)
+#' @param ver integer version number (23 as of 23 Nov 2018)
 #'
 #' @export
-installCustomCdfPackages = function(pkgs, ver=22) {
+installCustomCdfPackages = function(pkgs, ver=23) {
   for (pkg in pkgs) {
     pkgUrl = sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.tar.gz',
                      ver, pkg, ver)
@@ -41,10 +41,10 @@ installCustomCdfPackages = function(pkgs, ver=22) {
 #'
 #' @param cdf data frame with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ') and
 #' \code{rename} (e.g., 'mouse4302mmentrezgcdf')
-#' @param ver integer version number (22 as of 21 Jun 2017)
+#' @param ver integer version number (23 as of 23 Nov 2018)
 #'
 #' @export
-downloadCustomCdfMappings = function(cdf, path='.', ver=22) {
+downloadCustomCdfMappings = function(cdf, path='.', ver=23) {
   if (!dir.exists(path)) {
     dir.create(path)}
   for (ii in 1:nrow(cdf)) {
