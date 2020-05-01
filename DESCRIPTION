@@ -42,3 +42,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Encoding: UTF-8
+BugReports: https://github.com/hugheylab/metapredict/issues
