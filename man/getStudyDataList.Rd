@@ -9,12 +9,12 @@ getStudyDataList(parentFolderPath, studyMetadata)
 \arguments{
 \item{parentFolderPath}{Path to the folder that contains the data.}
 
-\item{studyMetadata}{A data.frame where each row corresponds to one study.
-Should have columns for study, studyDataType, and platformInfo.}
+\item{studyMetadata}{A \code{data.frame} where each row corresponds to one study.
+Should have columns for \code{study}, \code{studyDataType}, and \code{platformInfo}.}
 }
 \value{
-A named list of ExpressionSets.
+A named list of \code{ExpressionSet}s.
 }
 \description{
-\code{getStudyDataList} runs \code{getStudyData} for multiple studies.
+Runs \code{\link[=getStudyData]{getStudyData()}} for multiple studies.
 }

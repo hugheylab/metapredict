@@ -1,6 +1,5 @@
 ---
 title: "Running a gene expression meta-analysis of lung cancer subtypes"
-author: "Jake Hughey"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,7 +9,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.retina = 2)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.retina = 4)
 ```
 
 This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
@@ -75,7 +74,7 @@ ematDiscovery = mergeStudyData(ematList[discoveryStudyNames], sampleMetadata)
 
 ## Leave-one-study-out cross-validation
 Before running cross-validation, we'll use the sample metadata to create the `weights` and `foldid` vectors that will be passed to `cv.glmnet`. `metapredictCv` returns a list, with one element for each value of `alpha`. Since we're doing multinomial classification (AD, SQ, and SCLC), `cv.glmnet` uses the multinomial deviance as the measure of goodness of fit (the lower the better).
-```{r, fig.width = 5, fig.height = 4, fig.retina = 4}
+```{r, fig.width = 5, fig.height = 4}
 glmnetArgs = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
                             foldidColname = foldidColname)
 
@@ -90,7 +89,7 @@ plot(cvFit)
 
 ## Coefficients of the best model from cross-validation
 Let's look at the coefficients for the best model from cross-validation (ignore the warning about "Stacking not well defined..."). This plot shows which genes are used to predict lung cancer subtype. For example, increased expression of any of three keratins (KRT17, KRT5, KRT6A) increases the probability that a sample is SQ. The number in parentheses next to each gene symbol is the Entrez gene ID.
-```{r, fig.width = 4, fig.height = 4.5, fig.retina = 4}
+```{r, fig.width = 4, fig.height = 4.5}
 fitResult = cvFit$glmnet.fit
 lambda = cvFit$lambda.min
 
@@ -101,7 +100,7 @@ plotCoefficients(fitResult, lambda, classLevels = classLevels) +
 
 ## Expression of selected genes in the discovery set
 We can also examine the expression of those selected genes in the merged expression data. In this heatmap, hierarchical clustering is used to determine the order of the genes and the order of the samples within each class.
-```{r, fig.width = 7, fig.height = 4, fig.retina = 4}
+```{r, fig.width = 7, fig.height = 4}
 annoNames = c('study', 'class')
 annoLevels = list(discoveryStudyNames, classLevels)
 names(annoLevels) = annoNames
@@ -131,7 +130,7 @@ calcConfusionValidation(predsList, lambda = lambda, sampleMetadata = sampleMetad
 
 ## Class probabilities for validation samples
 Instead of looking at the single predicted subtype, we can also look at the probabilities for all four subtypes. Both the confusion matrix and this plot suggest that `metapredict` can combine data from multiple studies to learn an accurate classifier of lung cancer subtype.
-```{r, fig.width = 7, fig.height = 3, fig.retina = 4}
+```{r, fig.width = 7, fig.height = 3}
 plotClassProbsValidation(predsList, sampleMetadata, className, classLevels, size = 1.5,
                          ggplotArgs = list(scale_color_brewer(type = 'qual', palette = 3)))
 ```

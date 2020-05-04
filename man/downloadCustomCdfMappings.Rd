@@ -7,10 +7,10 @@
 downloadCustomCdfMappings(cdf, path = ".", ver = 23)
 }
 \arguments{
-\item{cdf}{data frame with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ') and
-\code{rename} (e.g., 'mouse4302mmentrezgcdf')}
+\item{cdf}{\verb{data frame} with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ')
+and \code{rename} (e.g., 'mouse4302mmentrezgcdf').}
 
-\item{ver}{integer version number (23 as of 23 Nov 2018)}
+\item{ver}{integer version number (23 as of 23 Nov 2018).}
 }
 \description{
 Download Brainarray custom CDF mapping files, which are used for mapping probes to genes

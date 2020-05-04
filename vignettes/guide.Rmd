@@ -1,6 +1,5 @@
 ---
 title: "Guide to preparing data for a gene expression meta-analysis"
-author: "Jake Hughey"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

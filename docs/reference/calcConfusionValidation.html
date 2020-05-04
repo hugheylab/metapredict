@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Calculate confusion matrices (or matrix) for validation datasets. — calcConfusionValidation" />
-<meta property="og:description" content="calcConfusionCv calculates confusion matrices based on predictions
-for validation datasets from metapredict." />
+<meta property="og:description" content="Calculate confusion matrices based on predictions for validation datasets." />
 
 
 
@@ -73,7 +72,7 @@ for validation datasets from metapredict." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -84,9 +83,6 @@ for validation datasets from metapredict." />
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -139,19 +135,24 @@ for validation datasets from metapredict." />
     </div>
 
     <div class="ref-description">
-    <p><code>calcConfusionCv</code> calculates confusion matrices based on predictions
-for validation datasets from <code>metapredict</code>.</p>
+    <p>Calculate confusion matrices based on predictions for validation datasets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calcConfusionValidation</span>(<span class='no'>predsList</span>, <span class='no'>lambda</span>, <span class='no'>sampleMetadata</span>,
-  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>, <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>calcConfusionValidation</span>(
+  <span class='no'>predsList</span>,
+  <span class='no'>lambda</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
+  <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>predsList</th>
-      <td><p>list of predictions from <code>metapredict</code>.</p></td>
+      <td><p>list of predictions from <code><a href='metapredict.html'>metapredict()</a></code>.</p></td>
     </tr>
     <tr>
       <th>lambda</th>
@@ -181,8 +182,8 @@ datasets.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If <code>each==TRUE</code>, a list of objects of class <code>table</code>.
-Otherwise, an object of class <code>table</code>.</p>
+    <p>If <code>each==TRUE</code>, a list of objects of class <code>table</code>. Otherwise, an
+object of class <code>table</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

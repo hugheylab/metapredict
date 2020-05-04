@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -83,9 +83,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -141,9 +138,14 @@
     <p>Merge gene expression from different platforms that was measured on the same biological samples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mergeMatchStudyData</span>(<span class='no'>ematAtomicList</span>, <span class='no'>studyMetadataAtomic</span>, <span class='no'>matchStudyColname</span>,
-  <span class='no'>sampleMetadataAtomic</span>, <span class='no'>matchSampleColname</span>, <span class='kw'>mergeFunc</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</pre>
+    <pre class="usage"><span class='fu'>mergeMatchStudyData</span>(
+  <span class='no'>ematAtomicList</span>,
+  <span class='no'>studyMetadataAtomic</span>,
+  <span class='no'>matchStudyColname</span>,
+  <span class='no'>sampleMetadataAtomic</span>,
+  <span class='no'>matchSampleColname</span>,
+  <span class='kw'>mergeFunc</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

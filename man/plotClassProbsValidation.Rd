@@ -4,27 +4,34 @@
 \alias{plotClassProbsValidation}
 \title{Plot class probabilities for samples from multiple validation datasets.}
 \usage{
-plotClassProbsValidation(predsList, sampleMetadata, className, classLevels,
-  size = 1.5, ggplotArgs = NA)
+plotClassProbsValidation(
+  predsList,
+  sampleMetadata,
+  className,
+  classLevels,
+  size = 1.5,
+  ggplotArgs = NA
+)
 }
 \arguments{
-\item{predsList}{Result from \code{metapredict}.}
+\item{predsList}{Result from \code{\link[=metapredict]{metapredict()}}.}
 
 \item{sampleMetadata}{data.frame of sample metadata.}
 
-\item{className}{column in sampleMetadata containing values of the response variable.}
+\item{className}{column in sampleMetadata containing values of the response
+variable.}
 
 \item{classLevels}{Preferred order of classes.}
 
-\item{size}{Point size, passed to \code{geom_point}.}
+\item{size}{Point size, passed to \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}.}
 
-\item{ggplotArgs}{List of additional arguments to add to each ggplot.}
+\item{ggplotArgs}{List of additional arguments to add to each \code{ggplot}.}
 }
 \value{
-A ggplot object constructed by \code{cowplot::plot_grid}.
+A ggplot object constructed by \code{\link[cowplot:plot_grid]{cowplot::plot_grid()}}.
 }
 \description{
-\code{plotClassProbsValidation} generates a gtable consisting of multiple
-ggplots, one for each validation dataset. Within each class, samples are
-sorted by the probability of the true class.
+Make a gtable consisting of multiple ggplots, one for each validation
+dataset. Within each class, samples are sorted by the probability of the true
+class.
 }

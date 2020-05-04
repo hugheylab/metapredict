@@ -1,9 +1,9 @@
 #' Make arguments for glmnet.
 #'
-#' \code{makeGlmnetArgs} makes vectors for foldid and weights to be
-#' 	used for leave-one-study-out cross-validation with glmnet.
+#' Make vectors for foldid and weights to be used for leave-one-study-out
+#' cross-validation with [glmnet::glmnet()].
 #'
-#' @param metadata data.frame containing a row for each observation.
+#' @param metadata `data.frame` containing a row for each observation.
 #' @param foldidColname column to use for grouping observations.
 #' @param sampleColname column that contains sample names.
 #'
@@ -25,24 +25,25 @@ makeGlmnetArgs = function(metadata, foldidColname='study', sampleColname='sample
 
 #' Perform cross-validation of merged gene expression data.
 #'
-#' \code{metapredictCv} runs cross-validation to predict a
-#' 	response variable from gene expression data across multiple
-#' 	studies. This function is a wrapper around cv.glmnet.
+#' Run cross-validation to predict a response variable from gene expression data
+#' across multiple studies.
 #'
 #' @param ematMerged matrix of gene expression for genes by samples.
 #' @param sampleMetadata data.frame of sample metadata,
-#' 	with rownames corresponding to sample names.
+#' 	 with rownames corresponding to sample names.
 #' @param weights vector of weights.
 #' @param alpha vector of values for alpha, the elastic net mixing parameter.
-#' @param nFolds number of folds. Ignored, if foldid is not NA.
+#' @param nFolds number of folds. Ignored, if `foldid` is not `NA`.
 #' @param foldid vector of values specifying what fold each observation is in.
-#' @param nRepeats number of times to perform cross-validation. Ignored, if foldid is not NA.
-#' @param yName column in sampleMetadata containing values of the response variable.
-#' @param addlFeatureColnames optional vector of column names containing other features
-#' 	to be used for predicting the response variable.
-#' @param ... Other arguments passed to cv.glmnet.
+#' @param nRepeats number of times to perform cross-validation. Ignored, if
+#'   foldid is not `NA`.
+#' @param yName column in `sampleMetadata` containing values of the response
+#'   variable.
+#' @param addlFeatureColnames optional vector of column names containing other
+#'   features to be used for predicting the response variable.
+#' @param ... Other arguments passed to [glmnet::cv.glmnet()].
 #'
-#' @return A list of cv.glmnet objects.
+#' @return A list of `cv.glmnet` objects.
 #'
 #' @export
 metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, foldid=NA,
@@ -81,29 +82,28 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 
 #' Predict the response variable in validation datasets.
 #'
-#' \code{metapredict} independently merges the discovery datasets
-#' 	with each validation dataset, trains a glmnet model on the samples
-#' 	from the discovery datasets, then predicts the response variable
-#' 	for the samples in the respective validation dataset. This function
-#' 	is a wrapper around glmnet.
+#' Merge the discovery datasets with each validation dataset, train a `glmnet`
+#' model on the samples from the discovery datasets, then predicts the response
+#' variable for the samples in the respective validation dataset.
 #'
 #' @param ematList Named list of expression matrices.
-#' @param studyMetadata data.frame of study metadata.
-#' @param sampleMetadata data.frame of sample metadata,
-#' 	with rownames corresponding to sample names.
+#' @param studyMetadata `data.frame` of study metadata.
+#' @param sampleMetadata `data.frame` of sample metadata, with rownames
+#'   corresponding to sample names.
 #' @param discoveryStudyNames vector of study names for training.
 #' @param alpha value of alpha for the elastic net mixing parameter.
 #' @param lambda value of regularization parameter.
-#' @param weights vector of weights for training the glmnet model.
-#' @param batchColname column in sampleMetadata containing
-#' 	batch information for ComBat.
-#' @param covariateName column in sampleMetadata containing
-#' 	additional covariates for ComBat besides batch.
-#' @param className column in sampleMetadata containing values of the response variable.
-#' @param type type of prediction to make (passed to \code{predict.glmnet}).
-#' @param ... Other arguments passed to \code{glmnet}.
+#' @param weights vector of weights for training the `glmnet` model.
+#' @param batchColname column in `sampleMetadata` containing batch information
+#'   for [sva::ComBat()].
+#' @param covariateName column in `sampleMetadata` containing additional
+#'   covariates for [sva::ComBat()] besides batch.
+#' @param className column in `sampleMetadata` containing values of the response
+#'   variable.
+#' @param type type of prediction to make, passed to [glmnet::predict.glmnet()].
+#' @param ... Other arguments passed to [glmnet::glmnet()].
 #'
-#' @return A named list of objects from \code{predict.glmnet}.
+#' @return A named list of objects from [glmnet::predict.glmnet()].
 #'
 #' @export
 metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda, weights,
@@ -128,31 +128,32 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
     fitResult = glmnet::glmnet(t(ematMergedDisc), y, alpha=alpha, lambda=lambda,
                                weights=weights[discoverySampleNames], standardize=FALSE, ...)
     newx = data.matrix(t(ematMergedDiscVal[,validationSampleNames]))
-    preds = predictWrapper(fitResult, newx = newx, s = lambda, type = type)}
+    preds = predict(fitResult, newx = newx, s = lambda, type = type)}
+    # preds = predictWrapper(fitResult, newx = newx, s = lambda, type = type)}
 
   names(predsList) = validationStudyNames
   return(predsList)}
 
 
-predictWrapper = function(object, ...) {
-  predFunc = switch(class(object)[1],
-                    multnet = glmnet::predict.multnet,
-                    coxnet = glmnet::predict.coxnet,
-                    glmnet::predict.glmnet)
-  return(predFunc(object, ...))}
+# predictWrapper = function(object, ...) {
+#   predFunc = switch(class(object)[1],
+#                     multnet = glmnet::predict.multnet,
+#                     coxnet = glmnet::predict.coxnet,
+#                     glmnet::predict.glmnet)
+#   return(predFunc(object, ...))}
 
 
 #' Make data.frame of non-zero coefficients from a glmnet model.
 #'
-#' \code{makeCoefDf} makes a sorted data.frame of the non-zero
-#' 	coefficients of a logistic or multinomial glmnet model.
+#' Make a sorted `data.frame` of the non-zero coefficients of a logistic or
+#' multinomial `glmnet` model.
 #'
-#' @param fitResult glmnet object.
+#' @param fitResult `glmnet` object.
 #' @param lambda value of lambda for which to obtain coefficients.
-#' @param decreasing logical passed to \code{order}.
-#' @param classLevels order of columns in resulting data.frame.
+#' @param decreasing logical passed to `order`.
+#' @param classLevels order of columns in resulting `data.frame`.
 #'
-#' @return A data.frame.
+#' @return A `data.frame`.
 #'
 #' @export
 makeCoefDf = function(fitResult, lambda, decreasing=TRUE, classLevels=NA) {

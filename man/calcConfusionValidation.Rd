@@ -4,11 +4,17 @@
 \alias{calcConfusionValidation}
 \title{Calculate confusion matrices (or matrix) for validation datasets.}
 \usage{
-calcConfusionValidation(predsList, lambda, sampleMetadata,
-  className = "class", classLevels = NA, each = TRUE)
+calcConfusionValidation(
+  predsList,
+  lambda,
+  sampleMetadata,
+  className = "class",
+  classLevels = NA,
+  each = TRUE
+)
 }
 \arguments{
-\item{predsList}{list of predictions from \code{metapredict}.}
+\item{predsList}{list of predictions from \code{\link[=metapredict]{metapredict()}}.}
 
 \item{lambda}{value of lambda at which to use predictions.}
 
@@ -25,10 +31,9 @@ each validation dataset (default) or one confusion matrix including all
 datasets.}
 }
 \value{
-If \code{each==TRUE}, a list of objects of class \code{table}.
-Otherwise, an object of class \code{table}.
+If \code{each==TRUE}, a list of objects of class \code{table}. Otherwise, an
+object of class \code{table}.
 }
 \description{
-\code{calcConfusionCv} calculates confusion matrices based on predictions
-for validation datasets from \code{metapredict}.
+Calculate confusion matrices based on predictions for validation datasets.
 }

@@ -4,11 +4,10 @@
 \alias{makeGlmnetArgs}
 \title{Make arguments for glmnet.}
 \usage{
-makeGlmnetArgs(metadata, foldidColname = "study",
-  sampleColname = "sample")
+makeGlmnetArgs(metadata, foldidColname = "study", sampleColname = "sample")
 }
 \arguments{
-\item{metadata}{data.frame containing a row for each observation.}
+\item{metadata}{\code{data.frame} containing a row for each observation.}
 
 \item{foldidColname}{column to use for grouping observations.}
 
@@ -20,6 +19,6 @@ A named list.
 \item{weights}{vector of weights, such that each study is weighted equally.}
 }
 \description{
-\code{makeGlmnetArgs} makes vectors for foldid and weights to be
-	used for leave-one-study-out cross-validation with glmnet.
+Make vectors for foldid and weights to be used for leave-one-study-out
+cross-validation with \code{\link[glmnet:glmnet]{glmnet::glmnet()}}.
 }

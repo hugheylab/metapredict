@@ -4,8 +4,14 @@
 \alias{mergeStudyData}
 \title{Merge gene expression data from multiple studies.}
 \usage{
-mergeStudyData(ematList, sampleMetadata, batchColname = "study",
-  covariateName = NA, batchCorrection = TRUE, parPrior = TRUE)
+mergeStudyData(
+  ematList,
+  sampleMetadata,
+  batchColname = "study",
+  covariateName = NA,
+  batchCorrection = TRUE,
+  parPrior = TRUE
+)
 }
 \arguments{
 \item{ematList}{list of expression matrices.}
@@ -18,8 +24,8 @@ batch information for ComBat.}
 \item{covariateName}{column in sampleMetadata containing
 additional covariates for ComBat besides batch.}
 
-\item{batchCorrection}{TRUE indicates cross-study normalization
-will be performed, FALSE indicates datasets will be merged
+\item{batchCorrection}{\code{TRUE} indicates cross-study normalization
+will be performed, \code{FALSE} indicates datasets will be merged
 without performing normalization.}
 
 \item{parPrior}{passed to ComBat's \code{par.prior} argument.}
@@ -28,8 +34,7 @@ without performing normalization.}
 A matrix of expression for genes by samples.
 }
 \description{
-\code{mergeStudyData} merges gene expression data from
-	multiple studies, keeping only genes measured in each
-	dataset, then optionally performs cross-study normalization
-	using ComBat.
+Merge gene expression data from multiple studies, keeping only genes measured
+in each dataset, then optionally perform cross-study normalization using
+\code{\link[sva:ComBat]{sva::ComBat()}}.
 }

@@ -40,9 +40,8 @@
 
 
 <meta property="og:title" content="Perform cross-validation of merged gene expression data. — metapredictCv" />
-<meta property="og:description" content="metapredictCv runs cross-validation to predict a
-	response variable from gene expression data across multiple
-	studies. This function is a wrapper around cv.glmnet." />
+<meta property="og:description" content="Run cross-validation to predict a response variable from gene expression data
+across multiple studies." />
 
 
 
@@ -74,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -85,9 +84,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -140,14 +136,22 @@
     </div>
 
     <div class="ref-description">
-    <p><code>metapredictCv</code> runs cross-validation to predict a
-	response variable from gene expression data across multiple
-	studies. This function is a wrapper around cv.glmnet.</p>
+    <p>Run cross-validation to predict a response variable from gene expression data
+across multiple studies.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>metapredictCv</span>(<span class='no'>ematMerged</span>, <span class='no'>sampleMetadata</span>, <span class='no'>weights</span>, <span class='no'>alpha</span>, <span class='kw'>nFolds</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>foldid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>nRepeats</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>yName</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
-  <span class='kw'>addlFeatureColnames</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>metapredictCv</span>(
+  <span class='no'>ematMerged</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='no'>weights</span>,
+  <span class='no'>alpha</span>,
+  <span class='kw'>nFolds</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>foldid</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>nRepeats</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>yName</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
+  <span class='kw'>addlFeatureColnames</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +175,7 @@ with rownames corresponding to sample names.</p></td>
     </tr>
     <tr>
       <th>nFolds</th>
-      <td><p>number of folds. Ignored, if foldid is not NA.</p></td>
+      <td><p>number of folds. Ignored, if <code>foldid</code> is not <code>NA</code>.</p></td>
     </tr>
     <tr>
       <th>foldid</th>
@@ -179,26 +183,28 @@ with rownames corresponding to sample names.</p></td>
     </tr>
     <tr>
       <th>nRepeats</th>
-      <td><p>number of times to perform cross-validation. Ignored, if foldid is not NA.</p></td>
+      <td><p>number of times to perform cross-validation. Ignored, if
+foldid is not <code>NA</code>.</p></td>
     </tr>
     <tr>
       <th>yName</th>
-      <td><p>column in sampleMetadata containing values of the response variable.</p></td>
+      <td><p>column in <code>sampleMetadata</code> containing values of the response
+variable.</p></td>
     </tr>
     <tr>
       <th>addlFeatureColnames</th>
-      <td><p>optional vector of column names containing other features
-to be used for predicting the response variable.</p></td>
+      <td><p>optional vector of column names containing other
+features to be used for predicting the response variable.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed to cv.glmnet.</p></td>
+      <td><p>Other arguments passed to <code><a href='https://rdrr.io/pkg/glmnet/man/cv.glmnet.html'>glmnet::cv.glmnet()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of cv.glmnet objects.</p>
+    <p>A list of <code>cv.glmnet</code> objects.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

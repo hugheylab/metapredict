@@ -40,9 +40,9 @@
 
 
 <meta property="og:title" content="Plot class probabilities for samples from cross-validation. — plotClassProbsCv" />
-<meta property="og:description" content="plotClassProbsCv generates a gtable consisting of multiple
-ggplots, one for each dataset used in cross-validation. Within each
-class, samples are sorted by the probability of the true class." />
+<meta property="og:description" content="Make a gtable consisting of multiple ggplots, one for each dataset used in
+cross-validation. Within each class, samples are sorted by the probability of
+the true class." />
 
 
 
@@ -74,7 +74,7 @@ class, samples are sorted by the probability of the true class." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -85,9 +85,6 @@ class, samples are sorted by the probability of the true class." />
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -140,25 +137,32 @@ class, samples are sorted by the probability of the true class." />
     </div>
 
     <div class="ref-description">
-    <p><code>plotClassProbsCv</code> generates a gtable consisting of multiple
-ggplots, one for each dataset used in cross-validation. Within each
-class, samples are sorted by the probability of the true class.</p>
+    <p>Make a gtable consisting of multiple <code>ggplot</code>s, one for each dataset used in
+cross-validation. Within each class, samples are sorted by the probability of
+the true class.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotClassProbsCv</span>(<span class='no'>cvFit</span>, <span class='no'>lambda</span>, <span class='no'>ematMerged</span>, <span class='no'>sampleMetadata</span>,
-  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>, <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
-  <span class='kw'>ggplotArgs</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
+    <pre class="usage"><span class='fu'>plotClassProbsCv</span>(
+  <span class='no'>cvFit</span>,
+  <span class='no'>lambda</span>,
+  <span class='no'>ematMerged</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
+  <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,
+  <span class='kw'>ggplotArgs</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>cvFit</th>
-      <td><p>cv.glmnet object from <code>metapredictCv</code>.</p></td>
+      <td><p><code>cv.glmnet</code> object from <code><a href='metapredictCv.html'>metapredictCv()</a></code>.</p></td>
     </tr>
     <tr>
       <th>lambda</th>
-      <td><p>value of lambda to use in <code>fitResult</code>.</p></td>
+      <td><p>value of lambda to use in <code>cvFit</code>.</p></td>
     </tr>
     <tr>
       <th>ematMerged</th>
@@ -170,7 +174,8 @@ class, samples are sorted by the probability of the true class.</p>
     </tr>
     <tr>
       <th>className</th>
-      <td><p>column in sampleMetadata containing values of the response variable.</p></td>
+      <td><p>column in sampleMetadata containing values of the response
+variable.</p></td>
     </tr>
     <tr>
       <th>classLevels</th>
@@ -178,7 +183,7 @@ class, samples are sorted by the probability of the true class.</p>
     </tr>
     <tr>
       <th>size</th>
-      <td><p>Point size, passed to <code>geom_point</code>.</p></td>
+      <td><p>Point size, passed to <code><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>ggplot2::geom_point()</a></code>.</p></td>
     </tr>
     <tr>
       <th>ggplotArgs</th>
@@ -188,7 +193,7 @@ class, samples are sorted by the probability of the true class.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot object constructed by <code><a href='https://rdrr.io/pkg/cowplot/man/plot_grid.html'>cowplot::plot_grid</a></code>.</p>
+    <p>A <code>ggplot</code> object constructed by <code><a href='https://rdrr.io/pkg/cowplot/man/plot_grid.html'>cowplot::plot_grid()</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

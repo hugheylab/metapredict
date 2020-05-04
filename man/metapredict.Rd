@@ -4,17 +4,28 @@
 \alias{metapredict}
 \title{Predict the response variable in validation datasets.}
 \usage{
-metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames,
-  alpha, lambda, weights, batchColname = "study", covariateName = NA,
-  className = "class", type = "response", ...)
+metapredict(
+  ematList,
+  studyMetadata,
+  sampleMetadata,
+  discoveryStudyNames,
+  alpha,
+  lambda,
+  weights,
+  batchColname = "study",
+  covariateName = NA,
+  className = "class",
+  type = "response",
+  ...
+)
 }
 \arguments{
 \item{ematList}{Named list of expression matrices.}
 
-\item{studyMetadata}{data.frame of study metadata.}
+\item{studyMetadata}{\code{data.frame} of study metadata.}
 
-\item{sampleMetadata}{data.frame of sample metadata,
-with rownames corresponding to sample names.}
+\item{sampleMetadata}{\code{data.frame} of sample metadata, with rownames
+corresponding to sample names.}
 
 \item{discoveryStudyNames}{vector of study names for training.}
 
@@ -22,27 +33,26 @@ with rownames corresponding to sample names.}
 
 \item{lambda}{value of regularization parameter.}
 
-\item{weights}{vector of weights for training the glmnet model.}
+\item{weights}{vector of weights for training the \code{glmnet} model.}
 
-\item{batchColname}{column in sampleMetadata containing
-batch information for ComBat.}
+\item{batchColname}{column in \code{sampleMetadata} containing batch information
+for \code{\link[sva:ComBat]{sva::ComBat()}}.}
 
-\item{covariateName}{column in sampleMetadata containing
-additional covariates for ComBat besides batch.}
+\item{covariateName}{column in \code{sampleMetadata} containing additional
+covariates for \code{\link[sva:ComBat]{sva::ComBat()}} besides batch.}
 
-\item{className}{column in sampleMetadata containing values of the response variable.}
+\item{className}{column in \code{sampleMetadata} containing values of the response
+variable.}
 
-\item{type}{type of prediction to make (passed to \code{predict.glmnet}).}
+\item{type}{type of prediction to make, passed to \code{\link[glmnet:predict.glmnet]{glmnet::predict.glmnet()}}.}
 
-\item{...}{Other arguments passed to \code{glmnet}.}
+\item{...}{Other arguments passed to \code{\link[glmnet:glmnet]{glmnet::glmnet()}}.}
 }
 \value{
-A named list of objects from \code{predict.glmnet}.
+A named list of objects from \code{\link[glmnet:predict.glmnet]{glmnet::predict.glmnet()}}.
 }
 \description{
-\code{metapredict} independently merges the discovery datasets
-	with each validation dataset, trains a glmnet model on the samples
-	from the discovery datasets, then predicts the response variable
-	for the samples in the respective validation dataset. This function
-	is a wrapper around glmnet.
+Merge the discovery datasets with each validation dataset, train a \code{glmnet}
+model on the samples from the discovery datasets, then predicts the response
+variable for the samples in the respective validation dataset.
 }

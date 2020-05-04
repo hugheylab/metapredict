@@ -40,10 +40,9 @@
 
 
 <meta property="og:title" content="Merge gene expression data from multiple studies. — mergeStudyData" />
-<meta property="og:description" content="mergeStudyData merges gene expression data from
-	multiple studies, keeping only genes measured in each
-	dataset, then optionally performs cross-study normalization
-	using ComBat." />
+<meta property="og:description" content="Merge gene expression data from multiple studies, keeping only genes measured
+in each dataset, then optionally perform cross-study normalization using
+sva::ComBat()." />
 
 
 
@@ -75,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -86,9 +85,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -141,14 +137,19 @@
     </div>
 
     <div class="ref-description">
-    <p><code>mergeStudyData</code> merges gene expression data from
-	multiple studies, keeping only genes measured in each
-	dataset, then optionally performs cross-study normalization
-	using ComBat.</p>
+    <p>Merge gene expression data from multiple studies, keeping only genes measured
+in each dataset, then optionally perform cross-study normalization using
+<code><a href='https://rdrr.io/pkg/sva/man/ComBat.html'>sva::ComBat()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mergeStudyData</span>(<span class='no'>ematList</span>, <span class='no'>sampleMetadata</span>, <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>,
-  <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>batchCorrection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>parPrior</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>mergeStudyData</span>(
+  <span class='no'>ematList</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>,
+  <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>batchCorrection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>parPrior</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,8 +174,8 @@ additional covariates for ComBat besides batch.</p></td>
     </tr>
     <tr>
       <th>batchCorrection</th>
-      <td><p>TRUE indicates cross-study normalization
-will be performed, FALSE indicates datasets will be merged
+      <td><p><code>TRUE</code> indicates cross-study normalization
+will be performed, <code>FALSE</code> indicates datasets will be merged
 without performing normalization.</p></td>
     </tr>
     <tr>

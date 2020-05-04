@@ -20,13 +20,13 @@ globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'
 #' Install custom CDF packages from Brainarray.
 #'
 #' Install Brainarray custom CDFs for processing raw Affymetrix data. See
-#' \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
+#' <http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp>.
 #'
 #' @param pkgs character vector of package names, e.g., 'hgu133ahsentrezgcdf'
-#' @param ver integer version number (23 as of 23 Nov 2018)
+#' @param ver integer version number (24 as of 1 Oct 2019)
 #'
 #' @export
-installCustomCdfPackages = function(pkgs, ver=23) {
+installCustomCdfPackages = function(pkgs, ver=24) {
   for (pkg in pkgs) {
     pkgUrl = sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.tar.gz',
                      ver, pkg, ver)
@@ -36,12 +36,12 @@ installCustomCdfPackages = function(pkgs, ver=23) {
 #' Download custom CDF mapping files from Brainarray.
 #'
 #' Download Brainarray custom CDF mapping files, which are used for mapping probes to genes
-#' in datasets whose \code{studyDataType} is 'affy_series_matrix'. See
+#' in datasets whose `studyDataType` is 'affy_series_matrix'. See
 #' \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
 #'
-#' @param cdf data frame with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ') and
-#' \code{rename} (e.g., 'mouse4302mmentrezgcdf')
-#' @param ver integer version number (23 as of 23 Nov 2018)
+#' @param cdf `data frame` with columns `download` (e.g., 'Mouse4302_Mm_ENTREZ')
+#'   and `rename` (e.g., 'mouse4302mmentrezgcdf').
+#' @param ver integer version number (23 as of 23 Nov 2018).
 #'
 #' @export
 downloadCustomCdfMappings = function(cdf, path='.', ver=23) {
@@ -140,12 +140,11 @@ getSupportedPlatforms = function() {
 
 #' Get the GPLs for unsupported microarray platforms.
 #'
-#'\code{getUnsupportedPlatforms} checks if any studies in studyMetadata
-#' whose \code{studyDataType=='series_matrix'} have \code{platformInfo}
-#' that is not supported.
+#' @param studyMetadata `data.frame` of study metadata, with columns for
+#'   `studyDataType` and `platformInfo`.
 #'
-#' @param studyMetadata data.frame of study metadata, with columns for
-#' \code{studyDataType} and \code{platformInfo}
+#' @return A vector of platforms for which `studyDataType` is 'series_matrix'
+#'   and `platformInfo` is not supported.
 #'
 #' @export
 getUnsupportedPlatforms = function(studyMetadata) {
@@ -165,16 +164,16 @@ getUnsupportedPlatforms = function(studyMetadata) {
 
 #' Get the gene expression data for one study.
 #'
-#' \code{getStudyData} loads the gene expression data for one study,
-#' 	maps probes to Entrez Gene IDs, and normalizes and transforms
-#' 	the expression values.
+#' Load the gene expression data for one study, map probes to Entrez Gene IDs,
+#' then normalize and transform the expression values.
 #'
 #' @param parentFolderPath Path to the folder that contains the data.
 #' @param studyName Name of dataset to load.
 #' @param studyDataType Type of data.
 #' @param platformInfo Microarray platform.
 #'
-#' @return An ExpressionSet, unless the platform or data type is not supported, then NA.
+#' @return An `ExpressionSet`, unless the platform or data type is not
+#'   supported, then NA.
 #'
 #' @export
 getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo) {
@@ -387,13 +386,13 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 
 #' Get the gene expression data for multiple studies.
 #'
-#' \code{getStudyDataList} runs \code{getStudyData} for multiple studies.
+#' Runs [getStudyData()] for multiple studies.
 #'
 #' @param parentFolderPath Path to the folder that contains the data.
-#' @param studyMetadata A data.frame where each row corresponds to one study.
-#' 	Should have columns for study, studyDataType, and platformInfo.
+#' @param studyMetadata A `data.frame` where each row corresponds to one study.
+#' 	 Should have columns for `study`, `studyDataType`, and `platformInfo`.
 #'
-#' @return A named list of ExpressionSets.
+#' @return A named list of `ExpressionSet`s.
 #'
 #' @export
 getStudyDataList = function(parentFolderPath, studyMetadata) {
@@ -410,8 +409,8 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 
 #' Extract the expression matrices containing the desired samples.
 #'
-#' @param esetList list of ExpressionSets.
-#' @param sampleMetadata data.frame with columns for study and sample names.
+#' @param esetList list of `ExpressionSets`.
+#' @param sampleMetadata `data.frame` with columns for study and sample names.
 #'
 #' @return A named list of matrices.
 #'

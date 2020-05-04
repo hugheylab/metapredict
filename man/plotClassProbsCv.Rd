@@ -4,32 +4,40 @@
 \alias{plotClassProbsCv}
 \title{Plot class probabilities for samples from cross-validation.}
 \usage{
-plotClassProbsCv(cvFit, lambda, ematMerged, sampleMetadata,
-  className = "class", classLevels = NA, size = 1.5,
-  ggplotArgs = NA)
+plotClassProbsCv(
+  cvFit,
+  lambda,
+  ematMerged,
+  sampleMetadata,
+  className = "class",
+  classLevels = NA,
+  size = 1.5,
+  ggplotArgs = NA
+)
 }
 \arguments{
-\item{cvFit}{cv.glmnet object from \code{metapredictCv}.}
+\item{cvFit}{\code{cv.glmnet} object from \code{\link[=metapredictCv]{metapredictCv()}}.}
 
-\item{lambda}{value of lambda to use in \code{fitResult}.}
+\item{lambda}{value of lambda to use in \code{cvFit}.}
 
 \item{ematMerged}{matrix of gene expression for genes by samples.}
 
 \item{sampleMetadata}{data.frame of sample metadata.}
 
-\item{className}{column in sampleMetadata containing values of the response variable.}
+\item{className}{column in sampleMetadata containing values of the response
+variable.}
 
 \item{classLevels}{Preferred order of classes.}
 
-\item{size}{Point size, passed to \code{geom_point}.}
+\item{size}{Point size, passed to \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}.}
 
 \item{ggplotArgs}{List of additional arguments to add to each ggplot.}
 }
 \value{
-A ggplot object constructed by \code{cowplot::plot_grid}.
+A \code{ggplot} object constructed by \code{\link[cowplot:plot_grid]{cowplot::plot_grid()}}.
 }
 \description{
-\code{plotClassProbsCv} generates a gtable consisting of multiple
-ggplots, one for each dataset used in cross-validation. Within each
-class, samples are sorted by the probability of the true class.
+Make a gtable consisting of multiple \code{ggplot}s, one for each dataset used in
+cross-validation. Within each class, samples are sorted by the probability of
+the true class.
 }

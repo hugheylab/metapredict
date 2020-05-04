@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Get the gene expression data for multiple studies. — getStudyDataList" />
-<meta property="og:description" content="getStudyDataList runs getStudyData for multiple studies." />
+<meta property="og:description" content="Runs getStudyData() for multiple studies." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -83,9 +83,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -138,7 +135,7 @@
     </div>
 
     <div class="ref-description">
-    <p><code>getStudyDataList</code> runs <code>getStudyData</code> for multiple studies.</p>
+    <p>Runs <code><a href='getStudyData.html'>getStudyData()</a></code> for multiple studies.</p>
     </div>
 
     <pre class="usage"><span class='fu'>getStudyDataList</span>(<span class='no'>parentFolderPath</span>, <span class='no'>studyMetadata</span>)</pre>
@@ -152,14 +149,14 @@
     </tr>
     <tr>
       <th>studyMetadata</th>
-      <td><p>A data.frame where each row corresponds to one study.
-Should have columns for study, studyDataType, and platformInfo.</p></td>
+      <td><p>A <code>data.frame</code> where each row corresponds to one study.
+Should have columns for <code>study</code>, <code>studyDataType</code>, and <code>platformInfo</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list of ExpressionSets.</p>
+    <p>A named list of <code>ExpressionSet</code>s.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,11 +40,9 @@
 
 
 <meta property="og:title" content="Predict the response variable in validation datasets. — metapredict" />
-<meta property="og:description" content="metapredict independently merges the discovery datasets
-	with each validation dataset, trains a glmnet model on the samples
-	from the discovery datasets, then predicts the response variable
-	for the samples in the respective validation dataset. This function
-	is a wrapper around glmnet." />
+<meta property="og:description" content="Merge the discovery datasets with each validation dataset, train a glmnet
+model on the samples from the discovery datasets, then predicts the response
+variable for the samples in the respective validation dataset." />
 
 
 
@@ -76,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -87,9 +85,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -142,16 +137,25 @@
     </div>
 
     <div class="ref-description">
-    <p><code>metapredict</code> independently merges the discovery datasets
-	with each validation dataset, trains a glmnet model on the samples
-	from the discovery datasets, then predicts the response variable
-	for the samples in the respective validation dataset. This function
-	is a wrapper around glmnet.</p>
+    <p>Merge the discovery datasets with each validation dataset, train a <code>glmnet</code>
+model on the samples from the discovery datasets, then predicts the response
+variable for the samples in the respective validation dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>metapredict</span>(<span class='no'>ematList</span>, <span class='no'>studyMetadata</span>, <span class='no'>sampleMetadata</span>, <span class='no'>discoveryStudyNames</span>,
-  <span class='no'>alpha</span>, <span class='no'>lambda</span>, <span class='no'>weights</span>, <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>, <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>metapredict</span>(
+  <span class='no'>ematList</span>,
+  <span class='no'>studyMetadata</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='no'>discoveryStudyNames</span>,
+  <span class='no'>alpha</span>,
+  <span class='no'>lambda</span>,
+  <span class='no'>weights</span>,
+  <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>,
+  <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,12 +166,12 @@
     </tr>
     <tr>
       <th>studyMetadata</th>
-      <td><p>data.frame of study metadata.</p></td>
+      <td><p><code>data.frame</code> of study metadata.</p></td>
     </tr>
     <tr>
       <th>sampleMetadata</th>
-      <td><p>data.frame of sample metadata,
-with rownames corresponding to sample names.</p></td>
+      <td><p><code>data.frame</code> of sample metadata, with rownames
+corresponding to sample names.</p></td>
     </tr>
     <tr>
       <th>discoveryStudyNames</th>
@@ -183,35 +187,36 @@ with rownames corresponding to sample names.</p></td>
     </tr>
     <tr>
       <th>weights</th>
-      <td><p>vector of weights for training the glmnet model.</p></td>
+      <td><p>vector of weights for training the <code>glmnet</code> model.</p></td>
     </tr>
     <tr>
       <th>batchColname</th>
-      <td><p>column in sampleMetadata containing
-batch information for ComBat.</p></td>
+      <td><p>column in <code>sampleMetadata</code> containing batch information
+for <code><a href='https://rdrr.io/pkg/sva/man/ComBat.html'>sva::ComBat()</a></code>.</p></td>
     </tr>
     <tr>
       <th>covariateName</th>
-      <td><p>column in sampleMetadata containing
-additional covariates for ComBat besides batch.</p></td>
+      <td><p>column in <code>sampleMetadata</code> containing additional
+covariates for <code><a href='https://rdrr.io/pkg/sva/man/ComBat.html'>sva::ComBat()</a></code> besides batch.</p></td>
     </tr>
     <tr>
       <th>className</th>
-      <td><p>column in sampleMetadata containing values of the response variable.</p></td>
+      <td><p>column in <code>sampleMetadata</code> containing values of the response
+variable.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>type of prediction to make (passed to <code>predict.glmnet</code>).</p></td>
+      <td><p>type of prediction to make, passed to <code><a href='https://rdrr.io/pkg/glmnet/man/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed to <code>glmnet</code>.</p></td>
+      <td><p>Other arguments passed to <code><a href='https://rdrr.io/pkg/glmnet/man/glmnet.html'>glmnet::glmnet()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list of objects from <code>predict.glmnet</code>.</p>
+    <p>A named list of objects from <code><a href='https://rdrr.io/pkg/glmnet/man/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

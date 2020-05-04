@@ -4,11 +4,17 @@
 \alias{calcConfusionCv}
 \title{Calculate confusion matrix for cross-validation.}
 \usage{
-calcConfusionCv(cvFit, lambda, ematMerged, sampleMetadata,
-  className = "class", classLevels = NA)
+calcConfusionCv(
+  cvFit,
+  lambda,
+  ematMerged,
+  sampleMetadata,
+  className = "class",
+  classLevels = NA
+)
 }
 \arguments{
-\item{cvFit}{cv.glmnet object from \code{metapredictCv}.}
+\item{cvFit}{cv.glmnet object from \code{\link[=metapredictCv]{metapredictCv()}}.}
 
 \item{lambda}{value of lambda at which to use predictions.}
 
@@ -26,6 +32,5 @@ labels.}
 An object of class \code{table}.
 }
 \description{
-\code{calcConfusionCv} calculates a confusion matrix of cross-validation
-results from \code{metapredictCv}.
+Calculate a confusion matrix based on predictions from cross-validation.
 }

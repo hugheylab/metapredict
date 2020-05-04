@@ -87,21 +87,20 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
 
 #' Merge gene expression data from multiple studies.
 #'
-#' \code{mergeStudyData} merges gene expression data from
-#' 	multiple studies, keeping only genes measured in each
-#' 	dataset, then optionally performs cross-study normalization
-#' 	using ComBat.
+#' Merge gene expression data from multiple studies, keeping only genes measured
+#' in each dataset, then optionally perform cross-study normalization using
+#' [sva::ComBat()].
 #'
 #' @param ematList list of expression matrices.
 #' @param sampleMetadata data.frame for sample metadata.
 #' @param batchColname column in sampleMetadata containing
-#' 	batch information for ComBat.
+#' 	 batch information for ComBat.
 #' @param covariateName column in sampleMetadata containing
-#' 	additional covariates for ComBat besides batch.
-#' @param batchCorrection TRUE indicates cross-study normalization
-#' 	will be performed, FALSE indicates datasets will be merged
-#' 	without performing normalization.
-#' @param parPrior passed to ComBat's \code{par.prior} argument.
+#' 	 additional covariates for ComBat besides batch.
+#' @param batchCorrection `TRUE` indicates cross-study normalization
+#' 	 will be performed, `FALSE` indicates datasets will be merged
+#' 	 without performing normalization.
+#' @param parPrior passed to ComBat's `par.prior` argument.
 #'
 #' @return A matrix of expression for genes by samples.
 #'

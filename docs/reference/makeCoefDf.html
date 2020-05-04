@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Make data.frame of non-zero coefficients from a glmnet model. — makeCoefDf" />
-<meta property="og:description" content="makeCoefDf makes a sorted data.frame of the non-zero
-	coefficients of a logistic or multinomial glmnet model." />
+<meta property="og:description" content="Make a sorted data.frame of the non-zero coefficients of a logistic or
+multinomial glmnet model." />
 
 
 
@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -84,9 +84,6 @@
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -139,8 +136,8 @@
     </div>
 
     <div class="ref-description">
-    <p><code>makeCoefDf</code> makes a sorted data.frame of the non-zero
-	coefficients of a logistic or multinomial glmnet model.</p>
+    <p>Make a sorted <code>data.frame</code> of the non-zero coefficients of a logistic or
+multinomial <code>glmnet</code> model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>makeCoefDf</span>(<span class='no'>fitResult</span>, <span class='no'>lambda</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
@@ -150,7 +147,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>fitResult</th>
-      <td><p>glmnet object.</p></td>
+      <td><p><code>glmnet</code> object.</p></td>
     </tr>
     <tr>
       <th>lambda</th>
@@ -162,13 +159,13 @@
     </tr>
     <tr>
       <th>classLevels</th>
-      <td><p>order of columns in resulting data.frame.</p></td>
+      <td><p>order of columns in resulting <code>data.frame</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame.</p>
+    <p>A <code>data.frame</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

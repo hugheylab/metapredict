@@ -7,11 +7,13 @@
 getUnsupportedPlatforms(studyMetadata)
 }
 \arguments{
-\item{studyMetadata}{data.frame of study metadata, with columns for
-\code{studyDataType} and \code{platformInfo}}
+\item{studyMetadata}{\code{data.frame} of study metadata, with columns for
+\code{studyDataType} and \code{platformInfo}.}
+}
+\value{
+A vector of platforms for which \code{studyDataType} is 'series_matrix'
+and \code{platformInfo} is not supported.
 }
 \description{
-\code{getUnsupportedPlatforms} checks if any studies in studyMetadata
-whose \code{studyDataType=='series_matrix'} have \code{platformInfo}
-that is not supported.
+Get the GPLs for unsupported microarray platforms.
 }

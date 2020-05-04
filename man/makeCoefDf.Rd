@@ -7,18 +7,18 @@
 makeCoefDf(fitResult, lambda, decreasing = TRUE, classLevels = NA)
 }
 \arguments{
-\item{fitResult}{glmnet object.}
+\item{fitResult}{\code{glmnet} object.}
 
 \item{lambda}{value of lambda for which to obtain coefficients.}
 
 \item{decreasing}{logical passed to \code{order}.}
 
-\item{classLevels}{order of columns in resulting data.frame.}
+\item{classLevels}{order of columns in resulting \code{data.frame}.}
 }
 \value{
-A data.frame.
+A \code{data.frame}.
 }
 \description{
-\code{makeCoefDf} makes a sorted data.frame of the non-zero
-	coefficients of a logistic or multinomial glmnet model.
+Make a sorted \code{data.frame} of the non-zero coefficients of a logistic or
+multinomial \code{glmnet} model.
 }

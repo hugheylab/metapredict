@@ -16,10 +16,10 @@ getStudyData(parentFolderPath, studyName, studyDataType, platformInfo)
 \item{platformInfo}{Microarray platform.}
 }
 \value{
-An ExpressionSet, unless the platform or data type is not supported, then NA.
+An \code{ExpressionSet}, unless the platform or data type is not
+supported, then NA.
 }
 \description{
-\code{getStudyData} loads the gene expression data for one study,
-	maps probes to Entrez Gene IDs, and normalizes and transforms
-	the expression values.
+Load the gene expression data for one study, map probes to Entrez Gene IDs,
+then normalize and transform the expression values.
 }

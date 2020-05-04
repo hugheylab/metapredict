@@ -4,9 +4,18 @@
 \alias{metapredictCv}
 \title{Perform cross-validation of merged gene expression data.}
 \usage{
-metapredictCv(ematMerged, sampleMetadata, weights, alpha, nFolds = 10,
-  foldid = NA, nRepeats = 3, yName = "class",
-  addlFeatureColnames = NA, ...)
+metapredictCv(
+  ematMerged,
+  sampleMetadata,
+  weights,
+  alpha,
+  nFolds = 10,
+  foldid = NA,
+  nRepeats = 3,
+  yName = "class",
+  addlFeatureColnames = NA,
+  ...
+)
 }
 \arguments{
 \item{ematMerged}{matrix of gene expression for genes by samples.}
@@ -18,24 +27,25 @@ with rownames corresponding to sample names.}
 
 \item{alpha}{vector of values for alpha, the elastic net mixing parameter.}
 
-\item{nFolds}{number of folds. Ignored, if foldid is not NA.}
+\item{nFolds}{number of folds. Ignored, if \code{foldid} is not \code{NA}.}
 
 \item{foldid}{vector of values specifying what fold each observation is in.}
 
-\item{nRepeats}{number of times to perform cross-validation. Ignored, if foldid is not NA.}
+\item{nRepeats}{number of times to perform cross-validation. Ignored, if
+foldid is not \code{NA}.}
 
-\item{yName}{column in sampleMetadata containing values of the response variable.}
+\item{yName}{column in \code{sampleMetadata} containing values of the response
+variable.}
 
-\item{addlFeatureColnames}{optional vector of column names containing other features
-to be used for predicting the response variable.}
+\item{addlFeatureColnames}{optional vector of column names containing other
+features to be used for predicting the response variable.}
 
-\item{...}{Other arguments passed to cv.glmnet.}
+\item{...}{Other arguments passed to \code{\link[glmnet:cv.glmnet]{glmnet::cv.glmnet()}}.}
 }
 \value{
-A list of cv.glmnet objects.
+A list of \code{cv.glmnet} objects.
 }
 \description{
-\code{metapredictCv} runs cross-validation to predict a
-	response variable from gene expression data across multiple
-	studies. This function is a wrapper around cv.glmnet.
+Run cross-validation to predict a response variable from gene expression data
+across multiple studies.
 }

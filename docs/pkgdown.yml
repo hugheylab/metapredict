@@ -3,8 +3,7 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   guide: guide.html
-  metapredict: metapredict.html
   prepare_example: prepare_example.html
   run_example: run_example.html
-last_built: 2020-05-01T16:53Z
+last_built: 2020-05-04T21:38Z
 

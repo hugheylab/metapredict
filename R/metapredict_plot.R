@@ -1,21 +1,19 @@
 #' Plot coefficients for a gene expression meta-analysis.
 #'
-#' \code{plotCoefficients} generates a ggplot of the coefficients
-#' from a glmnet object trained on a gene expression meta-analysis
-#' (either logistic or multinomial classification).
+#' Make a ggplot of the coefficients from a `glmnet` object trained on a gene
+#' expression meta-analysis (either logistic or multinomial classification).
 #'
 #' @param fitResult glmnet object.
-#' @param lambda value of lambda to use in \code{fitResult}.
-#' @param classLevels Order of classes in the confusion matrix. If \code{NA} (default),
-#' then the function uses the order in \code{fitResult}, passed to \code{makeCoefDf}.
-#' @param decreasing logical indicating whether to sort genes by decreasing coefficient,
-#' passed to \code{makeCoefDf}.
+#' @param lambda value of lambda to use in `fitResult`.
+#' @param classLevels Order of classes in the confusion matrix. If `NA` (default),
+#'   then the function uses the order in `fitResult`.
+#' @param decreasing logical indicating whether to sort genes by decreasing coefficient.
 #' @param geneIdOrder Optional character array of Entrez Gene IDs specifying the order
-#' of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.
+#'   of genes. If `NA` (default), the order from [makeCoefDf()] is used.
 #' @param org Name of package for mapping Entrez Gene IDs to gene symbols,
-#' passed to \code{data} argument of \code{annotate::lookUp}.
+#'   passed to `data` argument of [annotate::lookUp()].
 #'
-#' @return A ggplot object.
+#' @return A `ggplot` object.
 #'
 #' @export
 plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
@@ -54,32 +52,31 @@ plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
 
 #' Plot heatmap of merged gene expression data.
 #'
-#' \code{plotExpressionHeatmap} generates a heatmap of gene expression
-#' from multiple datasets. This function calls \code{pheatmap::pheatmap}.
+#' Make a heatmap of gene expression from multiple datasets.
 #'
-#' @param fitResult glmnet object.
-#' @param lambda value of lambda to use in \code{fitResult}.
+#' @param fitResult `glmnet` object.
+#' @param lambda value of lambda to use in `fitResult`.
 #' @param ematMerged matrix of gene expression for genes by samples.
 #' @param sampleMetadata data.frame of sample metadata.
-#' @param annoLevels Named list used to make the \code{annotation}
-#' argument passed to \code{pheatmap::pheatmap}. Each name must correspond
-#' to a column name in \code{sampleMetadata}, and each item in the
-#' list must be a vector of values found in that particular column.
-#' @param annoColors Passed to \code{annotation_colors} argument of
-#' \code{pheatmap::pheatmap}.
+#' @param annoLevels Named list used to make the `annotation`
+#'   argument passed to [pheatmap::pheatmap()]. Each name must correspond
+#'   to a column name in `sampleMetadata`, and each item in the
+#'   list must be a vector of values found in that particular column.
+#' @param annoColors Passed to `annotation_colors` argument of
+#'   [pheatmap::pheatmap()].
 #' @param clusterTogether logical indicating whether to cluster the samples
-#' from each dataset together or separately.
+#'   from each dataset together or separately.
 #' @param geneIdOrder Optional character array of Entrez Gene IDs specifying the order
-#' of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.
+#'   of genes. If `NA` (default), the order from [makeCoefDf()] is used.
 #' @param className column in sampleMetadata containing values of the response variable.
 #' @param classLevels Order of classes for the column annotations.
 #' @param org Name of package for mapping Entrez Gene IDs to gene symbols,
-#' passed to \code{data} argument of \code{annotate::lookUp}.
+#'   passed to `data` argument of [annotate::lookUp()].
 #' @param maxVal Maximum absolute value of scaled and centered gene expression, used
-#' to control dynamic range of color in the heatmap.
-#' @param ... Additional arguments passed to \code{pheatmap::pheatmap}.
+#'   to control dynamic range of color in the heatmap.
+#' @param ... Additional arguments passed to [pheatmap::pheatmap()].
 #'
-#' @return A pheatmap object.
+#' @return A `pheatmap` object.
 #'
 #' @export
 plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, annoLevels,
@@ -148,20 +145,21 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
 
 #' Plot class probabilities for samples from cross-validation.
 #'
-#' \code{plotClassProbsCv} generates a gtable consisting of multiple
-#' ggplots, one for each dataset used in cross-validation. Within each
-#' class, samples are sorted by the probability of the true class.
+#' Make a gtable consisting of multiple `ggplot`s, one for each dataset used in
+#' cross-validation. Within each class, samples are sorted by the probability of
+#' the true class.
 #'
-#' @param cvFit cv.glmnet object from \code{metapredictCv}.
-#' @param lambda value of lambda to use in \code{fitResult}.
+#' @param cvFit `cv.glmnet` object from [metapredictCv()].
+#' @param lambda value of lambda to use in `cvFit`.
 #' @param ematMerged matrix of gene expression for genes by samples.
 #' @param sampleMetadata data.frame of sample metadata.
-#' @param className column in sampleMetadata containing values of the response variable.
+#' @param className column in sampleMetadata containing values of the response
+#'   variable.
 #' @param classLevels Preferred order of classes.
-#' @param size Point size, passed to \code{geom_point}.
+#' @param size Point size, passed to [ggplot2::geom_point()].
 #' @param ggplotArgs List of additional arguments to add to each ggplot.
 #'
-#' @return A ggplot object constructed by \code{cowplot::plot_grid}.
+#' @return A `ggplot` object constructed by [cowplot::plot_grid()].
 #'
 #' @export
 plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className='class', classLevels=NA,
@@ -213,18 +211,19 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
 
 #' Plot class probabilities for samples from multiple validation datasets.
 #'
-#' \code{plotClassProbsValidation} generates a gtable consisting of multiple
-#' ggplots, one for each validation dataset. Within each class, samples are
-#' sorted by the probability of the true class.
+#' Make a gtable consisting of multiple ggplots, one for each validation
+#' dataset. Within each class, samples are sorted by the probability of the true
+#' class.
 #'
-#' @param predsList Result from \code{metapredict}.
+#' @param predsList Result from [metapredict()].
 #' @param sampleMetadata data.frame of sample metadata.
-#' @param className column in sampleMetadata containing values of the response variable.
+#' @param className column in sampleMetadata containing values of the response
+#'   variable.
 #' @param classLevels Preferred order of classes.
-#' @param size Point size, passed to \code{geom_point}.
-#' @param ggplotArgs List of additional arguments to add to each ggplot.
+#' @param size Point size, passed to [ggplot2::geom_point()].
+#' @param ggplotArgs List of additional arguments to add to each `ggplot`.
 #'
-#' @return A ggplot object constructed by \code{cowplot::plot_grid}.
+#' @return A ggplot object constructed by [cowplot::plot_grid()].
 #'
 #' @export
 plotClassProbsValidation = function(predsList, sampleMetadata, className,

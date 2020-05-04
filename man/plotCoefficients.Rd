@@ -4,8 +4,14 @@
 \alias{plotCoefficients}
 \title{Plot coefficients for a gene expression meta-analysis.}
 \usage{
-plotCoefficients(fitResult, lambda, classLevels = NA,
-  decreasing = FALSE, geneIdOrder = NA, org = "org.Hs.eg")
+plotCoefficients(
+  fitResult,
+  lambda,
+  classLevels = NA,
+  decreasing = FALSE,
+  geneIdOrder = NA,
+  org = "org.Hs.eg"
+)
 }
 \arguments{
 \item{fitResult}{glmnet object.}
@@ -13,22 +19,20 @@ plotCoefficients(fitResult, lambda, classLevels = NA,
 \item{lambda}{value of lambda to use in \code{fitResult}.}
 
 \item{classLevels}{Order of classes in the confusion matrix. If \code{NA} (default),
-then the function uses the order in \code{fitResult}, passed to \code{makeCoefDf}.}
+then the function uses the order in \code{fitResult}.}
 
-\item{decreasing}{logical indicating whether to sort genes by decreasing coefficient,
-passed to \code{makeCoefDf}.}
+\item{decreasing}{logical indicating whether to sort genes by decreasing coefficient.}
 
 \item{geneIdOrder}{Optional character array of Entrez Gene IDs specifying the order
-of genes. If \code{NA} (default), the order from \code{makeCoefDf} is used.}
+of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDf]{makeCoefDf()}} is used.}
 
 \item{org}{Name of package for mapping Entrez Gene IDs to gene symbols,
-passed to \code{data} argument of \code{annotate::lookUp}.}
+passed to \code{data} argument of \code{\link[annotate:lookUp]{annotate::lookUp()}}.}
 }
 \value{
-A ggplot object.
+A \code{ggplot} object.
 }
 \description{
-\code{plotCoefficients} generates a ggplot of the coefficients
-from a glmnet object trained on a gene expression meta-analysis
-(either logistic or multinomial classification).
+Make a ggplot of the coefficients from a \code{glmnet} object trained on a gene
+expression meta-analysis (either logistic or multinomial classification).
 }

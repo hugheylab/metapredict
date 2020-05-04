@@ -40,9 +40,7 @@
 
 
 <meta property="og:title" content="Get the GPLs for unsupported microarray platforms. — getUnsupportedPlatforms" />
-<meta property="og:description" content="getUnsupportedPlatforms checks if any studies in studyMetadata
-whose studyDataType=='series_matrix' have platformInfo
-that is not supported." />
+<meta property="og:description" content="Get the GPLs for unsupported microarray platforms." />
 
 
 
@@ -74,7 +72,7 @@ that is not supported." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -85,9 +83,6 @@ that is not supported." />
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -140,9 +135,7 @@ that is not supported." />
     </div>
 
     <div class="ref-description">
-    <p><code>getUnsupportedPlatforms</code> checks if any studies in studyMetadata
-whose <code>studyDataType=='series_matrix'</code> have <code>platformInfo</code>
-that is not supported.</p>
+    <p>Get the GPLs for unsupported microarray platforms.</p>
     </div>
 
     <pre class="usage"><span class='fu'>getUnsupportedPlatforms</span>(<span class='no'>studyMetadata</span>)</pre>
@@ -152,11 +145,15 @@ that is not supported.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>studyMetadata</th>
-      <td><p>data.frame of study metadata, with columns for
-<code>studyDataType</code> and <code>platformInfo</code></p></td>
+      <td><p><code>data.frame</code> of study metadata, with columns for
+<code>studyDataType</code> and <code>platformInfo</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A vector of platforms for which <code>studyDataType</code> is 'series_matrix'
+and <code>platformInfo</code> is not supported.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

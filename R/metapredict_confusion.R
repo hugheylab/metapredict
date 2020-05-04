@@ -1,18 +1,17 @@
 #' Calculate confusion matrix for cross-validation.
 #'
-#'\code{calcConfusionCv} calculates a confusion matrix of cross-validation
-#' results from \code{metapredictCv}.
+#' Calculate a confusion matrix based on predictions from cross-validation.
 #'
-#' @param cvFit cv.glmnet object from \code{metapredictCv}.
+#' @param cvFit cv.glmnet object from [metapredictCv()].
 #' @param lambda value of lambda at which to use predictions.
 #' @param ematMerged matrix of gene expression for genes by samples.
 #' @param sampleMetadata data.frame of sample metadata.
-#' @param className name of column in \code{sampleMetadata} containing the true
-#' labels.
-#' @param classLevels Order of classes in the confusion matrix. If \code{NA}
-#' (default), then the function uses the order in \code{cvFit}.
+#' @param className name of column in `sampleMetadata` containing the true
+#'   labels.
+#' @param classLevels Order of classes in the confusion matrix. If `NA`
+#'   (default), then the function uses the order in `cvFit`.
 #'
-#' @return An object of class \code{table}.
+#' @return An object of class `table`.
 #'
 #' @export
 calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
@@ -34,22 +33,21 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
 
 #' Calculate confusion matrices (or matrix) for validation datasets.
 #'
-#' \code{calcConfusionCv} calculates confusion matrices based on predictions
-#' for validation datasets from \code{metapredict}.
+#' Calculate confusion matrices based on predictions for validation datasets.
 #'
-#' @param predsList list of predictions from \code{metapredict}.
+#' @param predsList list of predictions from [metapredict()].
 #' @param lambda value of lambda at which to use predictions.
 #' @param sampleMetadata data.frame of sample metadata.
-#' @param className name of column in \code{sampleMetadata} containing the true
-#' labels.
-#' @param classLevels Order of classes in the confusion matrix. If \code{NA}
-#' (default), then the function uses the order in \code{cvFit}.
+#' @param className name of column in `sampleMetadata` containing the true
+#'   labels.
+#' @param classLevels Order of classes in the confusion matrix. If `NA`
+#'   (default), then the function uses the order in `cvFit`.
 #' @param each logical indicating whether to calculate a confusion matrix for
-#' each validation dataset (default) or one confusion matrix including all
-#' datasets.
+#'   each validation dataset (default) or one confusion matrix including all
+#'   datasets.
 #'
-#' @return If \code{each==TRUE}, a list of objects of class \code{table}.
-#' Otherwise, an object of class \code{table}.
+#' @return If `each==TRUE`, a list of objects of class `table`. Otherwise, an
+#'   object of class `table`.
 #'
 #' @export
 calcConfusionValidation = function(predsList, lambda, sampleMetadata,

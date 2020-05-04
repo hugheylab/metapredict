@@ -7,9 +7,9 @@
 extractExpressionData(esetList, sampleMetadata)
 }
 \arguments{
-\item{esetList}{list of ExpressionSets.}
+\item{esetList}{list of \code{ExpressionSets}.}
 
-\item{sampleMetadata}{data.frame with columns for study and sample names.}
+\item{sampleMetadata}{\code{data.frame} with columns for study and sample names.}
 }
 \value{
 A named list of matrices.

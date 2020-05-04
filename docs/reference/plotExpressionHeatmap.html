@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Plot heatmap of merged gene expression data. — plotExpressionHeatmap" />
-<meta property="og:description" content="plotExpressionHeatmap generates a heatmap of gene expression
-from multiple datasets. This function calls pheatmap::pheatmap." />
+<meta property="og:description" content="Make a heatmap of gene expression from multiple datasets." />
 
 
 
@@ -73,7 +72,7 @@ from multiple datasets. This function calls pheatmap::pheatmap." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -84,9 +83,6 @@ from multiple datasets. This function calls pheatmap::pheatmap." />
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/metapredict.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -139,21 +135,31 @@ from multiple datasets. This function calls pheatmap::pheatmap." />
     </div>
 
     <div class="ref-description">
-    <p><code>plotExpressionHeatmap</code> generates a heatmap of gene expression
-from multiple datasets. This function calls <code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap</a></code>.</p>
+    <p>Make a heatmap of gene expression from multiple datasets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotExpressionHeatmap</span>(<span class='no'>fitResult</span>, <span class='no'>lambda</span>, <span class='no'>ematMerged</span>, <span class='no'>sampleMetadata</span>,
-  <span class='no'>annoLevels</span>, <span class='kw'>annoColors</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>clusterTogether</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>geneIdOrder</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>, <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"org.Hs.eg"</span>, <span class='kw'>maxVal</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>plotExpressionHeatmap</span>(
+  <span class='no'>fitResult</span>,
+  <span class='no'>lambda</span>,
+  <span class='no'>ematMerged</span>,
+  <span class='no'>sampleMetadata</span>,
+  <span class='no'>annoLevels</span>,
+  <span class='kw'>annoColors</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>clusterTogether</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>geneIdOrder</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
+  <span class='kw'>classLevels</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"org.Hs.eg"</span>,
+  <span class='kw'>maxVal</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>fitResult</th>
-      <td><p>glmnet object.</p></td>
+      <td><p><code>glmnet</code> object.</p></td>
     </tr>
     <tr>
       <th>lambda</th>
@@ -170,14 +176,14 @@ from multiple datasets. This function calls <code><a href='https://rdrr.io/pkg/p
     <tr>
       <th>annoLevels</th>
       <td><p>Named list used to make the <code>annotation</code>
-argument passed to <code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap</a></code>. Each name must correspond
+argument passed to <code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap()</a></code>. Each name must correspond
 to a column name in <code>sampleMetadata</code>, and each item in the
 list must be a vector of values found in that particular column.</p></td>
     </tr>
     <tr>
       <th>annoColors</th>
       <td><p>Passed to <code>annotation_colors</code> argument of
-<code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap</a></code>.</p></td>
+<code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap()</a></code>.</p></td>
     </tr>
     <tr>
       <th>clusterTogether</th>
@@ -187,7 +193,7 @@ from each dataset together or separately.</p></td>
     <tr>
       <th>geneIdOrder</th>
       <td><p>Optional character array of Entrez Gene IDs specifying the order
-of genes. If <code>NA</code> (default), the order from <code>makeCoefDf</code> is used.</p></td>
+of genes. If <code>NA</code> (default), the order from <code><a href='makeCoefDf.html'>makeCoefDf()</a></code> is used.</p></td>
     </tr>
     <tr>
       <th>className</th>
@@ -200,7 +206,7 @@ of genes. If <code>NA</code> (default), the order from <code>makeCoefDf</code> i
     <tr>
       <th>org</th>
       <td><p>Name of package for mapping Entrez Gene IDs to gene symbols,
-passed to <code>data</code> argument of <code><a href='https://rdrr.io/pkg/annotate/man/getSYMBOL.html'>annotate::lookUp</a></code>.</p></td>
+passed to <code>data</code> argument of <code><a href='https://rdrr.io/pkg/annotate/man/getSYMBOL.html'>annotate::lookUp()</a></code>.</p></td>
     </tr>
     <tr>
       <th>maxVal</th>
@@ -209,13 +215,13 @@ to control dynamic range of color in the heatmap.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap</a></code>.</p></td>
+      <td><p>Additional arguments passed to <code><a href='https://rdrr.io/pkg/pheatmap/man/pheatmap.html'>pheatmap::pheatmap()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A pheatmap object.</p>
+    <p>A <code>pheatmap</code> object.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
