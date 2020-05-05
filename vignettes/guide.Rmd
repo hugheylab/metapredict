@@ -76,8 +76,8 @@ The format of the gene expression data for each study should correspond to its `
     metapredict::getUnsupportedPlatforms(studyMetadata)
     ```
 1. If any platforms are not supported but you still want to include those studies in the meta-analysis, you will need to edit the source of the metapredict package.
-	1. In the `getStudyData` function, add another `else if` statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.
-	1. Add the GPL for the microarray platform to the character vector of supported platforms in the `getSupportedPlatforms` function.
+	1. In the `getStudyData()` function, add another `else if` statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.
+	1. Add the GPL for the microarray platform to the character vector of supported platforms in the `getSupportedPlatforms()` function.
 	1. Submit a pull request to <https://github.com/hugheylab/metapredict>, so other people can analyze data from that platform without going through the same hassle!
 
 ## Create the table of sample metadata

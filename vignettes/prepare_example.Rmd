@@ -14,7 +14,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 This vignette describes how to prepare the data to run a gene expression meta-analysis of lung cancer subtypes according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229). You will need an internet connection to download the expression data and the custom cdf packages.
 
-After completing the steps in this vignette, you can move on to run the meta-analysis described at `vignette('run_example', package = 'metapredict'))`.
+After completing the steps in this vignette, you can move on to run the meta-analysis described at `vignette('run_example')`.
 
 The meta-analysis will use data from the following four studies:
 

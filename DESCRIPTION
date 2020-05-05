@@ -1,5 +1,5 @@
 Package: metapredict
-Version: 1.0.1
+Version: 1.0.2
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
 Description: An approach for merging multiple datasets of genome-wide gene

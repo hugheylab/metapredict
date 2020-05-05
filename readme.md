@@ -29,17 +29,9 @@ docker pull hugheylab/hugheyverse
 ```
 
 ## Usage
-First follow the instructions to download and prepare the data for the example meta-analysis.
-```R
-vignette('prepare_example', package = 'metapredict'))
-```
+Go through the vignettes to
+- [prepare the data for the example meta-analysis](articles/prepare_example.html),
+- [run the example meta-analysis](articles/run_example.html), and
+- [see how to run your own meta-analysis](articles/guide.html).
 
-Then work through the example meta-analysis.
-```R
-vignette('run_example', package = 'metapredict'))
-```
-
-Finally, consult the detailed guide to running your own meta-analysis.
-```R
-vignette('guide', package = 'metapredict'))
-```
+For help on using specific functions, consult the [reference documentation](reference/index.html).
