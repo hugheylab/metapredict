@@ -28,7 +28,7 @@ install.packages('metapredict', type = 'source')
 
 You can update the package using `update.packages()`.
 
-There's also a pre-built [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies installed.
+There's also a [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies installed.
 
 ```bash
 docker pull hugheylab/hugheyverse
