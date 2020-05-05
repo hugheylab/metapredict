@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^.*expression_data$
 ^.*expression_data\.rds$
+^_pkgdown\.yml$
+^docs$
