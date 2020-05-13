@@ -28,12 +28,12 @@ jobs:
 
       - run:
           name: Build package
-          command: R CMD build .
+          command: R CMD build . --no-build-vignettes
+          # run_example depends on large files kept locally but not in git
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual --no-build-vignettes
-          # run_example builds fine, then fails during the check
+          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
 
       ## Currently no tests
       - run:
