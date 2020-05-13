@@ -1,5 +1,7 @@
 # metapredict
 
+[![CircleCI](https://circleci.com/gh/hugheylab/metapredict.svg?style=shield)](https://circleci.com/gh/hugheylab/metapredict)
+
 `metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you don't want or need to run the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and to map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
 
 ## Installation
