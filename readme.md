@@ -6,29 +6,28 @@
 
 ## Installation
 
-First add the hugheylab repository to your repos. There are multiple ways to do this.
-
-If you use RStudio, go to Tools -> Global Options... -> Packages -> Add... (under Secondary repositories), then enter the following values.
+If you use RStudio, go to Tools -> Global Options... -> Packages -> Add... (under Secondary repositories), then enter:
 
 - Name: hugheylab
 - Url: https://hugheylab.github.io/drat/
 
-You only have to do this once.
-
-Alternatively, enter the following command each time you want to install or update the package.
+You only have to do this once. Then you can install or update the package by entering:
 
 ```R
-options(repos = c(getOption('repos'), 'https://hugheylab.github.io/drat/'))
+if (!requireNamespace('BiocManager', quietly = TRUE))
+  install.packages('BiocManager')
+
+BiocManager::install('metapredict')
 ```
 
-Now you can install the package.
+Alternatively, you can install or update the package by entering:
 
 ```R
-setRepositories(ind = c(1:5, 9))
-install.packages('metapredict', type = 'source')
-```
+if (!requireNamespace('BiocManager', quietly = TRUE))
+  install.packages('BiocManager')
 
-You can update the package using `update.packages()`.
+BiocManager::install('metapredict', site_repository = 'https://hugheylab.github.io/drat/')
+```
 
 There's also a [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies installed.
 
