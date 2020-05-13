@@ -14,7 +14,9 @@
 #' @importMethodsFrom BiocGenerics as.list
 NULL
 
-globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'))
+globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel',
+                  '.', 'study', 'ii', 'studyDataType', 'platformInfo', 'geneId',
+                  'coefficient'))
 
 
 #' Install custom CDF packages from Brainarray.
@@ -30,7 +32,7 @@ installCustomCdfPackages = function(pkgs, ver=24) {
   for (pkg in pkgs) {
     pkgUrl = sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.tar.gz',
                      ver, pkg, ver)
-    install.packages(pkgUrl, repos=NULL)}}
+    utils::install.packages(pkgUrl, repos=NULL)}}
 
 
 #' Download custom CDF mapping files from Brainarray.
@@ -41,17 +43,18 @@ installCustomCdfPackages = function(pkgs, ver=24) {
 #'
 #' @param cdf `data frame` with columns `download` (e.g., 'Mouse4302_Mm_ENTREZ')
 #'   and `rename` (e.g., 'mouse4302mmentrezgcdf').
-#' @param ver integer version number (23 as of 23 Nov 2018).
+#' @param path directory into which to download the files.
+#' @param ver integer version number (24 as of 1 Oct 2019).
 #'
 #' @export
-downloadCustomCdfMappings = function(cdf, path='.', ver=23) {
+downloadCustomCdfMappings = function(cdf, path='.', ver=24) {
   if (!dir.exists(path)) {
     dir.create(path)}
   for (ii in 1:nrow(cdf)) {
     temp = tempfile()
-    download.file(sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.zip',
-                          ver, cdf$download[ii], ver), temp)
-    unzip(temp, files=paste0(cdf$download[ii], '_mapping.txt'), exdir=path)
+    utils::download.file(sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.zip',
+                                 ver, cdf$download[ii], ver), temp)
+    utils::unzip(temp, files=paste0(cdf$download[ii], '_mapping.txt'), exdir=path)
     file.rename(file.path(path, paste0(cdf$download[ii], '_mapping.txt')),
                 file.path(path, paste0(cdf$rename[ii], '_mapping.txt')))
     unlink(temp)}}

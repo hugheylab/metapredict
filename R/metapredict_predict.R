@@ -128,7 +128,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
     fitResult = glmnet::glmnet(t(ematMergedDisc), y, alpha=alpha, lambda=lambda,
                                weights=weights[discoverySampleNames], standardize=FALSE, ...)
     newx = data.matrix(t(ematMergedDiscVal[,validationSampleNames]))
-    preds = predict(fitResult, newx = newx, s = lambda, type = type)}
+    preds = stats::predict(fitResult, newx = newx, s = lambda, type = type)}
     # preds = predictWrapper(fitResult, newx = newx, s = lambda, type = type)}
 
   names(predsList) = validationStudyNames

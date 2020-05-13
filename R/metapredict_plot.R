@@ -176,7 +176,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
   cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
   pList = list()
   for (studyName in studyNames) {
-    sampleNamesNow = filter(sm, study==studyName)$sample
+    sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
     df = tibble::as_tibble(cvProbs[sm$study==studyName,])
     colnames(df) = names(cvFit$glmnet.fit$beta)
     df$study = studyName

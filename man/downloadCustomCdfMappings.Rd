@@ -4,13 +4,15 @@
 \alias{downloadCustomCdfMappings}
 \title{Download custom CDF mapping files from Brainarray.}
 \usage{
-downloadCustomCdfMappings(cdf, path = ".", ver = 23)
+downloadCustomCdfMappings(cdf, path = ".", ver = 24)
 }
 \arguments{
 \item{cdf}{\verb{data frame} with columns \code{download} (e.g., 'Mouse4302_Mm_ENTREZ')
 and \code{rename} (e.g., 'mouse4302mmentrezgcdf').}
 
-\item{ver}{integer version number (23 as of 23 Nov 2018).}
+\item{path}{directory into which to download the files.}
+
+\item{ver}{integer version number (24 as of 1 Oct 2019).}
 }
 \description{
 Download Brainarray custom CDF mapping files, which are used for mapping probes to genes
