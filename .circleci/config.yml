@@ -26,11 +26,11 @@ jobs:
             -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)' 
       - run:
           name: Build package
-          command: R CMD build . --md5 --no-build-vignettes
+          command: R CMD build . --md5
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
+          command: R CMD check ${PKG_TARBALL} --no-manual
 
       - run:
           name: Check failures
@@ -53,35 +53,35 @@ jobs:
                 echo "File Exists."
                 mkdir ../tmpDir1;
                 tar xvzf "../${PKG_TARBALL}" -C ../tmpDir1/;
-                sed -i '/DESCRIPTION$/d' ../tmpDir1/cspgram/MD5;
+                sed -i '/DESCRIPTION$/d' ../tmpDir1/${PKG_NAME}/MD5;
                 
-                sed -i '/Packaged:/d' ../tmpDir1/cspgram/DESCRIPTION;
+                sed -i '/Packaged:/d' ../tmpDir1/${PKG_NAME}/DESCRIPTION;
                 cd ../tmpDir1/;
-                SHADESC1=`sha256sum cspgram/DESCRIPTION`;
+                SHADESC1=`sha256sum ${PKG_NAME}/DESCRIPTION`;
                 cd ../drat;
                 
                 mkdir ../tmpDir2;
                 tar xvzf "../drat/src/contrib/${PKG_TARBALL}" -C ../tmpDir2/;
                 
                 echo "Checking for previous MD5 hash file..."
-                MD5FILE="../tmpDir2/cspgram/MD5";
+                MD5FILE="../tmpDir2/${PKG_NAME}/MD5";
                 if test -f "$MD5FILE" ; then
                   echo "Found previous MD5 file..."
 
-                  sed -i '/DESCRIPTION$/d' ../tmpDir2/cspgram/MD5;
-                  sed -i '/Packaged:/d' ../tmpDir2/cspgram/DESCRIPTION;
+                  sed -i '/DESCRIPTION$/d' ../tmpDir2/${PKG_NAME}/MD5;
+                  sed -i '/Packaged:/d' ../tmpDir2/${PKG_NAME}/DESCRIPTION;
                   cd ../tmpDir2/;
-                  SHADESC2=`sha256sum cspgram/DESCRIPTION`;
+                  SHADESC2=`sha256sum ${PKG_NAME}/DESCRIPTION`;
                   cd ../drat;
 
                   echo "SHADESC1: $SHADESC1"
                   echo "SHADESC2: $SHADESC2"
 
                   cd ../tmpDir1;
-                  SHATARBALLTMP=`sha256sum cspgram/MD5`;
+                  SHATARBALLTMP=`sha256sum ${PKG_NAME}/MD5`;
                   echo "SHATAR1: $SHATARBALLTMP"
                   cd ../tmpDir2;
-                  SHATARBALLGT=`sha256sum cspgram/MD5`;
+                  SHATARBALLGT=`sha256sum ${PKG_NAME}/MD5`;
                   echo "SHATAR2: $SHATARBALLGT"
                   cd ../drat;
                   if [ "$SHATARBALLGT" == "$SHATARBALLTMP" ] && [ "$SHADESC1" == "$SHADESC2" ] ; then
@@ -96,7 +96,7 @@ jobs:
               else
                 echo "File Doesn't Exist."
               fi
-              if [ "$DEPLOYTARBALL" = true ] && false; then
+              if [ "$DEPLOYTARBALL" = true ]; then
                 echo "Deploying..."
                 git remote rm origin;
                 git remote add origin https://www.github.com/jschoenbachler/drat.git;
