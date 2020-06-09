@@ -39,8 +39,8 @@ docker pull hugheylab/hugheyverse
 
 Go through the vignettes to
 
-- [prepare the data for the example meta-analysis](articles/prepare_example.html),
-- [run the example meta-analysis](articles/run_example.html), and
-- [see how to run your own meta-analysis](articles/guide.html).
+- [prepare the data for the example meta-analysis](https://metapredict.hugheylab.org/articles/prepare_example.html),
+- [run the example meta-analysis](https://metapredict.hugheylab.org/articles/run_example.html), and
+- [see how to run your own meta-analysis](https://metapredict.hugheylab.org/articles/guide.html).
 
-For help on using specific functions, consult the [reference documentation](reference/index.html).
+For help on using specific functions, consult the [reference documentation](https://metapredict.hugheylab.org/reference/index.html).
