@@ -4,3 +4,4 @@
 *.RData
 inst/doc
 *expression_data*
+.Rproj.user
