@@ -74,7 +74,7 @@ variable for the samples in the respective validation dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ variable for the samples in the respective validation dataset." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +114,7 @@ variable for the samples in the respective validation dataset." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hugheylab/metapredict/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,20 +142,20 @@ model on the samples from the discovery datasets, then predicts the response
 variable for the samples in the respective validation dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>metapredict</span>(
-  <span class='no'>ematList</span>,
-  <span class='no'>studyMetadata</span>,
-  <span class='no'>sampleMetadata</span>,
-  <span class='no'>discoveryStudyNames</span>,
-  <span class='no'>alpha</span>,
-  <span class='no'>lambda</span>,
-  <span class='no'>weights</span>,
-  <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>,
-  <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>className</span> <span class='kw'>=</span> <span class='st'>"class"</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>metapredict</span><span class='op'>(</span>
+  <span class='va'>ematList</span>,
+  <span class='va'>studyMetadata</span>,
+  <span class='va'>sampleMetadata</span>,
+  <span class='va'>discoveryStudyNames</span>,
+  <span class='va'>alpha</span>,
+  <span class='va'>lambda</span>,
+  <span class='va'>weights</span>,
+  batchColname <span class='op'>=</span> <span class='st'>"study"</span>,
+  covariateName <span class='op'>=</span> <span class='cn'>NA</span>,
+  className <span class='op'>=</span> <span class='st'>"class"</span>,
+  type <span class='op'>=</span> <span class='st'>"response"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,17 +206,17 @@ variable.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>type of prediction to make, passed to <code><a href='https://rdrr.io/pkg/glmnet/man/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p></td>
+      <td><p>type of prediction to make, passed to <code><a href='https://glmnet.stanford.edu/reference/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed to <code><a href='https://rdrr.io/pkg/glmnet/man/glmnet.html'>glmnet::glmnet()</a></code>.</p></td>
+      <td><p>Other arguments passed to <code><a href='https://glmnet.stanford.edu/reference/glmnet.html'>glmnet::glmnet()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list of objects from <code><a href='https://rdrr.io/pkg/glmnet/man/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p>
+    <p>A named list of objects from <code><a href='https://glmnet.stanford.edu/reference/predict.glmnet.html'>glmnet::predict.glmnet()</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -233,7 +233,7 @@ variable.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

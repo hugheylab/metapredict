@@ -74,7 +74,7 @@ sva::ComBat()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ sva::ComBat()." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +114,7 @@ sva::ComBat()." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hugheylab/metapredict/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,14 +142,14 @@ in each dataset, then optionally perform cross-study normalization using
 <code><a href='https://rdrr.io/pkg/sva/man/ComBat.html'>sva::ComBat()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mergeStudyData</span>(
-  <span class='no'>ematList</span>,
-  <span class='no'>sampleMetadata</span>,
-  <span class='kw'>batchColname</span> <span class='kw'>=</span> <span class='st'>"study"</span>,
-  <span class='kw'>covariateName</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>batchCorrection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>parPrior</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mergeStudyData</span><span class='op'>(</span>
+  <span class='va'>ematList</span>,
+  <span class='va'>sampleMetadata</span>,
+  batchColname <span class='op'>=</span> <span class='st'>"study"</span>,
+  covariateName <span class='op'>=</span> <span class='cn'>NA</span>,
+  batchCorrection <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  parPrior <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,7 +203,7 @@ without performing normalization.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

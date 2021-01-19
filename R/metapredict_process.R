@@ -25,10 +25,10 @@ globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel'
 #' <http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp>.
 #'
 #' @param pkgs character vector of package names, e.g., 'hgu133ahsentrezgcdf'
-#' @param ver integer version number (24 as of 1 Oct 2019)
+#' @param ver integer version number (25 as of 5 Jan 2021)
 #'
 #' @export
-installCustomCdfPackages = function(pkgs, ver=24) {
+installCustomCdfPackages = function(pkgs, ver=25) {
   for (pkg in pkgs) {
     pkgUrl = sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.tar.gz',
                      ver, pkg, ver)
@@ -44,10 +44,10 @@ installCustomCdfPackages = function(pkgs, ver=24) {
 #' @param cdf `data frame` with columns `download` (e.g., 'Mouse4302_Mm_ENTREZ')
 #'   and `rename` (e.g., 'mouse4302mmentrezgcdf').
 #' @param path directory into which to download the files.
-#' @param ver integer version number (24 as of 1 Oct 2019).
+#' @param ver integer version number (25 as of 5 Jan 2021).
 #'
 #' @export
-downloadCustomCdfMappings = function(cdf, path='.', ver=24) {
+downloadCustomCdfMappings = function(cdf, path='.', ver=25) {
   if (!dir.exists(path)) {
     dir.create(path)}
   for (ii in 1:nrow(cdf)) {
@@ -110,7 +110,9 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   if (dbName=='org.Hs.egUNIGENE2EG') {
     geneInter = sub('Hs.', '', geneInter, fixed=TRUE)}
   mappingIdInter = data.frame(geneId, geneInter, stringsAsFactors=FALSE)
-  return(merge(mappingIdInter, mappingProbeIntermediate, by='geneInter', sort=FALSE))}
+  mapping = merge(mappingIdInter, mappingProbeIntermediate, by='geneInter', sort=FALSE)
+  mapping$probeSet = as.character(mapping$probeSet)
+  return(mapping)}
 
 
 calcExprsByGene = function(eset, mapping) {
@@ -202,7 +204,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     mapping = getGeneProbeMappingAffy(file.path(parentFolderPath,
                                                 paste0(platformInfo, '_mapping.txt')))
     esetOrig = GEOquery::getGEO(filename=file.path(parentFolderPath,
-                                                   paste0(studyName, '_series_matrix.txt')))
+                                                   paste0(studyName, '_series_matrix.txt.gz')))
     exprs(esetOrig)[exprs(esetOrig)<=0] = min(exprs(esetOrig)[exprs(esetOrig)>0])
     exprs(esetOrig) = log2(exprs(esetOrig))
     exprsByGene = calcExprsByGene(esetOrig, mapping)
@@ -220,7 +222,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       return(NA)}
 
     esetOrig = GEOquery::getGEO(filename=file.path(parentFolderPath,
-                                                   paste0(studyName, '_series_matrix.txt')))
+                                                   paste0(studyName, '_series_matrix.txt.gz')))
     if (is.list(esetOrig) && length(esetOrig)==1) {
       esetOrig = esetOrig[[1]]}
 

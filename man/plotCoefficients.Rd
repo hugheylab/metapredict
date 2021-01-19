@@ -27,7 +27,7 @@ then the function uses the order in \code{fitResult}.}
 of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDf]{makeCoefDf()}} is used.}
 
 \item{org}{Name of package for mapping Entrez Gene IDs to gene symbols,
-passed to \code{data} argument of \code{\link[annotate:lookUp]{annotate::lookUp()}}.}
+passed to \code{data} argument of \code{\link[annotate:getSYMBOL]{annotate::lookUp()}}.}
 }
 \value{
 A \code{ggplot} object.

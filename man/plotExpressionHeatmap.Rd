@@ -48,7 +48,7 @@ of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDf]{makeCo
 \item{classLevels}{Order of classes for the column annotations.}
 
 \item{org}{Name of package for mapping Entrez Gene IDs to gene symbols,
-passed to \code{data} argument of \code{\link[annotate:lookUp]{annotate::lookUp()}}.}
+passed to \code{data} argument of \code{\link[annotate:getSYMBOL]{annotate::lookUp()}}.}
 
 \item{maxVal}{Maximum absolute value of scaled and centered gene expression, used
 to control dynamic range of color in the heatmap.}

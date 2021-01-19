@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -71,7 +71,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/hugheylab/metapredict/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -85,12 +85,12 @@
 
       
 
-      </header><div class="row">
+      </header><script src="guide_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Guide to preparing data for a gene expression meta-analysis</h1>
             
-            <h4 class="date">2020-05-13</h4>
+            <h4 class="date">2021-01-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/master/vignettes/guide.Rmd"><code>vignettes/guide.Rmd</code></a></small>
       <div class="hidden name"><code>guide.Rmd</code></div>
@@ -219,7 +219,7 @@
 <td align="left">
 <code>affy_series_matrix</code> or <code>series_matrix</code>
 </td>
-<td align="left">File from GEO named <code>GSE98765_series_matrix.txt</code>.</td>
+<td align="left">File from GEO named <code>GSE98765_series_matrix.txt.gz</code>.</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>eset_rds</code></td>
@@ -234,11 +234,13 @@
 <ol style="list-style-type: decimal">
 <li>
 <p>For studies whose <code>studyDataType</code> is <code>affy_geo</code> or <code>affy_custom</code>, install the custom CDF package(s). See the <code>installCustomCdfPackages</code> documentation for details.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r">?<span class="kw pkg">metapredict</span><span class="kw ns">::</span><span class="no"><a href="../reference/installCustomCdfPackages.html">installCustomCdfPackages</a></span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">?</span><span class="fu">metapredict</span><span class="fu">::</span><span class="va"><a href="../reference/installCustomCdfPackages.html">installCustomCdfPackages</a></span></code></pre></div>
 </li>
 <li>
 <p>For studies whose <code>studyDataType</code> is <code>affy_series_matrix</code>, download the custom CDF mapping(s). See the <code>downloadCustomCdfMappings</code> documentation for details.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">?<span class="kw pkg">metapredict</span><span class="kw ns">::</span><span class="no"><a href="../reference/downloadCustomCdfMappings.html">downloadCustomCdfMappings</a></span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">?</span><span class="fu">metapredict</span><span class="fu">::</span><span class="va"><a href="../reference/downloadCustomCdfMappings.html">downloadCustomCdfMappings</a></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -248,10 +250,12 @@
 <ol style="list-style-type: decimal">
 <li>
 <p>Open R and execute the following commands, replacing “&lt;path to study metadata file&gt;” as appropriate.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">studyMetadata</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">'&lt;path to study metadata file&gt;'</span>, <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="kw pkg">metapredict</span><span class="kw ns">::</span><span class="fu"><a href="../reference/getUnsupportedPlatforms.html">getUnsupportedPlatforms</a></span>(<span class="no">studyMetadata</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">studyMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">'&lt;path to study metadata file&gt;'</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu">metapredict</span><span class="fu">::</span><span class="fu"><a href="../reference/getUnsupportedPlatforms.html">getUnsupportedPlatforms</a></span><span class="op">(</span><span class="va">studyMetadata</span><span class="op">)</span></code></pre></div>
 </li>
-<li>If any platforms are not supported but you still want to include those studies in the meta-analysis, you will need to edit the source of the metapredict package.
+<li>
+<p>If any platforms are not supported but you still want to include those studies in the meta-analysis, you will need to edit the source of the metapredict package.</p>
 <ol style="list-style-type: decimal">
 <li>In the <code><a href="../reference/getStudyData.html">getStudyData()</a></code> function, add another <code>else if</code> statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.</li>
 <li>Add the GPL for the microarray platform to the character vector of supported platforms in the <code><a href="../reference/getSupportedPlatforms.html">getSupportedPlatforms()</a></code> function.</li>
@@ -336,7 +340,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

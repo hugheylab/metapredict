@@ -40,7 +40,7 @@ The meta-analysis will use data from the following four studies:
     * [GSE11969](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE11nnn/GSE11969/matrix/GSE11969_series_matrix.txt.gz)
     * [GSE29016](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE29nnn/GSE29016/matrix/GSE29016_series_matrix.txt.gz)
     * [GSE30219](http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE30219&format=file)
-1. Create a folder called `metapredict_example`. Inside `metapredict_example`, create a folder called `expression_data`. Inside `expression_date`, create a folder called `Bhattacharjee`.
+1. Create a folder called `metapredict_example`. Inside `metapredict_example`, create a folder called `expression_data`. Inside `expression_data`, create a folder called `Bhattacharjee`.
 1. Unzip the files for the Bhattacharjee dataset and move all the .CEL files to the `Bhattacharjee` folder.
-1. Unzip `GSE11969_series_matrix.txt.gz` and `GSE29016_series_matrix.txt.gz` and move the resulting .txt files to the `expression_data` folder.
+1. Move `GSE11969_series_matrix.txt.gz` and `GSE29016_series_matrix.txt.gz` to the `expression_data` folder.
 1. Unzip `GSE30219_RAW.tar`, rename the resulting folder `GSE30219`, and move it to the `expression_data` folder.

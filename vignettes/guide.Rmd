@@ -53,7 +53,7 @@ The format of the gene expression data for each study should correspond to its `
 | `studyDataType`                         | Format of expression data if name of study is `GSE98765`   |
 |:----------------------------------------|:-----------------------------------------------------------|
 | `affy_geo` or `affy_custom`             | Folder named `GSE98765` containing cel or cel.gz files.    |
-| `affy_series_matrix` or `series_matrix` | File from GEO named `GSE98765_series_matrix.txt`.          |
+| `affy_series_matrix` or `series_matrix` | File from GEO named `GSE98765_series_matrix.txt.gz`.          |
 | `eset_rds`                              | RDS file named `GSE98765.rds` containing a Bioconductor `ExpressionSet`. |
 
 ## If necessary, download packages and files for mapping Affy probe sets to Entrez Gene IDs

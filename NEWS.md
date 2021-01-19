@@ -1,3 +1,7 @@
+# metapredict 1.0.3
+- Fixed a bug in mapping probes to genes for some platforms that was caused by mixing up characters and integers.
+- Enabled support for gzipped series matrix files.
+
 # metapredict 1.0.2
 - Vignettes now properly link to each other and to documentation.
 
