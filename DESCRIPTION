@@ -1,7 +1,7 @@
 Package: metapredict
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: as.person("Jake Hughey <jakejhughey@gmail.com> [aut, cre]")
 Description: An approach for merging multiple datasets of genome-wide gene
   expression for predictive modeling.

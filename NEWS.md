@@ -1,3 +1,6 @@
+# metapredict 1.0.4
+- Updated links in vignette to download data from the Bhattacharjee study.
+
 # metapredict 1.0.3
 - Fixed a bug in mapping probes to genes for some platforms that was caused by mixing up characters and integers.
 - Enabled support for gzipped series matrix files.

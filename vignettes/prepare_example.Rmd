@@ -31,12 +31,12 @@ The meta-analysis will use data from the following four studies:
                                             'hgu133plus2hsentrezgcdf'))
     ```
 1. Download each of the following files (we're only downloading a subset of the Bhattacharjee data):
-    * [Bhattacharjee adeno part 1](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz)
-    * [Bhattacharjee adeno part 2](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part2.tar.gz)
-    * [Bhattacharjee adeno part 3](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part3.tar.gz)
-    * [Bhattacharjee adeno part 4](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_ADENO_part4.tar.gz)
-    * [Bhattacharjee squamous](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_SQ.tar.gz)
-    * [Bhattacharjee small-cell](http://www.broadinstitute.org/mpr/publications/projects/LUNG/LUNG_scans_SMC.tar.gz)
+    * [Bhattacharjee adeno part 1](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz)
+    * [Bhattacharjee adeno part 2](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part2.tar.gz)
+    * [Bhattacharjee adeno part 3](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part3.tar.gz)
+    * [Bhattacharjee adeno part 4](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part4.tar.gz)
+    * [Bhattacharjee squamous](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SQ.tar.gz)
+    * [Bhattacharjee small-cell](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SMC.tar.gz)
     * [GSE11969](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE11nnn/GSE11969/matrix/GSE11969_series_matrix.txt.gz)
     * [GSE29016](ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE29nnn/GSE29016/matrix/GSE29016_series_matrix.txt.gz)
     * [GSE30219](http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE30219&format=file)
