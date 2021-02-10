@@ -21,6 +21,7 @@ Imports:
   BiocGenerics (>= 0.16.1),
   cba (>= 0.2-15),
   cowplot (>= 0.9.3),
+  data.table (>= 1.13.2),
   dplyr (>= 0.7.6),
   foreach (>= 1.4.3),
   GEOquery (>= 2.36.0),

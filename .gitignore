@@ -5,3 +5,4 @@
 inst/doc
 *expression_data*
 .Rproj.user
+metapredict_example/example_script.R
