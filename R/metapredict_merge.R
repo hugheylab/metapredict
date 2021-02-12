@@ -1,12 +1,22 @@
 makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
+  #
+  # if (is.unsorted(subStudyNames)) {
+  #   arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
+  # } else {
+  #   arrangeFunc = dplyr::arrange}
+  # metadataNow = metadata %>%
+  #   dplyr::filter(study %in% subStudyNames) %>%
+  #   dplyr::select(!!c('study', 'sample', matchSampleColname)) %>%
+  #   arrangeFunc(study)
+
+
+  metadataNowDT = arrangeFunc(data.table(metadata)[which(study %in% subStudyNames), ..c('study', 'sample', matchSampleColname)], study)
+
   if (is.unsorted(subStudyNames)) {
-    arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
+    metadataNow = data.table::setorder(dmetadataNowDT, -study)
   } else {
-    arrangeFunc = dplyr::arrange}
-  metadataNow = metadata %>%
-    dplyr::filter(study %in% subStudyNames) %>%
-    dplyr::select(!!c('study', 'sample', matchSampleColname)) %>%
-    arrangeFunc(study)
+    metadataNow = data.table::setorder(metadataNowDT, study)}
+
   mappingDf = metadataNow %>%
     dplyr::group_by(!!matchSampleColname) %>%
     dplyr::slice(1) %>%
@@ -121,8 +131,11 @@ mergeStudyData = function(ematList, sampleMetadata, batchColname='study', covari
     # ComBat can fail catastrophically
     ematListScaled = lapply(ematList2, function(emat) (emat - mean(emat)) / stats::sd(emat))
     ematMerged = do.call(cbind, ematListScaled)
-    sm = tibble::tibble(sample = colnames(ematMerged)) %>%
-      dplyr::inner_join(sampleMetadata, by='sample')
+
+    # sm = tibble::tibble(sample = colnames(ematMerged)) %>%
+    #   dplyr::inner_join(sampleMetadata, by='sample')
+
+    sm = data.table(sample = colnames(ematMerged))[sampleMetadata, on = "sample", nomatch = 0]
 
     if (is.na(covariateName) || length(unique(sm[[covariateName]])) < 2) {
       covariateInfo = stats::model.matrix(~rep_len(1, ncol(ematMerged)))

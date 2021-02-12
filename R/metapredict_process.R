@@ -422,7 +422,8 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 #' @export
 extractExpressionData = function(esetList, sampleMetadata) {
   ematList = foreach(studyName=names(esetList)) %do% {
-    sampleNamesNow = dplyr::filter(sampleMetadata, study==studyName)$sample
+    # sampleNamesNow = dplyr::filter(sampleMetadata, study==studyName)$sample
+    sampleNamesNow = data.table(sampleMetadata)[which(study == studyName), sample]
     keepIdx = colnames(esetList[[studyName]]) %in% sampleNamesNow
     exprs(esetList[[studyName]])[,keepIdx]}
   names(ematList) = names(esetList)
