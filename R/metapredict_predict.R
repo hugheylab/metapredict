@@ -49,6 +49,10 @@ makeGlmnetArgs = function(metadata, foldidColname='study', sampleColname='sample
 metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, foldid=NA,
                          nRepeats=3, yName='class', addlFeatureColnames=NA, ...) {
   args = list(...)
+
+  # sm = tibble::tibble(sample = colnames(ematMerged)) %>%
+  #   dplyr::inner_join(sampleMetadata, by='sample')
+
   sm = merge.data.table(data.table(sample = colnames(ematMerged)), sampleMetadata, .by = sample)
 
   if (!is.null(args$family) && args$family=='cox') {
@@ -108,11 +112,15 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda, weights,
                        batchColname='study', covariateName=NA, className='class', type='response', ...) {
 
+  # discoverySampleNames = dplyr::filter(sampleMetadata, study %in% discoveryStudyNames)$sample
+
   sampleMetadataDT = data.table(sampleMetadata)
   discoverySampleNames = sampleMetadataDT[which(study %in% discoveryStudyNames), sample]
   validationStudyNames = setdiff(sort(unique(sampleMetadataDT[,study])), discoveryStudyNames)
 
   predsList = foreach(validationStudyName=validationStudyNames) %do% {
+    # validationSampleNames = dplyr::filter(sampleMetadata, study==validationStudyName)$sample
+
     validationSampleNames = sampleMetadataDT[which(study == validationStudyName), sample]
 
     ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
@@ -120,6 +128,12 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
                                        batchColname=batchColname,
                                        covariateName=covariateName)
     ematMergedDisc = ematMergedDiscVal[,discoverySampleNames]
+
+
+    # y = tibble::tibble(sample = discoverySampleNames) %>%
+    #   dplyr::inner_join(sampleMetadata, by='sample') %>%
+    #   dplyr::select(!!className) %>%
+    #   as.matrix()
 
     yDTM = data.table(sample = discoverySampleNames)[sampleMetadataDT, on = "sample", nomatch = 0]
     yDTM2 = yDTM[, ..className]

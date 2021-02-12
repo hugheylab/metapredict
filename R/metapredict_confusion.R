@@ -24,6 +24,11 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
   colnames(cvProbs) = names(cvFit$glmnet.fit$beta)
   preds = colnames(cvProbs)[apply(cvProbs, MARGIN=1, function(x) which.max(x))]
   predictedClass = factor(preds, levels=classLevels)
+
+  # classValues = tibble::tibble(sample = colnames(ematMerged)) %>%
+  #   dplyr::inner_join(sampleMetadata) %>%
+  #   .[[className]]
+
   classValues = merge(data.table(sample = colnames(ematMerged)), sampleMetadata)[[className]]
   trueClass = factor(classValues, levels=classLevels)
   return(table(trueClass, predictedClass))}
@@ -61,6 +66,10 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
       predsClass = colnames(predsProb)[apply(predsProb, MARGIN=1,
                                              function(x) which.max(x))]
       predictedClass = factor(predsClass, levels=classLevels)
+
+      # sm = tibble::tibble(sample = rownames(predsProb)) %>%
+      #   dplyr::inner_join(sampleMetadata, by='sample')
+
       sm = data.table(sample = rownames(predsProb))[sampleMetadata, on = 'sample', nomatch = 0]
       trueClass = factor(sm[[className]], levels=classLevels)
       confusion[[validationStudyName]] = table(trueClass, predictedClass)}
@@ -70,6 +79,10 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
     predsClass = colnames(predsProb)[apply(predsProb, MARGIN=1,
                                            function(x) which.max(x))]
     predictedClass = factor(predsClass, levels=classLevels)
+
+    # sm = tibble::tibble(sample = rownames(predsProb)) %>%
+    #   dplyr::inner_join(sampleMetadata, by='sample')
+
     sm = data.table(sample = rownames(predsProb))[sampleMetadata, on = 'sample', nomatch = 0]
     trueClass = factor(sm[[className]], levels=classLevels)
     confusion = table(trueClass, predictedClass)}
