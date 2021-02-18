@@ -53,7 +53,7 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
   # sm = tibble::tibble(sample = colnames(ematMerged)) %>%
   #   dplyr::inner_join(sampleMetadata, by='sample')
 
-  sm = merge.data.table(data.table(sample = colnames(ematMerged)), sampleMetadata, .by = sample)
+  sm = merge(data.table(sample = colnames(ematMerged)), sampleMetadata, by = 'sample', sort = FALSE)
 
   if (!is.null(args$family) && args$family=='cox') {
     y = as.matrix(sm[, yName, drop = FALSE])

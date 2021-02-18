@@ -153,10 +153,13 @@ getSupportedPlatforms = function() {
 #'
 #' @export
 getUnsupportedPlatforms = function(studyMetadata) {
-  unsupportedPlatforms = studyMetadata %>%
-    dplyr::filter(studyDataType=='series_matrix',
-                  !(platformInfo %in% getSupportedPlatforms())) %>%
-    .$platformInfo
+  # unsupportedPlatforms = studyMetadata %>%
+  #   dplyr::filter(studyDataType=='series_matrix',
+  #                 !(platformInfo %in% getSupportedPlatforms())) %>%
+  #   .$platformInfo
+
+  unsupportedPlatforms = data.table(studyMetadata)[which(studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms())),platformInfo]
+
   if (length(unsupportedPlatforms)==0) {
     cat("Whew, all microarray platforms for studies whose studyDataType=='series_matrix' are supported.\n")
   } else {

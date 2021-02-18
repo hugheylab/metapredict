@@ -97,7 +97,8 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
     emat = emat[,co$order]
   } else {
     if (is.na(classLevels[1])) {
-      sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
+      # sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
+      sm = data.table(sampleMetadata)[which(sample %in% colnames(ematMerged)),]
       classLevels = unique(sm[[className]])}
 
     ematSmallList = foreach(classLevel=classLevels) %do% {
@@ -126,10 +127,11 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   emat[emat > maxVal] = maxVal
   emat[emat < (-maxVal)] = -maxVal
 
-  annotation = tibble::tibble(sample = colnames(ematMerged)) %>%
-    dplyr::inner_join(sampleMetadata, by='sample') %>%
-    dplyr::select(!!names(annoLevels)) %>%
-    as.data.frame()
+  # annotation = tibble::tibble(sample = colnames(ematMerged)) %>%
+  #   dplyr::inner_join(sampleMetadata, by='sample') %>%
+  #   dplyr::select(!!names(annoLevels)) %>%
+  #   as.data.frame()
+  annotation = as.data.frame(merge(data.table(sample = colnames(ematMerged)), sampleMetadata, by = 'sample', sort = FALSE)[,..cols])
   rownames(annotation) = colnames(ematMerged)
 
   for (annoName in names(annoLevels)) {
@@ -166,8 +168,9 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
                             size=1.5, ggplotArgs=NA) {
 
   sampleNames = colnames(ematMerged)
-  sm = tibble::tibble(sample = sampleNames) %>%
-    dplyr::inner_join(sampleMetadata, by='sample')
+  # sm = tibble::tibble(sample = sampleNames) %>%
+  #   dplyr::inner_join(sampleMetadata, by='sample')
+  sm = merge(data.table(sample = sampleNames), sampleMetadata, by = 'sample', sort = FALSE)
   studyNames = sort(unique(sm$study))
 
   if (is.na(classLevels[1])) {
@@ -176,12 +179,17 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
   cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
   pList = list()
   for (studyName in studyNames) {
-    sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
-    df = tibble::as_tibble(cvProbs[sm$study==studyName,])
+    # sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
+    sampleNamesNow = sm[which(study == studyName), sample]
+    # df = tibble::as_tibble(cvProbs[sm$study==studyName,])
+    df = as.data.frame(cvProbs[sm$study==studyName,])
     colnames(df) = names(cvFit$glmnet.fit$beta)
     df$study = studyName
     df$sample = sampleNamesNow
-    df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
+    dfDT = df
+    # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
+    df$trueClass = factor(data.table(sm)[which(sample %in% sampleNamesNow),][[className]], levels=classLevels)
+
     df$trueClassProb = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
 
     df = df[order(df$trueClass, -df$trueClassProb),]
@@ -231,9 +239,12 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
   pList = list()
   for (validationStudyName in names(predsList)) {
     df = data.frame(predsList[[validationStudyName]][,,1])
-    sm = tibble::tibble(sample = rownames(df)) %>%
-      dplyr::inner_join(sampleMetadata, by='sample')
-    df$study = sm$study
+    # sm = tibble::tibble(sample = rownames(df)) %>%
+    #   dplyr::inner_join(sampleMetadata, by='sample')
+
+    sm = merge(data.table(sample = rownames(df)), sampleMetadata, by = 'sample', sort = FALSE)
+
+    df$study = smDT[,study]
     df$sample = rownames(df)
     df$trueClass = factor(sm[[className]], levels=classLevels)
     df$trueClassProb = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))

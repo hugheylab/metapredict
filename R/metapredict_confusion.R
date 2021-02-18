@@ -29,7 +29,7 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
   #   dplyr::inner_join(sampleMetadata) %>%
   #   .[[className]]
 
-  classValues = merge(data.table(sample = colnames(ematMerged)), sampleMetadata)[[className]]
+  classValues = merge(data.table(sample = colnames(ematMerged)), sampleMetadata, sort = FALSE)[[className]]
   trueClass = factor(classValues, levels=classLevels)
   return(table(trueClass, predictedClass))}
 
@@ -70,7 +70,7 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
       # sm = tibble::tibble(sample = rownames(predsProb)) %>%
       #   dplyr::inner_join(sampleMetadata, by='sample')
 
-      sm = data.table(sample = rownames(predsProb))[sampleMetadata, on = 'sample', nomatch = 0]
+      sm = merge(data.table(sample = rownames(predsProb)), sampleMetadata, by = 'sample', sort = FALSE)
       trueClass = factor(sm[[className]], levels=classLevels)
       confusion[[validationStudyName]] = table(trueClass, predictedClass)}
 
