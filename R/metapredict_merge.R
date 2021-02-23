@@ -21,6 +21,7 @@ makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
     dplyr::group_by(!!matchSampleColname) %>%
     dplyr::slice(1) %>%
     dplyr::ungroup()
+
   mapping = mappingDf$sample
   names(mapping) = mappingDf[[matchSampleColname]]
   return(mapping)}
