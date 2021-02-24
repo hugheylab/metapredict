@@ -1,10 +1,10 @@
 #' @import ggplot2
 #' @import methods
+#' @import data.table
 #' @importFrom foreach foreach
 #' @importFrom foreach "%do%"
 #' @importFrom foreach "%dopar%"
 #' @importFrom magrittr "%>%"
-#' @importFrom data.table data.table
 #' @importMethodsFrom AnnotationDbi mappedkeys
 #' @importMethodsFrom Biobase experimentData
 #' @importMethodsFrom Biobase exprs
@@ -427,7 +427,7 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 extractExpressionData = function(esetList, sampleMetadata) {
   ematList = foreach(studyName=names(esetList)) %do% {
     # sampleNamesNow = dplyr::filter(sampleMetadata, study==studyName)$sample
-    sampleNamesNow = data.table::data.table(sampleMetadata)[study == studyName, sample]
+    sampleNamesNow = data.table(sampleMetadata)[study == studyName,]$sample
     keepIdx = colnames(esetList[[studyName]]) %in% sampleNamesNow
     exprs(esetList[[studyName]])[,keepIdx]}
   names(ematList) = names(esetList)

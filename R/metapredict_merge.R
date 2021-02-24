@@ -8,19 +8,22 @@ makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
   #   dplyr::filter(study %in% subStudyNames) %>%
   #   dplyr::select(!!c('study', 'sample', matchSampleColname)) %>%
   #   arrangeFunc(study)
-
-
-  metadataNowDT = data.table(metadata)[which(study %in% subStudyNames), ..c('study', 'sample', matchSampleColname)]
+  cols = c('study', 'sample')
+  if (!(matchSampleColname %in% cols)) {
+    cols = c(cols, matchSampleColname)}
+  metadataNow = data.table(metadata)[which(study %in% subStudyNames), ..cols]
 
   if (is.unsorted(subStudyNames)) {
     metadataNow = data.table::setorder(dmetadataNowDT, -study)
   } else {
     metadataNow = data.table::setorder(metadataNowDT, study)}
 
-  mappingDf = metadataNow %>%
-    dplyr::group_by(!!matchSampleColname) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup()
+  # mappingDf = metadataNow %>%
+  #   dplyr::group_by(!!matchSampleColname) %>%
+  #   dplyr::slice(1) %>%
+  #   dplyr::ungroup()
+
+  mappingDf = metadataNow[1,, by = ..matchSampleColname]
 
   mapping = mappingDf$sample
   names(mapping) = mappingDf[[matchSampleColname]]
@@ -88,15 +91,19 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
       sampleMetadataList[[matchStudyName]]$study = matchStudyName}}
 
   colnamesKeep = setdiff(colnames(studyMetadataAtomic), matchStudyColname)
-  studyMetadata = studyMetadataAtomic %>%
-    dplyr::group_by(!!matchStudyColname) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup() %>%
-    # dplyr::mutate_(study = lazyeval::interp(~ c1, c1=as.name(matchStudyColname))) %>%
-    dplyr::mutate(study = !!matchStudyColname) %>%
-    dplyr::select(!!colnamesKeep)
+  # studyMetadata = studyMetadataAtomic %>%
+  #   dplyr::group_by(!!matchStudyColname) %>%
+  #   dplyr::slice(1) %>%
+  #   dplyr::ungroup() %>%
+  #   # dplyr::mutate_(study = lazyeval::interp(~ c1, c1=as.name(matchStudyColname))) %>%
+  #   dplyr::mutate(study = !!matchStudyColname) %>%
+  #   dplyr::select(!!colnamesKeep)
 
-  sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
+  studyMetadata = studyMetadataAtomic[1,, by = ..matchStudyColname][,study := matchStudyColname][,..colnamesKeep]
+
+  # sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
+  sampleMetadata = suppressWarnings(rbindlist(sampleMetadataList))
+
 
   result = list(ematList, studyMetadata, sampleMetadata)
   names(result) = c('ematList', 'studyMetadata', 'sampleMetadata')

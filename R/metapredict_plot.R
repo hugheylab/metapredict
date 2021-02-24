@@ -131,6 +131,7 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   #   dplyr::inner_join(sampleMetadata, by='sample') %>%
   #   dplyr::select(!!names(annoLevels)) %>%
   #   as.data.frame()
+  cols = names(annoLevels)
   annotation = as.data.frame(merge(data.table(sample = colnames(ematMerged)), sampleMetadata, by = 'sample', sort = FALSE)[,..cols])
   rownames(annotation) = colnames(ematMerged)
 
@@ -244,7 +245,7 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
 
     sm = merge(data.table(sample = rownames(df)), sampleMetadata, by = 'sample', sort = FALSE)
 
-    df$study = smDT[,study]
+    df$study = sm[,study]
     df$sample = rownames(df)
     df$trueClass = factor(sm[[className]], levels=classLevels)
     df$trueClassProb = apply(df, MARGIN=1, function(x) as.numeric(x[x['trueClass']]))
