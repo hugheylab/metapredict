@@ -1,5 +1,5 @@
 makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
-  #
+
   # if (is.unsorted(subStudyNames)) {
   #   arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
   # } else {
@@ -8,6 +8,7 @@ makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
   #   dplyr::filter(study %in% subStudyNames) %>%
   #   dplyr::select(!!c('study', 'sample', matchSampleColname)) %>%
   #   arrangeFunc(study)
+
   cols = c('study', 'sample')
   if (!(matchSampleColname %in% cols)) {
     cols = c(cols, matchSampleColname)}
