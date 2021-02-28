@@ -36,7 +36,8 @@ plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
     if (is.na(classLevels[1])) {
       classLevels = colnames(coefDf)[2:ncol(coefDf)]}
 
-    coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
+    # coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
+    coefDfMolten = melt(as.data.table(coefDf), id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
     coefDfMolten$class = factor(coefDfMolten$class, levels=classLevels)
 
     geneIds = coefDf$geneId
@@ -201,7 +202,8 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
       if (any(df$trueClass==classLevel)) {
         idxTmp = c(idxTmp, 1:(sum(df$trueClass==classLevel)))}}
     df$idx = idxTmp
-    dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
+    # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
+    dfMolten = melt(as.data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
       facet_grid(study ~ trueClass, scales='free_x', space='free_x') +
@@ -260,7 +262,9 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
     df$idx = idxTmp
     rownames(df) = NULL
 
-    dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
+    # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
+    dfMolten = melt(as.data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
+
     p = ggplot(dfMolten) +
       facet_grid(study ~ trueClass, scales='free_x', space='free_x') +
       geom_point(aes_string(x='idx', y='prob', color='probClass', shape='probClass'), size=size) +

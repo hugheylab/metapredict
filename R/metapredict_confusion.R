@@ -15,22 +15,22 @@
 #'
 #' @export
 calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
-                           className='class', classLevels=NA) {
+                           className = 'class', classLevels = NA) {
   if (is.na(classLevels[1])) {
     classLevels = names(cvFit$glmnet.fit$beta)}
 
   cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
   rownames(cvProbs) = colnames(ematMerged)
   colnames(cvProbs) = names(cvFit$glmnet.fit$beta)
-  preds = colnames(cvProbs)[apply(cvProbs, MARGIN=1, function(x) which.max(x))]
-  predictedClass = factor(preds, levels=classLevels)
+  preds = colnames(cvProbs)[apply(cvProbs, MARGIN = 1, function(x) which.max(x))]
+  predictedClass = factor(preds, levels = classLevels)
 
   # classValues = tibble::tibble(sample = colnames(ematMerged)) %>%
   #   dplyr::inner_join(sampleMetadata) %>%
   #   .[[className]]
 
   classValues = merge(data.table(sample = colnames(ematMerged)), sampleMetadata, sort = FALSE)[[className]]
-  trueClass = factor(classValues, levels=classLevels)
+  trueClass = factor(classValues, levels = classLevels)
   return(table(trueClass, predictedClass))}
 
 
@@ -49,13 +49,13 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
 #'   each validation dataset (default) or one confusion matrix including all
 #'   datasets.
 #'
-#' @return If `each==TRUE`, a list of objects of class `table`. Otherwise, an
+#' @return If `each == TRUE`, a list of objects of class `table`. Otherwise, an
 #'   object of class `table`.
 #'
 #' @export
 calcConfusionValidation = function(predsList, lambda, sampleMetadata,
-                                   className='class', classLevels=NA,
-                                   each=TRUE) {
+                                   className = 'class', classLevels = NA,
+                                   each = TRUE) {
   if (is.na(classLevels[1])) {
     classLevels = colnames(predsList[[1]])}
 
@@ -63,28 +63,28 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
     confusion = list()
     for (validationStudyName in names(predsList)) {
       predsProb = predsList[[validationStudyName]][,,1]
-      predsClass = colnames(predsProb)[apply(predsProb, MARGIN=1,
+      predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                              function(x) which.max(x))]
-      predictedClass = factor(predsClass, levels=classLevels)
+      predictedClass = factor(predsClass, levels = classLevels)
 
       # sm = tibble::tibble(sample = rownames(predsProb)) %>%
-      #   dplyr::inner_join(sampleMetadata, by='sample')
+      #   dplyr::inner_join(sampleMetadata, by = 'sample')
 
       sm = merge(data.table(sample = rownames(predsProb)), sampleMetadata, by = 'sample', sort = FALSE)
-      trueClass = factor(sm[[className]], levels=classLevels)
+      trueClass = factor(sm[[className]], levels = classLevels)
       confusion[[validationStudyName]] = table(trueClass, predictedClass)}
 
   } else {
     predsProb = do.call(rbind, lapply(predsList, function(x) x[,,1]))
-    predsClass = colnames(predsProb)[apply(predsProb, MARGIN=1,
+    predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                            function(x) which.max(x))]
-    predictedClass = factor(predsClass, levels=classLevels)
+    predictedClass = factor(predsClass, levels = classLevels)
 
     # sm = tibble::tibble(sample = rownames(predsProb)) %>%
-    #   dplyr::inner_join(sampleMetadata, by='sample')
+    #   dplyr::inner_join(sampleMetadata, by = 'sample')
 
     sm = data.table(sample = rownames(predsProb))[sampleMetadata, on = 'sample', nomatch = 0]
-    trueClass = factor(sm[[className]], levels=classLevels)
+    trueClass = factor(sm[[className]], levels = classLevels)
     confusion = table(trueClass, predictedClass)}
 
   return(confusion)}
