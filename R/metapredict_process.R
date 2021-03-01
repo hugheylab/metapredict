@@ -15,7 +15,7 @@
 NULL
 
 globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel',
-                  '.', 'study', 'ii', 'studyDataType', 'platformInfo', 'geneId',
+                  '.', 'study', 'ii', 'studyDataType', 'platformInfo', 'geneId', 'geneIdTmp',
                   'coefficient'))
 
 
@@ -88,7 +88,7 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 
 
 getGeneProbeMappingDirect = function(featureDf, geneColname, probeColname = 'ID') {
-  mapping = featureDf[,c(probeColname, geneColname)]
+  mapping = featureDf[,c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
   mapping = data.frame(lapply(mapping, as.character), stringsAsFactors = FALSE)
   colnames(mapping) = c('probeSet', 'geneId')
@@ -121,13 +121,13 @@ calcExprsByGene = function(eset, mapping) {
   geneIds = unique(mapping[['geneId']])
   exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
                        dimnames = list(geneIds, Biobase::sampleNames(eset)))
-  for (geneId in geneIds) {
+  foreach(geneIdTmp = geneIds) %do% {
     # exprsTmp = exprs(eset)[mappingDf[mappingDf[,'geneId'] == geneId, 'probeSet'],, drop = FALSE]
-    exprsTmp = exprs(eset)[mapping[geneId == geneId, probeSet],, drop = FALSE]
+    exprsTmp = exprs(eset)[mapping[geneId == geneIdTmp, probeSet],, drop = FALSE]
     if (nrow(exprsTmp) == 1) {
-      exprsByGene[geneId,] = exprsTmp
+      exprsByGene[geneIdTmp,] = exprsTmp
     } else {
-      exprsByGene[geneId,] = matrixStats::rowMedians(t(exprsTmp), na.rm = TRUE)}}
+      exprsByGene[geneIdTmp,] = matrixStats::rowMedians(t(exprsTmp), na.rm = TRUE)}}
   return(exprsByGene)}
 
 
@@ -372,7 +372,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
   } else if (studyDataType == 'eset_rds') {
     esetOrig = readRDS(file.path(parentFolderPath, paste0(studyName, '.rds')))
 
-    featureDf = pData(featureData(esetOrig))
+    # featureDf = pData(featureData(esetOrig))
+    featureDf = setDT(pData(featureData(esetOrig)))
     if (platformInfo == 'ready') {
       return(esetOrig)
     } else if (platformInfo == 'rosetta') {

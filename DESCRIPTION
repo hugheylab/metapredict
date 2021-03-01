@@ -23,7 +23,6 @@ Imports:
   cowplot (>= 0.9.3),
   data.table (>= 1.13.2),
   doFuture (>= 0.12.0),
-  dplyr (>= 0.7.6),
   foreach (>= 1.4.3),
   GEOquery (>= 2.36.0),
   ggplot2 (>= 2.2.1),
@@ -31,7 +30,6 @@ Imports:
   impute (>= 1.44.0),
   iterators (>= 1.0.13),
   lazyeval (>= 0.2.1),
-  magrittr (>= 1.5),
   matrixStats (>= 0.15.0),
   methods (>= 3.2.1),
   org.Hs.eg.db (>= 3.2.3),
@@ -39,8 +37,6 @@ Imports:
   pheatmap (>= 1.0.7),
   RColorBrewer (>= 1.1-2),
   sva (>= 3.18.0),
-  tibble (>= 1.3.1),
-  tidyr (>= 0.8.1)
 Suggests:
   knitr,
   rmarkdown
