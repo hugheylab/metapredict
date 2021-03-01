@@ -232,12 +232,10 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     if (is.list(esetOrig) && length(esetOrig) == 1) {
       esetOrig = esetOrig[[1]]}
 
-    # featureDf = pData(featureData(esetOrig))
-    # idx = sapply(featureDf, is.factor)
-    # featureDf[idx] = lapply(featureDf[idx], as.character)
-    featureDf = setDT(pData(featureData(esetOrig)))
-    changeCols = colnames(featureDf)[which(as.vector(featureDf[,lapply(.SD, class)]) == "factor")]
-    featureDf[,(changeCols):= lapply(.SD, as.character), .SDcols = changeCols]
+    featureDf = pData(featureData(esetOrig))
+    idx = sapply(featureDf, is.factor)
+    featureDf[idx] = lapply(featureDf[idx], as.character)
+    setDT(featureDf)
     if (platformInfo == 'GPL180') {
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'GENE_SYM')
@@ -258,7 +256,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'GENE')
     } else if (platformInfo == 'GPL1073') {
-      featureDf[,'GenBank'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'GenBank'] = sapply(featureDf[,GB_ACC],
                                      function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egACCNUM2EG',
                                         interName = 'GenBank')
@@ -288,7 +286,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egENSEMBL2EG',
                                         interName = 'ENSEMBL_GENE_ID')
     } else if (platformInfo == 'GPL6333') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
@@ -298,24 +296,24 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'rep_name')
     } else if (platformInfo == 'GPL6880') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6884') {
       mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez_Gene_ID')
     } else if (platformInfo == 'GPL6885') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6887') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6947') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
@@ -348,7 +346,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Dr.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL18721') {
-      featureDf[,'RefSeq'] = sapply(featureDf[,'GB_ACC'],
+      featureDf[,'RefSeq'] = sapply(featureDf[,GB_ACC],
                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
@@ -372,8 +370,8 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
   } else if (studyDataType == 'eset_rds') {
     esetOrig = readRDS(file.path(parentFolderPath, paste0(studyName, '.rds')))
 
-    # featureDf = pData(featureData(esetOrig))
-    featureDf = setDT(pData(featureData(esetOrig)))
+    featureDf = pData(featureData(esetOrig))
+    setDT(featureDf)
     if (platformInfo == 'ready') {
       return(esetOrig)
     } else if (platformInfo == 'rosetta') {

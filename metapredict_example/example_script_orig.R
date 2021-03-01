@@ -1,7 +1,7 @@
 library('metapredict')
 library('ggplot2')
 library('RColorBrewer')
-# library('foreach')
+library('foreach')
 # library('data.table')
 # library('dplyr')
 
@@ -20,15 +20,26 @@ alpha = 0.9
 discoveryStudyNames = c('Bhattacharjee', 'GSE11969', 'GSE29016')
 classLevels = c('AD', 'SQ', 'SCLC')
 
+rdsPrefix = 'local'
+
 studyMetadataPath = system.file('extdata', 'study_metadata.csv', package = 'metapredict')
 studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 
 sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package = 'metapredict')
 sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
 
+foreach(studyRow = iterators::iter(studyMetadata, by = 'row'), .combine = c) %do% {
+  if (any(is.na(studyRow))) {
+    NA
+  } else {
+    studyData = getStudyData(parentFolderPath, studyRow$study,
+                 studyRow$studyDataType,
+                 studyRow$platformInfo)
+    saveRDS(studyData, file = paste0(rdsPrefix, studyRow$study, expressionDataFile))}}
+
 if (denovo) {
   esetListOrig = getStudyDataList(parentFolderPath, studyMetadata)
-  saveRDS(esetList, file = expressionDataFile)
+  saveRDS(esetListOrig, file = expressionDataFile)
 } else {
   esetListOrig = readRDS(expressionDataFile)}
 
