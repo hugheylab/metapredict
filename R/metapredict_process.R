@@ -3,7 +3,7 @@
 #' @import data.table
 #' @importFrom foreach foreach
 #' @importFrom foreach "%do%"
-#' @importFrom foreach "%dopar%"
+#' @importFrom doFuture "%dopar%"
 #' @importMethodsFrom AnnotationDbi mappedkeys
 #' @importMethodsFrom Biobase experimentData
 #' @importMethodsFrom Biobase exprs
@@ -123,7 +123,7 @@ calcExprsByGene = function(eset, mapping) {
   geneIds = unique(mapping[['geneId']])
   exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
                        dimnames = list(geneIds, Biobase::sampleNames(eset)))
-  foreach(geneIdTmp = geneIds) %do% {
+  foreach(geneIdTmp = geneIds) %dopar% {
     # exprsTmp = exprs(eset)[mappingDf[mappingDf[,'geneId'] == geneId, 'probeSet'],, drop = FALSE]
     exprsTmp = exprs(eset)[mapping[geneId == geneIdTmp, probeSet],, drop = FALSE]
     if (nrow(exprsTmp) == 1) {
