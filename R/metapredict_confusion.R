@@ -83,7 +83,7 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
     # sm = tibble::tibble(sample = rownames(predsProb)) %>%
     #   dplyr::inner_join(sampleMetadata, by = 'sample')
 
-    sm = data.table(sample = rownames(predsProb))[sampleMetadata, on = 'sample', nomatch = 0]
+    sm = merge(data.table(sample = rownames(predsProb)), sampleMetadata, by = 'sample', sort = FALSE)
     trueClass = factor(sm[[className]], levels = classLevels)
     confusion = table(trueClass, predictedClass)}
 
