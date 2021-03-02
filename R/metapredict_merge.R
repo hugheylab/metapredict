@@ -12,7 +12,7 @@ makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
   cols = c('study', 'sample')
   if (!(matchSampleColname %in% cols)) {
     cols = c(cols, matchSampleColname)}
-  metadataNow = data.table(metadata)[which(study %in% subStudyNames), ..cols]
+  metadataNow = data.table(metadata)[study %in% subStudyNames, ..cols]
 
   order = if (is.unsorted(subStudyNames)) -1L else 1L
   setorderv(metadataNow, 'study', order = order)
