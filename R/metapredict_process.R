@@ -1,7 +1,6 @@
 #' @import ggplot2
 #' @import methods
 #' @import data.table
-#' @import doFuture
 #' @importFrom foreach foreach
 #' @importFrom foreach "%do%"
 #' @importFrom foreach "%dopar%"
@@ -121,17 +120,22 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   return(mapping)}
 
 
+# Assign result of foreach to object using .combine to get appropriate matrix
+# Ensure mapping is a data.table
 calcExprsByGene = function(eset, mapping) {
-  geneIds = unique(mapping[['geneId']])
-  exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
-                       dimnames = list(geneIds, Biobase::sampleNames(eset)))
-  foreach(geneIdTmp = geneIds) %do% {
+  mapUnique = unique(mapping, by = 'geneId')
+  exprEset = exprs(eset)
+  # foreach(geneIdTmp = geneIds) %do% {
+  exprsByGene = foreach(mapVal = iterators::iter(mapUnique, by = 'row'), .combine = rbind) %dopar% {
     # exprsTmp = exprs(eset)[mappingDf[mappingDf[,'geneId'] == geneId, 'probeSet'],, drop = FALSE]
-    exprsTmp = exprs(eset)[mapping[geneId == geneIdTmp, probeSet],, drop = FALSE]
+    exprsTmp = exprEset[mapVal$probeSet,, drop = FALSE]
+    tmpMat= exprsTmp
     if (nrow(exprsTmp) == 1) {
-      exprsByGene[geneIdTmp,] = exprsTmp
+      tmpMat = exprsTmp
     } else {
-      exprsByGene[geneIdTmp,] = matrixStats::rowMedians(t(exprsTmp), na.rm = TRUE)}}
+      tmpMat = matrixStats::rowMedians(t(exprsTmp), na.rm = TRUE)}
+    rownames(tmpMat) = mapVal$geneId
+    tmpMat}
   return(exprsByGene)}
 
 
@@ -165,7 +169,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
   #                 !(platformInfo %in% getSupportedPlatforms())) %>%
   #   .$platformInfo
 
-  unsupportedPlatforms = data.table(studyMetadata)[which(studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms())),platformInfo]
+  unsupportedPlatforms = data.table(studyMetadata)[studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms()),platformInfo]
 
   if (length(unsupportedPlatforms) == 0) {
     cat("Whew, all microarray platforms for studies whose studyDataType == 'series_matrix' are supported.\n")

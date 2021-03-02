@@ -22,7 +22,6 @@ Imports:
   cba (>= 0.2-15),
   cowplot (>= 0.9.3),
   data.table (>= 1.12.2),
-  doFuture (>= 0.9.0),
   foreach (>= 1.4.3),
   GEOquery (>= 2.36.0),
   ggplot2 (>= 2.2.1),
@@ -38,6 +37,7 @@ Imports:
   RColorBrewer (>= 1.1-2),
   sva (>= 3.18.0),
 Suggests:
+  doFuture,
   knitr,
   rmarkdown
 VignetteBuilder: knitr
