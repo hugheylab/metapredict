@@ -84,6 +84,7 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
   rownames(mappingUnique) = NULL
   colnames(mappingUnique) = c('geneId', 'probeSet')
   mappingUnique[,'probeSet'] = as.character(mappingUnique[,'probeSet'])
+  setDT(mappingUnique)
   return(mappingUnique)}
 
 
@@ -92,6 +93,7 @@ getGeneProbeMappingDirect = function(featureDf, geneColname, probeColname = 'ID'
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
   mapping = data.frame(lapply(mapping, as.character), stringsAsFactors = FALSE)
   colnames(mapping) = c('probeSet', 'geneId')
+  setDT(mapping)
   return(mapping)}
 
 
