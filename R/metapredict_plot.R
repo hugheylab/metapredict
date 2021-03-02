@@ -102,7 +102,8 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
       sm = data.table(sampleMetadata)[which(sample %in% colnames(ematMerged)),]
       classLevels = unique(sm[[className]])}
 
-    ematSmallList = foreach(classLevel=classLevels) %do% {
+    # ematSmallList = foreach(classLevel=classLevels) %do% {
+    emat = foreach(classLevel=classLevels, .combine = cbind) %do% {
       # sampleNames1 = sampleMetadata %>%
       #   dplyr::filter_(lazyeval::interp(~ a==classLevel, a=as.name(className))) %>%
       #   .$sample
@@ -110,8 +111,8 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
       x = emat[, colnames(emat) %in% sampleNames1]
       d = stats::dist(t(x))
       co = cba::order.optimal(d, stats::hclust(d)$merge)
-      x = x[, co$order]}
-    emat = do.call(cbind, ematSmallList)}
+      x = x[, co$order]}}
+    # emat = do.call(cbind, ematSmallList)}
 
   # order the genes
   if (is.na(geneIdOrder[1])) {
