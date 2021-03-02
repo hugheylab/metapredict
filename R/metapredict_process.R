@@ -1,6 +1,7 @@
 #' @import ggplot2
 #' @import methods
 #' @import data.table
+#' @import doFuture
 #' @importFrom foreach foreach
 #' @importFrom foreach "%do%"
 #' @importFrom foreach "%dopar%"
@@ -16,7 +17,7 @@ NULL
 
 globalVariables(c('studyName', 'coefSparse', 'validationStudyName', 'classLevel',
                   '.', 'study', 'ii', 'studyDataType', 'platformInfo', 'geneId', 'geneIdTmp',
-                  'coefficient'))
+                  'coefficient', 'mapping'))
 
 
 #' Install custom CDF packages from Brainarray.
@@ -116,6 +117,7 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   mappingIdInter = data.table(geneId, geneInter, stringsAsFactors = FALSE)
   mapping = merge(mappingIdInter, mappingProbeIntermediate, by = 'geneInter', sort = FALSE)
   mapping$probeSet = as.character(mapping$probeSet)
+  setDT(mapping)
   return(mapping)}
 
 
@@ -123,7 +125,7 @@ calcExprsByGene = function(eset, mapping) {
   geneIds = unique(mapping[['geneId']])
   exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
                        dimnames = list(geneIds, Biobase::sampleNames(eset)))
-  foreach(geneIdTmp = geneIds) %dopar% {
+  foreach(geneIdTmp = geneIds) %do% {
     # exprsTmp = exprs(eset)[mappingDf[mappingDf[,'geneId'] == geneId, 'probeSet'],, drop = FALSE]
     exprsTmp = exprs(eset)[mapping[geneId == geneIdTmp, probeSet],, drop = FALSE]
     if (nrow(exprsTmp) == 1) {

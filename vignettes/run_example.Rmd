@@ -32,6 +32,10 @@ Open R and set the working directory to the `metapredict_example` folder that yo
 library('metapredict')
 library('ggplot2')
 library('RColorBrewer')
+library('doFuture')
+registerDoFuture()
+nCores = round(availableCores() * 0.75)
+plan(multisession, workers = nCores)
 
 parentFolderPath = 'expression_data'
 expressionDataFile = 'expression_data.rds'
