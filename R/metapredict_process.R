@@ -3,7 +3,7 @@
 #' @import data.table
 #' @importFrom foreach foreach
 #' @importFrom foreach "%do%"
-#' @importFrom doFuture "%dopar%"
+#' @importFrom foreach "%dopar%"
 #' @importMethodsFrom AnnotationDbi mappedkeys
 #' @importMethodsFrom Biobase experimentData
 #' @importMethodsFrom Biobase exprs
