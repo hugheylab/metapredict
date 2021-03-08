@@ -98,7 +98,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
   #   dplyr::mutate(study = !!matchStudyColname) %>%
   #   dplyr::select(!!colnamesKeep)
 
-  studyMetadata = studyMetadataAtomic[1,, by = ..matchStudyColname][,study := matchStudyColname][,..colnamesKeep]
+  studyMetadata = studyMetadataAtomic[, .SD[1L], by = ..matchStudyColname][,study := matchStudyColname][,..colnamesKeep]
 
   # sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
   sampleMetadata = suppressWarnings(rbindlist(sampleMetadataList))
