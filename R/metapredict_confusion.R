@@ -63,10 +63,10 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
   if (is.na(classLevels[1])) {
     classLevels = colnames(predsList[[1]])}
 
-  if (each) {
+  if (isTRUE(each)) {
     confusion = list()
     for (validationStudyName in names(predsList)) {
-      predsProb = predsList[[validationStudyName]][,,1]
+      predsProb = predsList[[validationStudyName]][, , 1]
       predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                              function(x) which.max(x))]
       predictedClass = factor(predsClass, levels = classLevels)

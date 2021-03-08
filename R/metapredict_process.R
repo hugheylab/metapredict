@@ -78,21 +78,22 @@ fixCelSampleNames = function(sampleNames) {
 
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
-  # mapping = utils::read.table(mappingFilePath, sep = '\t', header = TRUE, stringsAsFactors = FALSE)
-  mapping = fread(mappingFilePath, sep = '\t', header = TRUE, stringsAsFactors = FALSE)
-  mappingUnique = unique(mapping[,c('geneId', 'probeSet')])
+  mapping = fread(mappingFilePath, sep = '\t')
+  mappingUnique = unique(mapping[,c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
   mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))),]
-  rownames(mappingUnique) = NULL
-  colnames(mappingUnique) = c('geneId', 'probeSet')
-  mappingUnique$probeSet = as.character(mappingUnique$probeSet)
+  setnames(mappingUnique, 'Probe.Set.Name', 'geneId')
+  setnames(mappingUnique, 'Affy.Probe.Set.Name', 'probeSet')
+  mappingUnique[, probeSet := as.character(probeSet)]
   return(mappingUnique)}
 
 
 getGeneProbeMappingDirect = function(featureDf, geneColname, probeColname = 'ID') {
   mapping = featureDf[,c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
-  mapping = data.frame(lapply(mapping, as.character), stringsAsFactors = FALSE)
-  colnames(mapping) = c('probeSet', 'geneId')
+  setnames(mapping, probeColName, 'probeSet')
+  setnames(mapping, geneColName, 'geneId')
+  mapping[, probeSet := as.character(probeSet)]
+  mapping[, geneId := as.character(geneId)]
   setDT(mapping)
   return(mapping)}
 
@@ -100,7 +101,8 @@ getGeneProbeMappingDirect = function(featureDf, geneColname, probeColname = 'ID'
 getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   mappingProbeIntermediate = featureDf[!is.na(featureDf[[interName]]) & featureDf[[interName]]!='',
                                        c('ID', ..interName)]
-  colnames(mappingProbeIntermediate) = c('probeSet', 'geneInter')
+  setnames(mappingProbeIntermediate, 'ID', 'probeSet')
+  setnames(mappingProbeIntermediate, interName, 'geneInter')
 
   mapTmp1 = eval(parse(text = sprintf('%s.db::%s', substr(dbName, 1, 9), dbName)))
   mapTmp2 = mappedkeys(mapTmp1)
@@ -111,10 +113,9 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
                                 sapply(mapTmp3, length), SIMPLIFY = FALSE))
   if (dbName == 'org.Hs.egUNIGENE2EG') {
     geneInter = sub('Hs.', '', geneInter, fixed = TRUE)}
-  mappingIdInter = data.frame(geneId, geneInter, stringsAsFactors=FALSE)
-  mapping = merge(mappingIdInter, mappingProbeIntermediate, by='geneInter', sort=FALSE)
-  mapping$probeSet = as.character(mapping$probeSet)
-  setDT(mapping)
+  mappingIdInter = data.table(geneId, geneInter)
+  mapping = merge(mappingIdInter, mappingProbeIntermediate, by = 'geneInter', sort=FALSE)
+  mapping[, probeSet := as.character(probeSet)]
   return(mapping)}
 
 
@@ -124,32 +125,10 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
 # Dont use iterators, use same format as before
 calcExprsByGene = function(eset, mapping) {
 
-  mapping = as.data.frame(mapping)
-  mapUnique = unique(mapping, by = 'geneId')
-  geneIds = unique(mapping[,'geneId'])
-  exprsByGene = matrix(nrow=length(geneIds), ncol=ncol(eset),
-                       dimnames=list(geneIds, Biobase::sampleNames(eset)))
-  for (geneIdTmp in geneIds) {
-    exprsTmp = exprs(eset)[mapping[mapping[,'geneId']==geneIdTmp, 'probeSet'],, drop=FALSE]
-    if (nrow(exprsTmp)==1) {
-      exprsByGene[geneIdTmp,] = exprsTmp
-      } else {
-        exprsByGene[geneIdTmp,] = matrixStats::rowMedians(t(exprsTmp), na.rm=TRUE)}}
-
-  setDT(mapping)
-  exprsDT =  as.data.table(exprs(eset))
-  colNames = colnames(exprsDT)[colnames(exprsDT) != 'probeSet']
-  exprsDT[, probeSet := rownames(exprsDT)]
-  mapExprs = merge(mapping, exprsDT, by = 'probeSet', sort = FALSE)
-  mapExprs$probeSet = NULL
-  mapExprs$geneInter = NULL
-  mapExprs = mapExprs[,by=geneId, lapply(.SD, median)]
-  mapExprs = unique(mapExprs, by = 'geneId')
-  rownames(mapExprs) = mapExprs$geneId
-  mapExprs$geneId = NULL
-  exprsByGene2 = matrix(as.matrix(mapExprs), nrow = nrow(mapExprs), ncol = ncol(mapExprs),
-                    dimnames=list(rownames(mapExprs), colnames(mapExprs)))
-  all.equal(exprsByGene, exprsByGene2)
+  d = as.data.table(exprs(eset), keep.rownames = 'probeSet')
+  d1 = merge(d, mapping, by = 'probeSet')
+  d2 = d1[, lapply(.SD, median), keyby = geneId, .SDcols = !c('probeSet', 'geneInter')]
+  exprsByGene = as.matrix(d2[, 2:ncol(d2)], rownames = d2$geneId)
 
   return(exprsByGene)}
 
@@ -233,7 +212,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     mapping = getGeneProbeMappingAffy(file.path(parentFolderPath,
                                                 paste0(platformInfo, '_mapping.txt')))
     esetOrig = GEOquery::getGEO(filename = file.path(parentFolderPath,
-                                                   paste0(studyName, '_series_matrix.txt.gz')))
+                                                     paste0(studyName, '_series_matrix.txt.gz')))
     exprs(esetOrig)[exprs(esetOrig)<= 0] = min(exprs(esetOrig)[exprs(esetOrig)>0])
     exprs(esetOrig) = log2(exprs(esetOrig))
     exprsByGene = calcExprsByGene(esetOrig, mapping)
@@ -251,7 +230,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
       return(NA)}
 
     esetOrig = GEOquery::getGEO(filename = file.path(parentFolderPath,
-                                                   paste0(studyName, '_series_matrix.txt.gz')))
+                                                     paste0(studyName, '_series_matrix.txt.gz')))
     if (is.list(esetOrig) && length(esetOrig) == 1) {
       esetOrig = esetOrig[[1]]}
 
@@ -280,7 +259,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
                                         interName = 'GENE')
     } else if (platformInfo == 'GPL1073') {
       featureDf$GenBank = sapply(featureDf[,GB_ACC],
-                                     function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egACCNUM2EG',
                                         interName = 'GenBank')
     } else if (platformInfo == 'GPL1261') {
@@ -310,7 +289,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
                                         interName = 'ENSEMBL_GENE_ID')
     } else if (platformInfo == 'GPL6333') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6480') {
@@ -320,24 +299,24 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
                                         interName = 'rep_name')
     } else if (platformInfo == 'GPL6880') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6884') {
       mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez_Gene_ID')
     } else if (platformInfo == 'GPL6885') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6887') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6947') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL7015') {
@@ -370,7 +349,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL18721') {
       featureDf$RefSeq = sapply(featureDf[,GB_ACC],
-                                    function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
+                                function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
       mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL20769') {

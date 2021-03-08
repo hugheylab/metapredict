@@ -37,7 +37,7 @@ plotCoefficients = function(fitResult, lambda, classLevels=NA, decreasing=FALSE,
       classLevels = colnames(coefDf)[2:ncol(coefDf)]}
 
     # coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
-    coefDfMolten = melt(as.data.table(coefDf), id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
+    coefDfMolten = melt(data.table(coefDf), id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
     coefDfMolten$class = factor(coefDfMolten$class, levels=classLevels)
 
     geneIds = coefDf$geneId
@@ -99,11 +99,11 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   } else {
     if (is.na(classLevels[1])) {
       # sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
-      sm = data.table(sampleMetadata)[which(sample %in% colnames(ematMerged)),]
+      sm = data.table(sampleMetadata)[sample %in% colnames(ematMerged),]
       classLevels = unique(sm[[className]])}
 
     # ematSmallList = foreach(classLevel=classLevels) %do% {
-    emat = foreach(classLevel=classLevels, .combine = cbind) %do% {
+    emat = foreach(classLevel = classLevels, .combine = cbind) %do% {
       # sampleNames1 = sampleMetadata %>%
       #   dplyr::filter_(lazyeval::interp(~ a==classLevel, a=as.name(className))) %>%
       #   .$sample
@@ -134,7 +134,7 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   #   dplyr::select(!!names(annoLevels)) %>%
   #   as.data.frame()
   cols = names(annoLevels)
-  annotation = as.data.frame(merge(data.table(sample = colnames(ematMerged)), sampleMetadata, by = 'sample', sort = FALSE)[,..cols])
+  annotation = as.data.frame(mergeDataTable(colnames(ematMerged), sampleMetadata)[, ..cols])
   rownames(annotation) = colnames(ematMerged)
 
   for (annoName in names(annoLevels)) {
@@ -173,7 +173,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
   sampleNames = colnames(ematMerged)
   # sm = tibble::tibble(sample = sampleNames) %>%
   #   dplyr::inner_join(sampleMetadata, by='sample')
-  sm = merge(data.table(sample = sampleNames), sampleMetadata, by = 'sample', sort = FALSE)
+  sm = mergeDataTable(sampleNames, sampleMetadata)
   studyNames = sort(unique(sm$study))
 
   if (is.na(classLevels[1])) {
@@ -183,7 +183,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
   pList = list()
   for (studyName in studyNames) {
     # sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
-    sampleNamesNow = sm[which(study == studyName), sample]
+    sampleNamesNow = sm[study == studyName, sample]
     # df = tibble::as_tibble(cvProbs[sm$study==studyName,])
     df = as.data.frame(cvProbs[sm$study==studyName,])
     colnames(df) = names(cvFit$glmnet.fit$beta)
@@ -204,7 +204,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
         idxTmp = c(idxTmp, 1:(sum(df$trueClass==classLevel)))}}
     df$idx = idxTmp
     # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
-    dfMolten = melt(as.data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
+    dfMolten = melt(data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
       facet_grid(study ~ trueClass, scales='free_x', space='free_x') +
@@ -246,7 +246,7 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
     # sm = tibble::tibble(sample = rownames(df)) %>%
     #   dplyr::inner_join(sampleMetadata, by='sample')
 
-    sm = merge(data.table(sample = rownames(df)), sampleMetadata, by = 'sample', sort = FALSE)
+    sm = mergeDataTable(rownames(df), sampleMetadata)
 
     df$study = sm[,study]
     df$sample = rownames(df)
@@ -264,7 +264,7 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
     rownames(df) = NULL
 
     # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
-    dfMolten = melt(as.data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
+    dfMolten = melt(data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
       facet_grid(study ~ trueClass, scales='free_x', space='free_x') +

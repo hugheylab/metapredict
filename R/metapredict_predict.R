@@ -135,7 +135,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
     #   dplyr::select(!!className) %>%
     #   as.matrix()
 
-    yDTM = data.table(sample = discoverySampleNames)[sampleMetadataDT, on = "sample", nomatch = 0]
+    yDTM = mergeDataTable(discoverySampleNames, sampleMetadataDT)
     yDTM2 = yDTM[, ..className]
     y = as.matrix(yDTM2)
 
