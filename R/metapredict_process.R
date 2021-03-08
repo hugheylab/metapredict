@@ -114,7 +114,7 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   if (dbName == 'org.Hs.egUNIGENE2EG') {
     geneInter = sub('Hs.', '', geneInter, fixed = TRUE)}
   mappingIdInter = data.table(geneId, geneInter)
-  mapping = merge(mappingIdInter, mappingProbeIntermediate, by = 'geneInter', sort=FALSE)
+  mapping = merge(mappingIdInter, mappingProbeIntermediate, by = 'geneInter', sort = FALSE)
   mapping[, probeSet := as.character(probeSet)]
   return(mapping)}
 
