@@ -18,33 +18,33 @@
 #' @export
 plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FALSE,
                             geneIdOrder = NA, org = 'org.Hs.eg') {
-  coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
-  coefDf = coefDf[coefDf$geneId != '(Intercept)',]
+  # coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
+  # coefDf = coefDf[coefDf$geneId != '(Intercept)',]
+  coefDt = makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
+  coefDt = coefDt[geneId != '(Intercept)',]
 
   if (!is.na(geneIdOrder[1])) {
-    rownames(coefDf) = coefDf$geneId
-    coefDf = coefDf[geneIdOrder,]
-    rownames(coefDf) = NULL}
+    coefDt = coefDt[geneIdOrder,]}
 
-  if (ncol(coefDf) == 2) {
-    geneSymbols = do.call(c, annotate::lookUp(coefDf$geneId, org, 'SYMBOL', load = TRUE))
-    coefDf$geneId = factor(coefDf$geneId, levels = rev(coefDf$geneId),
-                           labels=sprintf('%s (%s)', rev(geneSymbols), rev(coefDf$geneId)))
-    p = ggplot(coefDf) + geom_bar(aes_string(x = 'geneId', y = 'coefficient'), stat = 'identity')
+  if (ncol(coefDt) == 2) {
+    geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
+    coefDt$geneId = factor(coefDt$geneId, levels = rev(coefDt$geneId),
+                           labels=sprintf('%s (%s)', rev(geneSymbols), rev(coefDt$geneId)))
+    p = ggplot(coefDt) + geom_bar(aes_string(x = 'geneId', y = 'coefficient'), stat = 'identity')
 
   } else {
     if (is.na(classLevels[1])) {
-      classLevels = colnames(coefDf)[2:ncol(coefDf)]}
+      classLevels = colnames(coefDt)[2:ncol(coefDt)]}
 
     # coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
-    coefDfMolten = melt(data.table(coefDf), id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
-    coefDfMolten$class = factor(coefDfMolten$class, levels = classLevels)
+    coefDtMolten = melt(coefDt, id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
+    coefDtMolten$class = factor(coefDtMolten$class, levels = classLevels)
 
-    geneIds = coefDf$geneId
-    geneSymbols = do.call(c, annotate::lookUp(coefDf$geneId, org, 'SYMBOL', load = TRUE))
-    coefDfMolten$geneId = factor(coefDfMolten$geneId, levels=rev(geneIds),
+    geneIds = coefDt$geneId
+    geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
+    coefDtMolten$geneId = factor(coefDtMolten$geneId, levels=rev(geneIds),
                                  labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))
-    p = ggplot(coefDfMolten) + facet_wrap(~ class, ncol = ncol(coefDf)-1) +
+    p = ggplot(coefDtMolten) + facet_wrap(~ class, ncol = ncol(coefDt)-1) +
       geom_bar(aes_string(x = 'geneId', y = 'coefficient', fill = 'class'), stat = 'identity') +
       guides(fill=FALSE)}
 
@@ -84,8 +84,9 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
                                  annoColors = NA, clusterTogether = FALSE, geneIdOrder = NA,
                                  className = 'class', classLevels = NA, org = 'org.Hs.eg',
                                  maxVal = 3, ...) {
-  coefDf = makeCoefDf(fitResult, lambda)
-  geneIds = coefDf$geneId[coefDf$geneId != '(Intercept)']
+  # coefDf = makeCoefDf(fitResult, lambda)
+  coefDt = makeCoefDt(fitResult, lambda)
+  geneIds = coefDt[geneId != '(Intercept)',]$geneId
   geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load = TRUE))
   geneTexts = sprintf('%s (%s)', geneSymbols, geneIds)
   names(geneTexts) = geneIds
