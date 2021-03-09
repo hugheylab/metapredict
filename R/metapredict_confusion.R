@@ -1,5 +1,5 @@
-mergeDataTable = function(sampleList, sampleMetadata) {
-  merge(data.table(sample = sampleList), sampleMetadata, by = 'sample', sort = FALSE)
+mergeDataTable = function(sample, sampleMetadata) {
+  merge(data.table(sample = sample), sampleMetadata, by = 'sample', sort = FALSE)
 }
 
 #' Calculate confusion matrix for cross-validation.

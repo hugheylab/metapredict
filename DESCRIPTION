@@ -28,7 +28,6 @@ Imports:
   glmnet (>= 2.0-2),
   impute (>= 1.44.0),
   iterators (>= 1.0.12),
-  lazyeval (>= 0.2.1),
   matrixStats (>= 0.15.0),
   methods (>= 3.2.1),
   org.Hs.eg.db (>= 3.2.3),
