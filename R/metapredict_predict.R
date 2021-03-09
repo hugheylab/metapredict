@@ -214,7 +214,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
     for (ii in 1:length(coefResult)) {
       setnames(coefResultNonzero[[ii]], 2, names(coefResult)[ii])}
     coefDt = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
-    decNum = if(isTRUE(decreasing)) -1L else 1L
+    decNum = if (isTRUE(decreasing)) -1L else 1L
     setorderv(coefDt, colnames(coefDt)[2:ncol(coefDt)], decNum, na.last = TRUE)
     coefDt[is.na(coefDt)] = 0
 

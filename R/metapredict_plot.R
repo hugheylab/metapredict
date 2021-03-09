@@ -9,7 +9,7 @@
 #'   then the function uses the order in `fitResult`.
 #' @param decreasing logical indicating whether to sort genes by decreasing coefficient.
 #' @param geneIdOrder Optional character array of Entrez Gene IDs specifying the order
-#'   of genes. If `NA` (default), the order from [makeCoefDf()] is used.
+#'   of genes. If `NA` (default), the order from [makeCoefDt()] is used.
 #' @param org Name of package for mapping Entrez Gene IDs to gene symbols,
 #'   passed to `data` argument of [annotate::lookUp()].
 #'
@@ -68,7 +68,7 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
 #' @param clusterTogether logical indicating whether to cluster the samples
 #'   from each dataset together or separately.
 #' @param geneIdOrder Optional character array of Entrez Gene IDs specifying the order
-#'   of genes. If `NA` (default), the order from [makeCoefDf()] is used.
+#'   of genes. If `NA` (default), the order from [makeCoefDt()] is used.
 #' @param className column in sampleMetadata containing values of the response variable.
 #' @param classLevels Order of classes for the column annotations.
 #' @param org Name of package for mapping Entrez Gene IDs to gene symbols,

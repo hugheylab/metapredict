@@ -82,7 +82,6 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
   mappingUnique = unique(mapping[, c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
   mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))), ]
   setnames(mappingUnique, c('Probe.Set.Name', 'Affy.Probe.Set.Name'), c('geneId', 'probeSet'))
-
   mappingUnique[, probeSet := as.character(probeSet)]
   return(mappingUnique)}
 
@@ -91,7 +90,6 @@ getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID'
   mapping = featureDt[,c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
   setnames(mapping, c(probeColName, geneColName), c('probeSet', 'geneId'))
-
   mapping[, probeSet := as.character(probeSet)]
   mapping[, geneId := as.character(geneId)]
   setDT(mapping)
@@ -102,7 +100,6 @@ getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
   mappingProbeIntermediate = featureDt[!is.na(featureDt[[interName]]) & featureDt[[interName]]!='',
                                        c('ID', ..interName)]
   setnames(mappingProbeIntermediate, c('ID', interName), c('probeSet', 'geneInter'))
-
 
   mapTmp1 = eval(parse(text = sprintf('%s.db::%s', substr(dbName, 1, 9), dbName)))
   mapTmp2 = mappedkeys(mapTmp1)
