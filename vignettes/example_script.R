@@ -1,9 +1,6 @@
 library('metapredict')
 library('ggplot2')
 library('RColorBrewer')
-# library('foreach')
-# library('data.table')
-# library('dplyr')
 
 if (!(grepl('vignettes', getwd()))) {
   setwd('vignettes')

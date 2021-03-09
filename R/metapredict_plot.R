@@ -20,17 +20,17 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
                             geneIdOrder = NA, org = 'org.Hs.eg') {
   # coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
   # coefDf = coefDf[coefDf$geneId != '(Intercept)',]
-  coefDt = makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
-  coefDt = coefDt[geneId != '(Intercept)',]
+  coefDt = metapredict:::makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
+  coefDt = coefDt[geneId != '(Intercept)']
 
   if (!is.na(geneIdOrder[1])) {
-    coefDt = coefDt[geneIdOrder,]}
+    coefDt = coefDt[geneIdOrder]}
 
   if (ncol(coefDt) == 2) {
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
-    coefDt$geneId = factor(coefDt$geneId, levels = rev(coefDt$geneId),
-                           labels=sprintf('%s (%s)', rev(geneSymbols), rev(coefDt$geneId)))
-    p = ggplot(coefDt) + geom_bar(aes_string(x = 'geneId', y = 'coefficient'), stat = 'identity')
+    coefDt[, geneId := factor(geneId, levels = rev(geneId),
+                           labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneId)))]
+    p = ggplot(coefDt) + geom_bar(aes(x = geneId, y = coefficient), stat = 'identity')
 
   } else {
     if (is.na(classLevels[1])) {
@@ -38,14 +38,14 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
 
     # coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
     coefDtMolten = melt(coefDt, id.vars = 'geneId', variable.name = 'class', variable.factor = FALSE, value.name = 'coefficient')
-    coefDtMolten$class = factor(coefDtMolten$class, levels = classLevels)
+    coefDtMolten[, class := factor(class, levels = classLevels)]
 
     geneIds = coefDt$geneId
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
-    coefDtMolten$geneId = factor(coefDtMolten$geneId, levels=rev(geneIds),
-                                 labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))
+    coefDtMolten[, geneId := factor(geneId, levels=rev(geneIds),
+                                 labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))]
     p = ggplot(coefDtMolten) + facet_wrap(~ class, ncol = ncol(coefDt)-1) +
-      geom_bar(aes_string(x = 'geneId', y = 'coefficient', fill = 'class'), stat = 'identity') +
+      geom_bar(aes(x = geneId, y = coefficient, fill = class), stat = 'identity') +
       guides(fill=FALSE)}
 
   return(p + coord_flip() + labs(x = 'Gene', y = 'Coefficient') + theme_light())}
@@ -86,11 +86,11 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
                                  maxVal = 3, ...) {
   # coefDf = makeCoefDf(fitResult, lambda)
   coefDt = makeCoefDt(fitResult, lambda)
-  geneIds = coefDt[geneId != '(Intercept)',]$geneId
+  geneIds = coefDt[geneId != '(Intercept)', geneId]
   geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load = TRUE))
   geneTexts = sprintf('%s (%s)', geneSymbols, geneIds)
   names(geneTexts) = geneIds
-  emat = ematMerged[geneIds,]
+  emat = ematMerged[geneIds, ]
 
   # order the samples
   if (clusterTogether) {
@@ -100,7 +100,7 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   } else {
     if (is.na(classLevels[1])) {
       # sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
-      sm = data.table(sampleMetadata)[sample %in% colnames(ematMerged),]
+      sm = data.table(sampleMetadata)[sample %in% colnames(ematMerged)]
       classLevels = unique(sm[[className]])}
 
     # ematSmallList = foreach(classLevel=classLevels) %do% {
@@ -119,10 +119,10 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
   if (is.na(geneIdOrder[1])) {
     d = stats::dist(emat)
     co = cba::order.optimal(d, stats::hclust(d)$merge)
-    emat = emat[co$order,]
+    emat = emat[co$order, ]
     rownames(emat) = geneTexts[co$order]
   } else {
-    emat = emat[geneIdOrder,]
+    emat = emat[geneIdOrder, ]
     rownames(emat) = geneTexts[geneIdOrder]}
 
   # scale the matrix
@@ -184,32 +184,43 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
   pList = list()
   for (studyName in studyNames) {
     # sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
-    sampleNamesNow = sm[study == studyName, sample]
+    sampleNamesNow = sm[study == studyName]$sample
     # df = tibble::as_tibble(cvProbs[sm$study==studyName,])
-    df = as.data.frame(cvProbs[sm$study == studyName,])
-    colnames(df) = names(cvFit$glmnet.fit$beta)
-    df$study = studyName
-    df$sample = sampleNamesNow
-    dfDT = df
+    # df = as.data.frame(cvProbs[sm$study == studyName,])
+    # colnames(df) = names(cvFit$glmnet.fit$beta)
+    # df$study = studyName
+    # df$sample = sampleNamesNow
+    # # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
+    # df$trueClass = factor(data.table(sm)[sample %in% sampleNamesNow,][[className]], levels = classLevels)
+    #
+    # df$trueClassProb = apply(df, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))
+    #
+    # df = df[order(df$trueClass, -df$trueClassProb),]
+    # df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
+
+    dt = data.table(cvProbs[sm$study == studyName, ])
+    setnames(dt, 1:3, names(cvFit$glmnet.fit$beta))
+    dt[, study := studyName]
+    dt[, sample := sampleNamesNow]
     # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
-    df$trueClass = factor(data.table(sm)[which(sample %in% sampleNamesNow),][[className]], levels = classLevels)
+    dt[, trueClass := factor(sm[sample %in% sampleNamesNow, ][[className]], levels = classLevels)]
 
-    df$trueClassProb = apply(df, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))
+    dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
-    df = df[order(df$trueClass, -df$trueClassProb),]
-    df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
+    setorder(dt, trueClass, -trueClassProb)
+    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x, ]))
 
     idxTmp = c()
     for (classLevel in classLevels) {
       if (any(df$trueClass == classLevel)) {
         idxTmp = c(idxTmp, 1:(sum(df$trueClass == classLevel)))}}
-    df$idx = idxTmp
+    dt[, idx := idxTmp]
     # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
-    dfMolten = melt(data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
+    dfMolten = melt(dt, measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
-      facet_grid(study ~ trueClass, scales = 'free_x', space = 'free_x') +
-      geom_point(aes_string(x = 'idx', y = 'prob', color = 'probClass', shape = 'probClass'), size = size) +
+      facet_grid(rows = vars(study), cols = vars(trueClass), scales = 'free_x', space = 'free_x') +
+      geom_point(aes(x = idx, y = prob, color = probClass, shape = probClass), size = size) +
       labs(x = 'Sample', y = 'Probability') + theme_light() + theme(legend.title = element_blank())
 
     if (!is.na(ggplotArgs[1])) {
@@ -251,25 +262,25 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
 
     df$study = sm[,study]
     df$sample = rownames(df)
-    df$trueClass = factor(sm[[className]], levels = classLevels)
-    df$trueClassProb = apply(df, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))
+    dt = data.table(df)
+    dt[, trueClass := factor(sm[[className]], levels = classLevels)]
+    dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
-    df = df[order(df$trueClass, -df$trueClassProb),]
-    df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
+    setorder(dt, trueClass, -trueClassProb)
+    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x, ]))
 
     idxTmp = c()
     for (classLevel in classLevels) {
-      if (any(df$trueClass == classLevel)) {
-        idxTmp = c(idxTmp, 1:(sum(df$trueClass == classLevel)))}}
-    df$idx = idxTmp
-    rownames(df) = NULL
+      if (any(dt$trueClass == classLevel)) {
+        idxTmp = c(idxTmp, 1:(sum(dt$trueClass == classLevel)))}}
+    dt[, idx := idxTmp]
 
     # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
-    dfMolten = melt(data.table(df), measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
+    dfMolten = melt(dt, measure.vars = classLevels, variable.name = 'probClass', variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
-      facet_grid(study ~ trueClass, scales = 'free_x', space = 'free_x') +
-      geom_point(aes_string(x = 'idx', y = 'prob', color = 'probClass', shape = 'probClass'), size = size) +
+      facet_grid(rows = vars(study), cols = vars(trueClass), scales = 'free_x', space = 'free_x') +
+      geom_point(aes(x = idx, y = prob, color = probClass, shape = probClass), size = size) +
       labs(x = 'Sample', y = 'Probability') + theme_light() + theme(legend.title = element_blank())
     if (!is.na(ggplotArgs[1])) {
       for (ggplotArg in ggplotArgs) {

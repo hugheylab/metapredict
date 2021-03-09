@@ -56,7 +56,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
       # sampleMetadataList[[matchStudyName]] = dplyr::filter(sampleMetadataAtomic, study == matchStudyName)
       sampleMetadataList[[matchStudyName]] = sampleMetadataAtomicDT[study == matchStudyName,]
 
-    } else if (sum(studyMetadataAtomic[[matchStudyColname]] == matchStudyName)>1) {
+    } else if (sum(studyMetadataAtomic[[matchStudyColname]] == matchStudyName) > 1) {
       atomicStudyNames = studyMetadataAtomic$study[studyMetadataAtomic[[matchStudyColname]] == matchStudyName]
       edfListNow = list()
       for (atomicStudyName in atomicStudyNames) {
@@ -78,7 +78,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
       edfMerged = data.frame(data.table(rbind(edfListNow)[[1]])[, lapply(.SD, mergeFunc)], by = geneId, check.names = FALSE)
 
       rownames(edfMerged) = edfMerged$geneId
-      edfMerged = edfMerged[,-1]
+      edfMerged = edfMerged[, -1]
 
       mapping = makeMatchSampleMapping(sampleMetadataAtomic, atomicStudyNames, matchSampleColname)
       colnames(edfMerged) = mapping[colnames(edfMerged)]
@@ -98,7 +98,8 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
   #   dplyr::mutate(study = !!matchStudyColname) %>%
   #   dplyr::select(!!colnamesKeep)
 
-  studyMetadata = studyMetadataAtomic[, .SD[1L], by = ..matchStudyColname][,study := matchStudyColname][,..colnamesKeep]
+  studyMetadata = studyMetadataAtomic[, .SD[1L],
+                                      by = ..matchStudyColname][, study := matchStudyColname][, ..colnamesKeep]
 
   # sampleMetadata = suppressWarnings(dplyr::bind_rows(sampleMetadataList))
   sampleMetadata = suppressWarnings(rbindlist(sampleMetadataList))

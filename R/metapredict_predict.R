@@ -121,7 +121,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
   predsList = foreach(validationStudyName = validationStudyNames) %do% {
     # validationSampleNames = dplyr::filter(sampleMetadata, study == validationStudyName)$sample
 
-    validationSampleNames = sampleMetadataDT[which(study == validationStudyName), sample]
+    validationSampleNames = sampleMetadataDT[study == validationStudyName, sample]
 
     ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
     ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata,
@@ -157,45 +157,33 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
 #   return(predFunc(object, ...))}
 
 
-#' Make data.frame of non-zero coefficients from a glmnet model.
-#'
-#' Make a sorted `data.frame` of the non-zero coefficients of a logistic or
-#' multinomial `glmnet` model.
-#'
-#' @param fitResult `glmnet` object.
-#' @param lambda value of lambda for which to obtain coefficients.
-#' @param decreasing logical passed to `order`.
-#' @param classLevels order of columns in resulting `data.frame`.
-#'
-#' @return A `data.frame`.
-#'
-#' @export
-makeCoefDf = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
-  coefResult = glmnet::coef.glmnet(fitResult, s = lambda)
 
-  if (is.list(coefResult)) {
-    coefResultNonzero = foreach(coefSparse = coefResult) %do% {
-      x = data.frame(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1], stringsAsFactors = FALSE)
-      colnames(x) = c('geneId', 'coefficient')
-      return(x)}
-    names(coefResultNonzero) = names(coefResult)
-    if (!is.na(classLevels[1])) {
-      coefResult = coefResult[classLevels]
-      coefResultNonzero = coefResultNonzero[classLevels]}
-
-    for (ii in 1:length(coefResult)) {
-      colnames(coefResultNonzero[[ii]])[2] = names(coefResult)[ii]}
-    coefDf = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
-    idx = do.call(order, c(coefDf[,2:ncol(coefDf)], list(decreasing = decreasing)))
-    coefDf = coefDf[idx,]
-    coefDf[is.na(coefDf)] = 0
-
-  } else {
-    coefDf = data.frame(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors = FALSE)
-    colnames(coefDf) = c('geneId', 'coefficient')
-    coefDf = coefDf[order(coefDf[,'coefficient'], decreasing = decreasing),]}
-  rownames(coefDf) = NULL
-  return(coefDf)}
+# makeCoefDf = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
+#   coefResult = glmnet::coef.glmnet(fitResult, s = lambda)
+#
+#   if (is.list(coefResult)) {
+#     coefResultNonzero = foreach(coefSparse = coefResult) %do% {
+#       x = data.frame(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1], stringsAsFactors = FALSE)
+#       colnames(x) = c('geneId', 'coefficient')
+#       return(x)}
+#     names(coefResultNonzero) = names(coefResult)
+#     if (!is.na(classLevels[1])) {
+#       coefResult = coefResult[classLevels]
+#       coefResultNonzero = coefResultNonzero[classLevels]}
+#
+#     for (ii in 1:length(coefResult)) {
+#       colnames(coefResultNonzero[[ii]])[2] = names(coefResult)[ii]}
+#     coefDf = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
+#     idx = do.call(order, c(coefDf[,2:ncol(coefDf)], list(decreasing = decreasing)))
+#     coefDf = coefDf[idx,]
+#     coefDf[is.na(coefDf)] = 0
+#
+#   } else {
+#     coefDf = data.frame(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors = FALSE)
+#     colnames(coefDf) = c('geneId', 'coefficient')
+#     coefDf = coefDf[order(coefDf[,'coefficient'], decreasing = decreasing),]}
+#   rownames(coefDf) = NULL
+#   return(coefDf)}
 
 #' Make data.table of non-zero coefficients from a glmnet model.
 #'
@@ -216,8 +204,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
   if (is.list(coefResult)) {
     coefResultNonzero = foreach(coefSparse = coefResult) %do% {
       x = data.table(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1])
-      setnames(x, 1, 'geneId')
-      setnames(x, 2, 'coefficient')
+      setnames(x, 1:2, c('geneId', 'coefficient'))
       x}
     names(coefResultNonzero) = names(coefResult)
     if (!is.na(classLevels[1])) {
@@ -233,9 +220,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
 
   } else {
     coefDt = data.table(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors = FALSE)
-    setnames(coefDt, 1, 'geneId')
-    setnames(coefDt, 2, 'coefficient')
-    decNum = if(isTRUE(decreasing)) -1L else 1L
+    setnames(coefDt, 1:2, c('geneId', 'coefficient'))
+    decNum = if (isTRUE(decreasing)) -1L else 1L
     setorderv(coefDt, 'coefficient', decNum, na.last = TRUE)}
-  rownames(coefDt) = NULL
   return(coefDt)}
