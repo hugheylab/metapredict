@@ -7,3 +7,4 @@ inst/doc
 .Rproj.user
 metapredict_example/*
 vignettes/example_script.R
+..Rcheck/00check.log
