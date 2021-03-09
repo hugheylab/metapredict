@@ -79,30 +79,30 @@ fixCelSampleNames = function(sampleNames) {
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
   mapping = fread(mappingFilePath, sep = '\t')
-  mappingUnique = unique(mapping[,c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
-  mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))),]
-  setnames(mappingUnique, 'Probe.Set.Name', 'geneId')
-  setnames(mappingUnique, 'Affy.Probe.Set.Name', 'probeSet')
+  mappingUnique = unique(mapping[, c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
+  mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))), ]
+  setnames(mappingUnique, c('Probe.Set.Name', 'Affy.Probe.Set.Name'), c('geneId', 'probeSet'))
+
   mappingUnique[, probeSet := as.character(probeSet)]
   return(mappingUnique)}
 
 
-getGeneProbeMappingDirect = function(featureDf, geneColname, probeColname = 'ID') {
-  mapping = featureDf[,c(..probeColname, ..geneColname)]
+getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
+  mapping = featureDt[,c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
-  setnames(mapping, probeColName, 'probeSet')
-  setnames(mapping, geneColName, 'geneId')
+  setnames(mapping, c(probeColName, geneColName), c('probeSet', 'geneId'))
+
   mapping[, probeSet := as.character(probeSet)]
   mapping[, geneId := as.character(geneId)]
   setDT(mapping)
   return(mapping)}
 
 
-getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
-  mappingProbeIntermediate = featureDf[!is.na(featureDf[[interName]]) & featureDf[[interName]]!='',
+getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
+  mappingProbeIntermediate = featureDt[!is.na(featureDt[[interName]]) & featureDt[[interName]]!='',
                                        c('ID', ..interName)]
-  setnames(mappingProbeIntermediate, 'ID', 'probeSet')
-  setnames(mappingProbeIntermediate, interName, 'geneInter')
+  setnames(mappingProbeIntermediate, c('ID', interName), c('probeSet', 'geneInter'))
+
 
   mapTmp1 = eval(parse(text = sprintf('%s.db::%s', substr(dbName, 1, 9), dbName)))
   mapTmp2 = mappedkeys(mapTmp1)
@@ -119,10 +119,6 @@ getGeneProbeMappingAnno = function(featureDf, dbName, interName) {
   return(mapping)}
 
 
-# Assign rownames at end (all at once)
-# Modify loop logic to cut out unnecessary fat
-# Rbind numeric vector if possible then cast to matrix
-# Dont use iterators, use same format as before
 calcExprsByGene = function(eset, mapping) {
 
   d = as.data.table(exprs(eset), keep.rownames = 'probeSet')
@@ -163,7 +159,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
   #                 !(platformInfo %in% getSupportedPlatforms())) %>%
   #   .$platformInfo
 
-  unsupportedPlatforms = data.table(studyMetadata)[studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms()),platformInfo]
+  unsupportedPlatforms = data.table(studyMetadata)[studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms()), platformInfo]
 
   if (length(unsupportedPlatforms) == 0) {
     cat("Whew, all microarray platforms for studies whose studyDataType == 'series_matrix' are supported.\n")
@@ -213,7 +209,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
                                                 paste0(platformInfo, '_mapping.txt')))
     esetOrig = GEOquery::getGEO(filename = file.path(parentFolderPath,
                                                      paste0(studyName, '_series_matrix.txt.gz')))
-    exprs(esetOrig)[exprs(esetOrig)<= 0] = min(exprs(esetOrig)[exprs(esetOrig)>0])
+    exprs(esetOrig)[exprs(esetOrig) <= 0] = min(exprs(esetOrig)[exprs(esetOrig) > 0])
     exprs(esetOrig) = log2(exprs(esetOrig))
     exprsByGene = calcExprsByGene(esetOrig, mapping)
     rownames(exprsByGene) = fixCustomCdfGeneIds(rownames(exprsByGene))
@@ -237,123 +233,123 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     featureDf = pData(featureData(esetOrig))
     idx = sapply(featureDf, is.factor)
     featureDf[idx] = lapply(featureDf[idx], as.character)
-    setDT(featureDf)
+    featureDt = data.table(featureDf)
     if (platformInfo == 'GPL180') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'GENE_SYM')
     } else if (platformInfo == 'GPL341') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'ENTREZ_GENE_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'ENTREZ_GENE_ID')
     } else if (platformInfo == 'GPL571') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'ENTREZ_GENE_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'ENTREZ_GENE_ID')
     } else if (platformInfo == 'GPL885') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL887') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL890') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL962') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egUNIGENE2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egUNIGENE2EG',
                                         interName = 'UNIGENE')
     } else if (platformInfo == 'GPL1053') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'GENE')
     } else if (platformInfo == 'GPL1073') {
-      featureDf$GenBank = sapply(featureDf[,GB_ACC],
+      featureDt$GenBank = sapply(featureDt[,GB_ACC],
                                  function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egACCNUM2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Mm.egACCNUM2EG',
                                         interName = 'GenBank')
     } else if (platformInfo == 'GPL1261') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'ENTREZ_GENE_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'ENTREZ_GENE_ID')
     } else if (platformInfo == 'GPL1291') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez Gene ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'Entrez Gene ID')
     } else if (platformInfo == 'GPL1293') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez Gene ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'Entrez Gene ID')
     } else if (platformInfo == 'GPL1390') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL1708') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL3921') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'ENTREZ_GENE_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'ENTREZ_GENE_ID')
     } else if (platformInfo == 'GPL4133') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL4372') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'EntrezGeneID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'EntrezGeneID')
     } else if (platformInfo == 'GPL5645') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'Gene Name')
     } else if (platformInfo == 'GPL6104') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez_Gene_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'Entrez_Gene_ID')
     } else if (platformInfo == 'GPL6254') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egENSEMBL2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egENSEMBL2EG',
                                         interName = 'ENSEMBL_GENE_ID')
     } else if (platformInfo == 'GPL6333') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6480') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL6865') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'rep_name')
     } else if (platformInfo == 'GPL6880') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6884') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez_Gene_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'Entrez_Gene_ID')
     } else if (platformInfo == 'GPL6885') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6887') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Mm.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Mm.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL6947') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL7015') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_LIST')
     } else if (platformInfo == 'GPL7202') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'GENE')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'GENE')
     } else if (platformInfo == 'GPL8177') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL10332') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL10379') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'EntrezGeneID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'EntrezGeneID')
     } else if (platformInfo == 'GPL10558') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'Entrez_Gene_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'Entrez_Gene_ID')
     } else if (platformInfo == 'GPL10687') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'EntrezGeneID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'EntrezGeneID')
     } else if (platformInfo == 'GPL13607') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL13730') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'ENTREZ_GENE_ID')
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'ENTREZ_GENE_ID')
     } else if (platformInfo == 'GPL15331') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL15450') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Dr.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Dr.egREFSEQ2EG',
                                         interName = 'GB_ACC')
     } else if (platformInfo == 'GPL18721') {
-      featureDf$RefSeq = sapply(featureDf[,GB_ACC],
+      featureDt$RefSeq = sapply(featureDt[,GB_ACC],
                                 function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egREFSEQ2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egREFSEQ2EG',
                                         interName = 'RefSeq')
     } else if (platformInfo == 'GPL20769') {
-      mapping = getGeneProbeMappingAnno(featureDf, dbName = 'org.Hs.egSYMBOL2EG',
+      mapping = getGeneProbeMappingAnno(featureDt, dbName = 'org.Hs.egSYMBOL2EG',
                                         interName = 'ORF')
     } else {
       warning(sprintf('Study %s not loaded, because platform %s is not currently supported.',
@@ -373,11 +369,11 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     esetOrig = readRDS(file.path(parentFolderPath, paste0(studyName, '.rds')))
 
     featureDf = pData(featureData(esetOrig))
-    setDT(featureDf)
+    featureDt = data.table(featureDf)
     if (platformInfo == 'ready') {
       return(esetOrig)
     } else if (platformInfo == 'rosetta') {
-      mapping = getGeneProbeMappingDirect(featureDf, geneColname = 'EntrezGene.ID',
+      mapping = getGeneProbeMappingDirect(featureDt, geneColname = 'EntrezGene.ID',
                                           probeColname = 'probe')
     } else {
       warning(sprintf('Study %s not loaded, because platform %s is not currently supported.',
@@ -440,8 +436,8 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 extractExpressionData = function(esetList, sampleMetadata) {
   ematList = foreach(studyName = names(esetList)) %do% {
     # sampleNamesNow = dplyr::filter(sampleMetadata, study == studyName)$sample
-    sampleNamesNow = data.table(sampleMetadata)[study == studyName,]$sample
+    sampleNamesNow = data.table(sampleMetadata)[study == studyName]$sample
     keepIdx = colnames(esetList[[studyName]]) %in% sampleNamesNow
-    exprs(esetList[[studyName]])[,keepIdx]}
+    exprs(esetList[[studyName]])[, keepIdx]}
   names(ematList) = names(esetList)
   return(ematList)}
