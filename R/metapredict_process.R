@@ -87,12 +87,11 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 
 
 getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
-  mapping = featureDt[,c(..probeColname, ..geneColname)]
+  mapping = featureDt[, c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')),]
   setnames(mapping, c(probeColName, geneColName), c('probeSet', 'geneId'))
   mapping[, probeSet := as.character(probeSet)]
   mapping[, geneId := as.character(geneId)]
-  setDT(mapping)
   return(mapping)}
 
 
@@ -156,7 +155,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
   #                 !(platformInfo %in% getSupportedPlatforms())) %>%
   #   .$platformInfo
 
-  unsupportedPlatforms = data.table(studyMetadata)[studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms()), platformInfo]
+  unsupportedPlatforms = data.table(studyMetadata)[studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms())]$platformInfo
 
   if (length(unsupportedPlatforms) == 0) {
     cat("Whew, all microarray platforms for studies whose studyDataType == 'series_matrix' are supported.\n")

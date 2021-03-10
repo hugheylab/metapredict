@@ -20,7 +20,7 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
                             geneIdOrder = NA, org = 'org.Hs.eg') {
   # coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
   # coefDf = coefDf[coefDf$geneId != '(Intercept)',]
-  coefDt = metapredict:::makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
+  coefDt = makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
   coefDt = coefDt[geneId != '(Intercept)']
 
   if (!is.na(geneIdOrder[1])) {
@@ -29,7 +29,7 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
   if (ncol(coefDt) == 2) {
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
     coefDt[, geneId := factor(geneId, levels = rev(geneId),
-                           labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneId)))]
+                           labels = sprintf('%s (%s)', rev(geneSymbols), rev(geneId)))]
     p = ggplot(coefDt) + geom_bar(aes(x = geneId, y = coefficient), stat = 'identity')
 
   } else {
@@ -42,11 +42,11 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
 
     geneIds = coefDt$geneId
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
-    coefDtMolten[, geneId := factor(geneId, levels=rev(geneIds),
-                                 labels=sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))]
-    p = ggplot(coefDtMolten) + facet_wrap(~ class, ncol = ncol(coefDt)-1) +
+    coefDtMolten[, geneId := factor(geneId, levels = rev(geneIds),
+                                 labels = sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))]
+    p = ggplot(coefDtMolten) + facet_wrap(cols = vars(class), ncol = ncol(coefDt) - 1) +
       geom_bar(aes(x = geneId, y = coefficient, fill = class), stat = 'identity') +
-      guides(fill=FALSE)}
+      guides(fill = FALSE)}
 
   return(p + coord_flip() + labs(x = 'Gene', y = 'Coefficient') + theme_light())}
 
@@ -86,7 +86,7 @@ plotExpressionHeatmap = function(fitResult, lambda, ematMerged, sampleMetadata, 
                                  maxVal = 3, ...) {
   # coefDf = makeCoefDf(fitResult, lambda)
   coefDt = makeCoefDt(fitResult, lambda)
-  geneIds = coefDt[geneId != '(Intercept)', geneId]
+  geneIds = coefDt[geneId != '(Intercept)']$geneId
   geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load = TRUE))
   geneTexts = sprintf('%s (%s)', geneSymbols, geneIds)
   names(geneTexts) = geneIds
@@ -208,7 +208,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
     dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
     setorder(dt, trueClass, -trueClassProb)
-    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x, ]))
+    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x]))
 
     idxTmp = c()
     for (classLevel in classLevels) {
@@ -254,20 +254,20 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
                                     classLevels, size = 1.5, ggplotArgs = NA) {
   pList = list()
   for (validationStudyName in names(predsList)) {
-    df = data.frame(predsList[[validationStudyName]][,,1])
+    df = data.frame(predsList[[validationStudyName]][, , 1])
     # sm = tibble::tibble(sample = rownames(df)) %>%
     #   dplyr::inner_join(sampleMetadata, by='sample')
 
     sm = mergeDataTable(rownames(df), sampleMetadata)
 
-    df$study = sm[,study]
-    df$sample = rownames(df)
-    dt = data.table(df)
+    df$study = sm$study
+    dt = data.table(df, keep.rownames = TRUE)
+    setnames(dt, 'rn', 'sample')
     dt[, trueClass := factor(sm[[className]], levels = classLevels)]
     dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
     setorder(dt, trueClass, -trueClassProb)
-    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x, ]))
+    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x]))
 
     idxTmp = c()
     for (classLevel in classLevels) {

@@ -121,7 +121,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
   predsList = foreach(validationStudyName = validationStudyNames) %do% {
     # validationSampleNames = dplyr::filter(sampleMetadata, study == validationStudyName)$sample
 
-    validationSampleNames = sampleMetadataDT[study == validationStudyName, sample]
+    validationSampleNames = sampleMetadataDT[study == validationStudyName]$sample
 
     ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
     ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata,
@@ -219,7 +219,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
     coefDt[is.na(coefDt)] = 0
 
   } else {
-    coefDt = data.table(names(coefResult[(coefResult@i) + 1, ]), coefResult[(coefResult@i) + 1, ], stringsAsFactors = FALSE)
+    coefDt = data.table(names(coefResult[(coefResult@i) + 1]), coefResult[(coefResult@i) + 1])
     setnames(coefDt, 1:2, c('geneId', 'coefficient'))
     decNum = if (isTRUE(decreasing)) -1L else 1L
     setorderv(coefDt, 'coefficient', decNum, na.last = TRUE)}
