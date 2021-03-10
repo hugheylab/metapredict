@@ -28,20 +28,12 @@ jobs:
               -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)'
 
       - run:
-          name: Download vignette folder
-          command: |
-            cd vignettes
-            wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
-            tar -xf expression_data.tar.gz
-            cd ../
-
-      - run:
           name: Build package
-          command: R CMD build . --md5
+          command: R CMD build . --md5 --no-build-vignettes
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual
+          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
 
       - run:
           name: Check failures
