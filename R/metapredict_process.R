@@ -411,7 +411,7 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
   #     getStudyData(parentFolderPath, studyMetadata$study[ii],
   #                  studyMetadata$studyDataType[ii],
   #                  studyMetadata$platformInfo[ii])}}
-  esetList = foreach(studyRow = iterators::iter(studyMetadata, by = 'row'), .combine = c) %do% {
+  esetList = foreach(studyRow = iterators::iter(studyMetadata, by = 'row')) %do% {
     if (any(is.na(studyRow))) {
       NA
     } else {

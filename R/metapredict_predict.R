@@ -203,7 +203,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
 
   if (is.list(coefResult)) {
     coefResultNonzero = foreach(coefSparse = coefResult) %do% {
-      x = data.table(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1])
+      x = data.table(rownames(coefSparse)[(coefSparse@i) + 1], coefSparse[(coefSparse@i) + 1])
       setnames(x, 1:2, c('geneId', 'coefficient'))
       x}
     names(coefResultNonzero) = names(coefResult)
@@ -219,7 +219,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
     coefDt[is.na(coefDt)] = 0
 
   } else {
-    coefDt = data.table(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors = FALSE)
+    coefDt = data.table(names(coefResult[(coefResult@i) + 1, ]), coefResult[(coefResult@i) + 1, ], stringsAsFactors = FALSE)
     setnames(coefDt, 1:2, c('geneId', 'coefficient'))
     decNum = if (isTRUE(decreasing)) -1L else 1L
     setorderv(coefDt, 'coefficient', decNum, na.last = TRUE)}
