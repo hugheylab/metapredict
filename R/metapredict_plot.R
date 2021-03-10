@@ -44,7 +44,7 @@ plotCoefficients = function(fitResult, lambda, classLevels = NA, decreasing = FA
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
     coefDtMolten[, geneId := factor(geneId, levels = rev(geneIds),
                                  labels = sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))]
-    p = ggplot(coefDtMolten) + facet_wrap(cols = vars(class), ncol = ncol(coefDt) - 1) +
+    p = ggplot(coefDtMolten) + facet_wrap(vars(class), ncol = ncol(coefDt) - 1) +
       geom_bar(aes(x = geneId, y = coefficient, fill = class), stat = 'identity') +
       guides(fill = FALSE)}
 
@@ -199,7 +199,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
     # df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
 
     dt = data.table(cvProbs[sm$study == studyName, ])
-    setnames(dt, colnames(dt), names(cvFit$glmnet.fit$beta))
+    setnames(dt, names(cvFit$glmnet.fit$beta))
     dt[, study := studyName]
     dt[, sample := sampleNamesNow]
     # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
@@ -208,7 +208,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
     dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
     setorder(dt, trueClass, -trueClassProb)
-    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x]))
+    dt = dt[trueClass %in% classLevels]
 
     idxTmp = c()
     for (classLevel in classLevels) {
@@ -254,20 +254,18 @@ plotClassProbsValidation = function(predsList, sampleMetadata, className,
                                     classLevels, size = 1.5, ggplotArgs = NA) {
   pList = list()
   for (validationStudyName in names(predsList)) {
-    df = data.frame(predsList[[validationStudyName]][, , 1])
+    dt = data.table(predsList[[validationStudyName]][, , 1], keep.rownames = 'sample')
     # sm = tibble::tibble(sample = rownames(df)) %>%
     #   dplyr::inner_join(sampleMetadata, by='sample')
 
-    sm = mergeDataTable(rownames(df), sampleMetadata)
+    sm = mergeDataTable(dt$sample, sampleMetadata)
 
-    df$study = sm$study
-    dt = data.table(df, keep.rownames = TRUE)
-    setnames(dt, 'rn', 'sample')
+    dt[, study := sm$study]
     dt[, trueClass := factor(sm[[className]], levels = classLevels)]
     dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
     setorder(dt, trueClass, -trueClassProb)
-    dt = do.call(rbind, lapply(classLevels, function(x) dt[trueClass == x]))
+    dt = dt[trueClass %in% classLevels]
 
     idxTmp = c()
     for (classLevel in classLevels) {
