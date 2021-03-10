@@ -78,7 +78,7 @@ fixCelSampleNames = function(sampleNames) {
 
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
-  mapping = fread(mappingFilePath, sep = '\t')
+  mapping = fread(mappingFilePath)
   mappingUnique = unique(mapping[, c('Probe.Set.Name', 'Affy.Probe.Set.Name')])
   mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))), ]
   setnames(mappingUnique, c('Probe.Set.Name', 'Affy.Probe.Set.Name'), c('geneId', 'probeSet'))

@@ -199,7 +199,7 @@ plotClassProbsCv = function(cvFit, lambda, ematMerged, sampleMetadata, className
     # df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
 
     dt = data.table(cvProbs[sm$study == studyName, ])
-    setnames(dt, 1:3, names(cvFit$glmnet.fit$beta))
+    setnames(dt, colnames(dt), names(cvFit$glmnet.fit$beta))
     dt[, study := studyName]
     dt[, sample := sampleNamesNow]
     # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
