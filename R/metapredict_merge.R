@@ -75,7 +75,7 @@ mergeMatchStudyData = function(ematAtomicList, studyMetadataAtomic, matchStudyCo
       #   dplyr::summarize_all(mergeFunc) %>%
       #   data.frame(check.names = FALSE)
 
-      edfMerged = data.frame(data.table(rbind(edfListNow)[[1]])[, lapply(.SD, mergeFunc)], by = geneId, check.names = FALSE)
+      edfMerged = data.frame(data.table(rbind(edfListNow)[[1]])[, lapply(.SD, mergeFunc), by = geneId], check.names = FALSE)
 
       rownames(edfMerged) = edfMerged$geneId
       edfMerged = edfMerged[, -1]
