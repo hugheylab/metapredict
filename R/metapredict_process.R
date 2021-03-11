@@ -16,9 +16,9 @@ globalVariables(c(
   'studyName', 'coefSparse', 'validationStudyName', 'classLevel', '.', 'study',
   'ii', 'studyDataType', 'platformInfo', 'geneId', 'geneIdTmp', 'coefficient',
   'mapping', '..className', '..colnamesKeep', '..cols', '..geneColname',
-  '..old', '..probeColname', 'geneColName', 'idx', 'prob', 'probClass',
-  'probeColName', 'probeSet', 'studyRow', 'trueClass', 'trueClassProb',
-  '..interName', '..matchSampleColname', '..matchStudyColname'))
+  '..old', '..probeColname', 'idx', 'prob', 'probClass', 'probeSet', 'studyRow',
+  'trueClass', 'trueClassProb', '..interName', '..matchSampleColname',
+  '..matchStudyColname'))
 
 
 #' Install custom CDF packages from Brainarray.
@@ -97,7 +97,7 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
   mapping = featureDt[, c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')), ]
-  setnames(mapping, c(probeColName, geneColName), c('probeSet', 'geneId'))
+  setnames(mapping, c(probeColname, geneColname), c('probeSet', 'geneId'))
   mapping[, probeSet := as.character(probeSet)]
   mapping[, geneId := as.character(geneId)]
   return(mapping)}
@@ -125,10 +125,12 @@ getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
 
 
 calcExprsByGene = function(eset, mapping) {
-  d = as.data.table(exprs(eset), keep.rownames = 'probeSet')
-  d1 = merge(d, mapping, by = 'probeSet')
-  d2 = d1[, lapply(.SD, stats::median), keyby = geneId, .SDcols = !c('probeSet', 'geneInter')]
-  exprsByGene = as.matrix(d2[, 2:ncol(d2)], rownames = d2$geneId)
+  geneIds = unique(mapping$geneId)
+  exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
+                       dimnames = list(geneIds, Biobase::sampleNames(eset)))
+  for (geneIdNow in geneIds) {
+    exprsTmp = exprs(eset)[mapping[geneId == geneIdNow]$probeSet, , drop = FALSE]
+    exprsByGene[geneIdNow, ] = matrixStats::colMedians(exprsTmp, na.rm = TRUE)}
   return(exprsByGene)}
 
 
