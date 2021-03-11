@@ -15,7 +15,8 @@ and \code{rename} (e.g., 'mouse4302mmentrezgcdf').}
 \item{ver}{integer version number (25 as of 5 Jan 2021).}
 }
 \description{
-Download Brainarray custom CDF mapping files, which are used for mapping probes to genes
-in datasets whose \code{studyDataType} is 'affy_series_matrix'. See
+Download Brainarray custom CDF mapping files, which are used for mapping
+probes to genes in datasets whose \code{studyDataType} is 'affy_series_matrix'.
+See
 \url{http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/CDF_download.asp}.
 }

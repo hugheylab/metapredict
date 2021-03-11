@@ -127,7 +127,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
     ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata,
                                        batchColname = batchColname,
                                        covariateName = covariateName)
-    ematMergedDisc = ematMergedDiscVal[,discoverySampleNames]
+    ematMergedDisc = ematMergedDiscVal[, discoverySampleNames]
 
 
     # y = tibble::tibble(sample = discoverySampleNames) %>%
@@ -139,9 +139,10 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
     yDTM2 = yDTM[, ..className]
     y = as.matrix(yDTM2)
 
-    fitResult = glmnet::glmnet(t(ematMergedDisc), y, alpha = alpha, lambda = lambda,
-                               weights = weights[discoverySampleNames], standardize = FALSE, ...)
-    newx = data.matrix(t(ematMergedDiscVal[,validationSampleNames]))
+    fitResult = glmnet::glmnet(
+      t(ematMergedDisc), y, alpha = alpha, lambda = lambda,
+      weights = weights[discoverySampleNames], standardize = FALSE, ...)
+    newx = data.matrix(t(ematMergedDiscVal[, validationSampleNames]))
     preds = stats::predict(fitResult, newx = newx, s = lambda, type = type)}
     # preds = predictWrapper(fitResult, newx = newx, s = lambda, type = type)}
 
@@ -220,7 +221,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
 
   } else {
     coefDt = data.table(names(coefResult[(coefResult@i) + 1]), coefResult[(coefResult@i) + 1])
-    setnames(coefDt, 1:2, c('geneId', 'coefficient'))
+    setnames(coefDt, c('geneId', 'coefficient'))
     decNum = if (isTRUE(decreasing)) -1L else 1L
     setorderv(coefDt, 'coefficient', decNum, na.last = TRUE)}
   return(coefDt)}

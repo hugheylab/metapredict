@@ -31,7 +31,7 @@ each validation dataset (default) or one confusion matrix including all
 datasets.}
 }
 \value{
-If \code{each == TRUE}, a list of objects of class \code{table}. Otherwise, an
+If \code{isTRUE(each)}, a list of objects of class \code{table}. Otherwise, an
 object of class \code{table}.
 }
 \description{
