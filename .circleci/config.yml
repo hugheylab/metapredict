@@ -28,6 +28,12 @@ jobs:
               -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)'
 
       - run:
+          name: nstall CDF packages for vignettes
+          command: |
+            source('R/metapredict_process.R')
+            installCustomCdfPackages(c('hgu95av2hsentrezgcdf', 'hgu133plus2hsentrezgcdf'))
+
+      - run:
           name: Download vignette folder
           command: |
             cd vignettes
