@@ -28,7 +28,7 @@ jobs:
               -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)'
 
       - run:
-          name: nstall CDF packages for vignettes
+          name: Install CDF packages for vignettes
           command: |
             Rscript \
               -e 'source("R/metapredict_process.R")' \
@@ -45,11 +45,11 @@ jobs:
 
       - run:
           name: Build package
-          command: R CMD build . --md5
+          command: R CMD build . --md5 --no-build-vignettes
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual
+          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
 
       - run:
           name: Check failures

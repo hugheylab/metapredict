@@ -1,6 +1,5 @@
 mergeDataTable = function(sample, sampleMetadata) {
-  merge(data.table(sample = sample), sampleMetadata, by = 'sample', sort = FALSE)
-}
+  merge(data.table(sample = sample), sampleMetadata, by = 'sample', sort = FALSE)}
 
 #' Calculate confusion matrix for cross-validation.
 #'
@@ -53,19 +52,19 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
 #'   each validation dataset (default) or one confusion matrix including all
 #'   datasets.
 #'
-#' @return If `each == TRUE`, a list of objects of class `table`. Otherwise, an
+#' @return If `isTRUE(each)`, a list of objects of class `table`. Otherwise, an
 #'   object of class `table`.
 #'
 #' @export
-calcConfusionValidation = function(predsList, lambda, sampleMetadata,
-                                   className = 'class', classLevels = NA,
-                                   each = TRUE) {
+calcConfusionValidation = function(
+  predsList, lambda, sampleMetadata, className = 'class', classLevels = NA,
+  each = TRUE) {
+
   if (is.na(classLevels[1])) {
     classLevels = colnames(predsList[[1]])}
 
   if (isTRUE(each)) {
-    confusion = list()
-    for (validationStudyName in names(predsList)) {
+    confusion = foreach(validationStudyName = names(predsList)) %do% {
       predsProb = predsList[[validationStudyName]][, , 1]
       predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                              function(x) which.max(x))]
@@ -76,7 +75,8 @@ calcConfusionValidation = function(predsList, lambda, sampleMetadata,
 
       sm = mergeDataTable(rownames(predsProb), sampleMetadata)
       trueClass = factor(sm[[className]], levels = classLevels)
-      confusion[[validationStudyName]] = table(trueClass, predictedClass)}
+      conf = table(trueClass, predictedClass)}
+    names(confusion) = names(predsList)
 
   } else {
     predsProb = do.call(rbind, lapply(predsList, function(x) x[,,1]))

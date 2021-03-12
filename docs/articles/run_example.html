@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -85,12 +85,12 @@
 
       
 
-      </header><script src="run_example_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="run_example_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Running a gene expression meta-analysis of lung cancer subtypes</h1>
             
-            <h4 class="date">2021-02-05</h4>
+            <h4 class="date">2021-03-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/master/vignettes/run_example.Rmd"><code>vignettes/run_example.Rmd</code></a></small>
       <div class="hidden name"><code>run_example.Rmd</code></div>
@@ -118,7 +118,8 @@
 <a href="#set-the-parameters-for-the-meta-analysis" class="anchor"></a>Set the parameters for the meta-analysis</h2>
 <p>Open R and set the working directory to the <code>metapredict_example</code> folder that you previously created. Then we’ll load the necessary packages and set the parameters for the meta-analysis. After running the meta-analysis once, you can change <code>denovo</code> to <code>FALSE</code>. In this example, we’re going to use three studies for cross-validation and the fourth as validation.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/hugheylab/metapredict">'metapredict'</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">'data.table'</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/hugheylab/metapredict">'metapredict'</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">'ggplot2'</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st">'RColorBrewer'</span><span class="op">)</span>
 
@@ -139,10 +140,10 @@
 <p>For this meta-analysis, the files of study metadata and sample metadata have already been created.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">studyMetadataPath</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'study_metadata.csv'</span>, package <span class="op">=</span> <span class="st">'metapredict'</span><span class="op">)</span>
-<span class="va">studyMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">studyMetadataPath</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">studyMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="va">studyMetadataPath</span><span class="op">)</span>
 
 <span class="va">sampleMetadataPath</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'sample_metadata.csv'</span>, package <span class="op">=</span> <span class="st">'metapredict'</span><span class="op">)</span>
-<span class="va">sampleMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">sampleMetadataPath</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="va">sampleMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span><span class="va">sampleMetadataPath</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="load-the-gene-expression-data" class="section level2">
 <h2 class="hasAnchor">
@@ -188,9 +189,17 @@
 <span class="co">#&gt; Loading required package: S4Vectors</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'S4Vectors'</span>
+<span class="co">#&gt; The following objects are masked from 'package:data.table':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     first, second</span>
 <span class="co">#&gt; The following object is masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     expand.grid</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'IRanges'</span>
+<span class="co">#&gt; The following object is masked from 'package:data.table':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     shift</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Loading study GSE11969...</span>
 <span class="co">#&gt; Setting options('download.file.method.GEOquery'='auto')</span>
@@ -202,7 +211,7 @@
 <span class="co">#&gt; )</span>
 <span class="co">#&gt; ℹ Use `spec()` for the full column specifications.</span>
 <span class="co">#&gt; File stored at:</span>
-<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpUhQ1qz/GPL7015.soft</span>
+<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpycI0F5/GPL7015.soft</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Loading study GSE29016...</span>
 <span class="co">#&gt; </span>
@@ -213,7 +222,7 @@
 <span class="co">#&gt; )</span>
 <span class="co">#&gt; ℹ Use `spec()` for the full column specifications.</span>
 <span class="co">#&gt; File stored at:</span>
-<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpUhQ1qz/GPL6947.soft</span>
+<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpycI0F5/GPL6947.soft</span>
 <span class="co">#&gt; Loading study GSE30219...</span>
 <span class="co">#&gt; Loading required package: hgu133plus2hsentrezgcdf</span>
 <span class="co">#&gt; </span></code></pre></div>
@@ -237,13 +246,14 @@
 <a href="#leave-one-study-out-cross-validation" class="anchor"></a>Leave-one-study-out cross-validation</h2>
 <p>Before running cross-validation, we’ll use the sample metadata to create the <code>weights</code> and <code>foldid</code> vectors that will be passed to <code>cv.glmnet</code>. <code>metapredictCv</code> returns a list, with one element for each value of <code>alpha</code>. Since we’re doing multinomial classification (AD, SQ, and SCLC), <code>cv.glmnet</code> uses the multinomial deviance as the measure of goodness of fit (the lower the better).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glmnetArgs</span> <span class="op">=</span> <span class="fu"><a href="../reference/makeGlmnetArgs.html">makeGlmnetArgs</a></span><span class="op">(</span><span class="va">sampleMetadata</span><span class="op">[</span><span class="va">sampleMetadata</span><span class="op">$</span><span class="va">study</span> <span class="op">%in%</span> <span class="va">discoveryStudyNames</span>,<span class="op">]</span>,
-                            foldidColname <span class="op">=</span> <span class="va">foldidColname</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">glmnetArgs</span> <span class="op">=</span> <span class="fu"><a href="../reference/makeGlmnetArgs.html">makeGlmnetArgs</a></span><span class="op">(</span>
+  <span class="va">sampleMetadata</span><span class="op">[</span><span class="va">sampleMetadata</span><span class="op">$</span><span class="va">study</span> <span class="op">%in%</span> <span class="va">discoveryStudyNames</span>,<span class="op">]</span>,
+  foldidColname <span class="op">=</span> <span class="va">foldidColname</span><span class="op">)</span>
 
-<span class="va">cvFitList</span> <span class="op">=</span> <span class="fu"><a href="../reference/metapredictCv.html">metapredictCv</a></span><span class="op">(</span><span class="va">ematDiscovery</span>, <span class="va">sampleMetadata</span>, yName <span class="op">=</span> <span class="va">className</span>,
-                          weights <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">weights</span>, foldid <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">foldid</span>,
-                          alpha <span class="op">=</span> <span class="va">alpha</span>, family <span class="op">=</span> <span class="va">family</span>, lambda.min.ratio <span class="op">=</span> <span class="fl">0.001</span>,
-                          keep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">cvFitList</span> <span class="op">=</span> <span class="fu"><a href="../reference/metapredictCv.html">metapredictCv</a></span><span class="op">(</span>
+  <span class="va">ematDiscovery</span>, <span class="va">sampleMetadata</span>, yName <span class="op">=</span> <span class="va">className</span>,
+  weights <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">weights</span>, foldid <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">foldid</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,
+  family <span class="op">=</span> <span class="va">family</span>, lambda.min.ratio <span class="op">=</span> <span class="fl">0.001</span>, keep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">cvFit</span> <span class="op">=</span> <span class="va">cvFitList</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">cvFit</span><span class="op">)</span></code></pre></div>
@@ -275,8 +285,9 @@
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">annoColors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">=</span> <span class="va">annoLevels</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">annoColors</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">=</span> <span class="va">annoLevels</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 
-<span class="fu"><a href="../reference/plotExpressionHeatmap.html">plotExpressionHeatmap</a></span><span class="op">(</span><span class="va">fitResult</span>, <span class="va">lambda</span>, <span class="va">ematDiscovery</span>, <span class="va">sampleMetadata</span>, <span class="va">annoLevels</span>,
-                      <span class="va">annoColors</span>, classLevels <span class="op">=</span> <span class="va">classLevels</span>, fontsize_row <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/plotExpressionHeatmap.html">plotExpressionHeatmap</a></span><span class="op">(</span>
+  <span class="va">fitResult</span>, <span class="va">lambda</span>, <span class="va">ematDiscovery</span>, <span class="va">sampleMetadata</span>, <span class="va">annoLevels</span>, <span class="va">annoColors</span>,
+  classLevels <span class="op">=</span> <span class="va">classLevels</span>, fontsize_row <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
 <p><img src="run_example_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div id="predict-subtype-for-samples-in-the-validation-dataset" class="section level2">
@@ -284,9 +295,9 @@
 <a href="#predict-subtype-for-samples-in-the-validation-dataset" class="anchor"></a>Predict subtype for samples in the validation dataset</h2>
 <p>Now we’ll test the model on the last dataset. Internally, <code>metapredict</code> runs <code>mergeStudyData</code> to combine the discovery datasets and the validation dataset, then trains a predictive model on samples from the discovery dataset and predicts the subtype for samples from the validation dataset.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predsList</span> <span class="op">=</span> <span class="fu"><a href="../reference/metapredict.html">metapredict</a></span><span class="op">(</span><span class="va">ematList</span>, <span class="va">studyMetadata</span>, <span class="va">sampleMetadata</span>, <span class="va">discoveryStudyNames</span>,
-                        alpha <span class="op">=</span> <span class="va">alpha</span>, lambda <span class="op">=</span> <span class="va">lambda</span>, weights <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">weights</span>,
-                        family <span class="op">=</span> <span class="va">family</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">predsList</span> <span class="op">=</span> <span class="fu"><a href="../reference/metapredict.html">metapredict</a></span><span class="op">(</span>
+  <span class="va">ematList</span>, <span class="va">studyMetadata</span>, <span class="va">sampleMetadata</span>, <span class="va">discoveryStudyNames</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,
+  lambda <span class="op">=</span> <span class="va">lambda</span>, weights <span class="op">=</span> <span class="va">glmnetArgs</span><span class="op">$</span><span class="va">weights</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span>
 <span class="co">#&gt; Found4batches</span>
 <span class="co">#&gt; Adjusting for0covariate(s) or covariate level(s)</span>
 <span class="co">#&gt; Standardizing Data across genes</span>
@@ -299,8 +310,9 @@
 <a href="#confusion-matrix-for-validation-samples" class="anchor"></a>Confusion matrix for validation samples</h2>
 <p>One way to check prediction accuracy of a multinomial classifier is with a confusion matrix. These predictions look pretty good.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/calcConfusionValidation.html">calcConfusionValidation</a></span><span class="op">(</span><span class="va">predsList</span>, lambda <span class="op">=</span> <span class="va">lambda</span>, sampleMetadata <span class="op">=</span> <span class="va">sampleMetadata</span>,
-                        classLevels <span class="op">=</span> <span class="va">classLevels</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/calcConfusionValidation.html">calcConfusionValidation</a></span><span class="op">(</span>
+  <span class="va">predsList</span>, lambda <span class="op">=</span> <span class="va">lambda</span>, sampleMetadata <span class="op">=</span> <span class="va">sampleMetadata</span>,
+  classLevels <span class="op">=</span> <span class="va">classLevels</span><span class="op">)</span>
 <span class="co">#&gt; $GSE30219</span>
 <span class="co">#&gt;          predictedClass</span>
 <span class="co">#&gt; trueClass AD SQ SCLC</span>
@@ -313,8 +325,9 @@
 <a href="#class-probabilities-for-validation-samples" class="anchor"></a>Class probabilities for validation samples</h2>
 <p>Instead of looking at the single predicted subtype, we can also look at the probabilities for all four subtypes. Both the confusion matrix and this plot suggest that <code>metapredict</code> can combine data from multiple studies to learn an accurate classifier of lung cancer subtype.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotClassProbsValidation.html">plotClassProbsValidation</a></span><span class="op">(</span><span class="va">predsList</span>, <span class="va">sampleMetadata</span>, <span class="va">className</span>, <span class="va">classLevels</span>, size <span class="op">=</span> <span class="fl">1.5</span>,
-                         ggplotArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">'qual'</span>, palette <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotClassProbsValidation.html">plotClassProbsValidation</a></span><span class="op">(</span>
+  <span class="va">predsList</span>, <span class="va">sampleMetadata</span>, <span class="va">className</span>, <span class="va">classLevels</span>, size <span class="op">=</span> <span class="fl">1.5</span>,
+  ggplotArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">'qual'</span>, palette <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="run_example_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 </div>
   </div>
@@ -330,7 +343,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jake Hughey.</p>
+  <p>Developed by Jake Hughey, Josh Schoenbachler.</p>
 </div>
 
 <div class="pkgdown">
