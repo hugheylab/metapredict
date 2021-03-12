@@ -1,6 +1,3 @@
-mergeDataTable = function(sample, sampleMetadata) {
-  merge(data.table(sample = sample), sampleMetadata, by = 'sample', sort = FALSE)}
-
 #' Calculate confusion matrix for cross-validation.
 #'
 #' Calculate a confusion matrix based on predictions from cross-validation.
