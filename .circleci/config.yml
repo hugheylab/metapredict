@@ -28,6 +28,22 @@ jobs:
               -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)'
 
       - run:
+          name: Install CDF packages for vignettes
+          command: |
+            Rscript \
+              -e 'source("R/metapredict_process.R")' \
+              -e 'installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))'
+
+      - run:
+          name: Download vignette folder
+          command: |
+            cd vignettes
+            wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
+            mv expression_data.tar.gz?dl=1 expression_data.tar.gz
+            tar -xf expression_data.tar.gz
+            cd ../
+
+      - run:
           name: Build package
           command: R CMD build . --md5 --no-build-vignettes
 
