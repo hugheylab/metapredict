@@ -24,7 +24,7 @@ then the function uses the order in \code{fitResult}.}
 \item{decreasing}{logical indicating whether to sort genes by decreasing coefficient.}
 
 \item{geneIdOrder}{Optional character array of Entrez Gene IDs specifying the order
-of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDf]{makeCoefDf()}} is used.}
+of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDt]{makeCoefDt()}} is used.}
 
 \item{org}{Name of package for mapping Entrez Gene IDs to gene symbols,
 passed to \code{data} argument of \code{\link[annotate:getSYMBOL]{annotate::lookUp()}}.}

@@ -27,8 +27,8 @@ The meta-analysis will use data from the following four studies:
 
 1. Install the required custom CDF packages by running the following command in R.
     ```{r, eval = FALSE}
-    metapredict::installCustomCdfPackages(c('hgu95av2hsentrezgcdf',
-                                            'hgu133plus2hsentrezgcdf'))
+    metapredict::installCustomCdfPackages(
+      c('hgu95av2hsentrezgcdf', 'hgu133plus2hsentrezgcdf'))
     ```
 1. Download each of the following files (we're only downloading a subset of the Bhattacharjee data):
     * [Bhattacharjee adeno part 1](http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz)

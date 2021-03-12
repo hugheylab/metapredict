@@ -29,8 +29,8 @@ mergeMatchStudyData(
 \value{
 A named list.
 \item{ematList}{Named list of expression matrices.}
-\item{studyMetadata}{data frame of study metadata.}
-\item{sampleMetadata}{data frame of sample metadata.}
+\item{studyMetadata}{data.frame of study metadata.}
+\item{sampleMetadata}{data.frame of sample metadata.}
 }
 \description{
 Merge gene expression from different platforms that was measured on the same biological samples.

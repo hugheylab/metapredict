@@ -29,6 +29,7 @@ Each study contains samples from various lung cancer subtypes. For this meta-ana
 ## Set the parameters for the meta-analysis
 Open R and set the working directory to the `metapredict_example` folder that you previously created. Then we'll load the necessary packages and set the parameters for the meta-analysis. After running the meta-analysis once, you can change `denovo` to `FALSE`. In this example, we're going to use three studies for cross-validation and the fourth as validation.
 ```{r}
+library('data.table')
 library('metapredict')
 library('ggplot2')
 library('RColorBrewer')
@@ -49,10 +50,10 @@ classLevels = c('AD', 'SQ', 'SCLC')
 For this meta-analysis, the files of study metadata and sample metadata have already been created.
 ```{r}
 studyMetadataPath = system.file('extdata', 'study_metadata.csv', package = 'metapredict')
-studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
+studyMetadata = fread(studyMetadataPath)
 
 sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package = 'metapredict')
-sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
+sampleMetadata = fread(sampleMetadataPath)
 ```
 
 ## Load the gene expression data
@@ -75,13 +76,14 @@ ematDiscovery = mergeStudyData(ematList[discoveryStudyNames], sampleMetadata)
 ## Leave-one-study-out cross-validation
 Before running cross-validation, we'll use the sample metadata to create the `weights` and `foldid` vectors that will be passed to `cv.glmnet`. `metapredictCv` returns a list, with one element for each value of `alpha`. Since we're doing multinomial classification (AD, SQ, and SCLC), `cv.glmnet` uses the multinomial deviance as the measure of goodness of fit (the lower the better).
 ```{r, fig.width = 5, fig.height = 4}
-glmnetArgs = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
-                            foldidColname = foldidColname)
+glmnetArgs = makeGlmnetArgs(
+  sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
+  foldidColname = foldidColname)
 
-cvFitList = metapredictCv(ematDiscovery, sampleMetadata, yName = className,
-                          weights = glmnetArgs$weights, foldid = glmnetArgs$foldid,
-                          alpha = alpha, family = family, lambda.min.ratio = 0.001,
-                          keep = TRUE)
+cvFitList = metapredictCv(
+  ematDiscovery, sampleMetadata, yName = className,
+  weights = glmnetArgs$weights, foldid = glmnetArgs$foldid, alpha = alpha,
+  family = family, lambda.min.ratio = 0.001, keep = TRUE)
 cvFit = cvFitList[[1]]
 
 plot(cvFit)
@@ -109,28 +111,31 @@ names(annoColors) = annoNames
 names(annoColors[[1]]) = annoLevels[[1]]
 names(annoColors[[2]]) = annoLevels[[2]]
 
-plotExpressionHeatmap(fitResult, lambda, ematDiscovery, sampleMetadata, annoLevels,
-                      annoColors, classLevels = classLevels, fontsize_row = 7)
+plotExpressionHeatmap(
+  fitResult, lambda, ematDiscovery, sampleMetadata, annoLevels, annoColors,
+  classLevels = classLevels, fontsize_row = 7)
 ```
 
 ## Predict subtype for samples in the validation dataset
 Now we'll test the model on the last dataset. Internally, `metapredict` runs `mergeStudyData` to combine the discovery datasets and the validation dataset, then trains a predictive model on samples from the discovery dataset and predicts the subtype for samples from the validation dataset.
 ```{r}
-predsList = metapredict(ematList, studyMetadata, sampleMetadata, discoveryStudyNames,
-                        alpha = alpha, lambda = lambda, weights = glmnetArgs$weights,
-                        family = family)
+predsList = metapredict(
+  ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha = alpha,
+  lambda = lambda, weights = glmnetArgs$weights, family = family)
 ```
 
 ## Confusion matrix for validation samples
 One way to check prediction accuracy of a multinomial classifier is with a confusion matrix. These predictions look pretty good.
 ```{r}
-calcConfusionValidation(predsList, lambda = lambda, sampleMetadata = sampleMetadata,
-                        classLevels = classLevels)
+calcConfusionValidation(
+  predsList, lambda = lambda, sampleMetadata = sampleMetadata,
+  classLevels = classLevels)
 ```
 
 ## Class probabilities for validation samples
 Instead of looking at the single predicted subtype, we can also look at the probabilities for all four subtypes. Both the confusion matrix and this plot suggest that `metapredict` can combine data from multiple studies to learn an accurate classifier of lung cancer subtype.
 ```{r, fig.width = 7, fig.height = 3}
-plotClassProbsValidation(predsList, sampleMetadata, className, classLevels, size = 1.5,
-                         ggplotArgs = list(scale_color_brewer(type = 'qual', palette = 3)))
+plotClassProbsValidation(
+  predsList, sampleMetadata, className, classLevels, size = 1.5,
+  ggplotArgs = list(scale_color_brewer(type = 'qual', palette = 3)))
 ```

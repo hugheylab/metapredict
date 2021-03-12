@@ -12,15 +12,15 @@
 #' \item{weights}{vector of weights, such that each study is weighted equally.}
 #'
 #' @export
-makeGlmnetArgs = function(metadata, foldidColname='study', sampleColname='sample') {
+makeGlmnetArgs = function(metadata, foldidColname = 'study', sampleColname = 'sample') {
   foldid = as.numeric(factor(metadata[[foldidColname]],
-                             labels=1:length(unique(metadata[[foldidColname]]))))
+                             labels = 1:length(unique(metadata[[foldidColname]]))))
   names(foldid) = metadata[[sampleColname]]
   weights = length(unique(foldid)) /
-    do.call(c, sapply(sapply(unique(foldid), function(x) sum(foldid==x)),
-                      function(n) rep_len(n, n), simplify=FALSE))
+    do.call(c, sapply(sapply(unique(foldid), function(x) sum(foldid == x)),
+                      function(n) rep_len(n, n), simplify = FALSE))
   names(weights) = names(foldid)
-  return(list(foldid=foldid, weights=weights))}
+  return(list(foldid = foldid, weights = weights))}
 
 
 #' Perform cross-validation of merged gene expression data.
@@ -46,37 +46,40 @@ makeGlmnetArgs = function(metadata, foldidColname='study', sampleColname='sample
 #' @return A list of `cv.glmnet` objects.
 #'
 #' @export
-metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, foldid=NA,
-                         nRepeats=3, yName='class', addlFeatureColnames=NA, ...) {
+metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds = 10, foldid = NA,
+                         nRepeats = 3, yName = 'class', addlFeatureColnames = NA, ...) {
   args = list(...)
-  sm = tibble::tibble(sample = colnames(ematMerged)) %>%
-    dplyr::inner_join(sampleMetadata, by='sample')
 
-  if (!is.null(args$family) && args$family=='cox') {
+  # sm = tibble::tibble(sample = colnames(ematMerged)) %>%
+  #   dplyr::inner_join(sampleMetadata, by = 'sample')
+
+  sm = mergeDataTable(colnames(ematMerged), sampleMetadata)
+
+  if (!is.null(args$family) && args$family == 'cox') {
     y = as.matrix(sm[, yName, drop = FALSE])
     colnames(y) = c('time', 'status')
   } else {
     y = sm[[yName]]}
 
   if (is.na(addlFeatureColnames[1])) {
-    x = scale(t(ematMerged), center=TRUE, scale=FALSE)
+    x = scale(t(ematMerged), center = TRUE, scale = FALSE)
   } else {
-    addlFeatureTmp = data.frame(lapply(dplyr::select(sm, !!addlFeatureColnames), factor))
-    addlFeatureDummy = stats::model.matrix(~ 0 + ., data=addlFeatureTmp)
-    x = cbind(scale(t(ematMerged), center=TRUE, scale=FALSE), addlFeatureDummy)}
+    addlFeatureTmp = data.frame(lapply(sm[, addlFeatureColnames], factor))
+    addlFeatureDummy = stats::model.matrix(~ 0 + ., data = addlFeatureTmp)
+    x = cbind(scale(t(ematMerged), center = TRUE, scale = FALSE), addlFeatureDummy)}
 
   if (is.na(foldid[1])) {
     cvFitList = list()
     for (ii in 1:nRepeats) {
-      foldid = sample(rep(seq(nFolds), length=ncol(ematMerged)))
-      cvFitList[[ii]] = foreach(alpha=alpha) %do% {
-        glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)],
-                          foldid=foldid, alpha=alpha, standardize=FALSE, ...)}}
+      foldid = sample(rep(seq(nFolds), length = ncol(ematMerged)))
+      cvFitList[[ii]] = foreach(alpha = alpha) %do% {
+        glmnet::cv.glmnet(x, y, weights = weights[colnames(ematMerged)],
+                          foldid = foldid, alpha = alpha, standardize = FALSE, ...)}}
   } else {
-    cvFitList = foreach(alpha=alpha) %do% {
-      glmnet::cv.glmnet(x, y, weights=weights[colnames(ematMerged)],
-                        foldid=foldid[colnames(ematMerged)],
-                        alpha=alpha, standardize=FALSE, ...)}}
+    cvFitList = foreach(alpha = alpha) %do% {
+      glmnet::cv.glmnet(x, y, weights = weights[colnames(ematMerged)],
+                        foldid = foldid[colnames(ematMerged)],
+                        alpha = alpha, standardize = FALSE, ...)}}
   return(cvFitList)}
 
 
@@ -107,27 +110,39 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds=10, 
 #'
 #' @export
 metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda, weights,
-                       batchColname='study', covariateName=NA, className='class', type='response', ...) {
+                       batchColname = 'study', covariateName = NA, className = 'class', type = 'response', ...) {
 
-  discoverySampleNames = dplyr::filter(sampleMetadata, study %in% discoveryStudyNames)$sample
-  validationStudyNames = setdiff(sort(unique(sampleMetadata$study)), discoveryStudyNames)
+  # discoverySampleNames = dplyr::filter(sampleMetadata, study %in% discoveryStudyNames)$sample
 
-  predsList = foreach(validationStudyName=validationStudyNames) %do% {
-    validationSampleNames = dplyr::filter(sampleMetadata, study==validationStudyName)$sample
+  sampleMetadataDT = data.table(sampleMetadata)
+  discoverySampleNames = sampleMetadataDT[which(study %in% discoveryStudyNames), sample]
+  validationStudyNames = setdiff(sort(unique(sampleMetadataDT[,study])), discoveryStudyNames)
+
+  predsList = foreach(validationStudyName = validationStudyNames) %do% {
+    # validationSampleNames = dplyr::filter(sampleMetadata, study == validationStudyName)$sample
+
+    validationSampleNames = sampleMetadataDT[study == validationStudyName]$sample
 
     ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
     ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata,
-                                       batchColname=batchColname,
-                                       covariateName=covariateName)
-    ematMergedDisc = ematMergedDiscVal[,discoverySampleNames]
+                                       batchColname = batchColname,
+                                       covariateName = covariateName)
+    ematMergedDisc = ematMergedDiscVal[, discoverySampleNames]
 
-    y = tibble::tibble(sample = discoverySampleNames) %>%
-      dplyr::inner_join(sampleMetadata, by='sample') %>%
-      dplyr::select(!!className) %>%
-      as.matrix()
-    fitResult = glmnet::glmnet(t(ematMergedDisc), y, alpha=alpha, lambda=lambda,
-                               weights=weights[discoverySampleNames], standardize=FALSE, ...)
-    newx = data.matrix(t(ematMergedDiscVal[,validationSampleNames]))
+
+    # y = tibble::tibble(sample = discoverySampleNames) %>%
+    #   dplyr::inner_join(sampleMetadata, by = 'sample') %>%
+    #   dplyr::select(!!className) %>%
+    #   as.matrix()
+
+    yDTM = mergeDataTable(discoverySampleNames, sampleMetadataDT)
+    yDTM2 = yDTM[, ..className]
+    y = as.matrix(yDTM2)
+
+    fitResult = glmnet::glmnet(
+      t(ematMergedDisc), y, alpha = alpha, lambda = lambda,
+      weights = weights[discoverySampleNames], standardize = FALSE, ...)
+    newx = data.matrix(t(ematMergedDiscVal[, validationSampleNames]))
     preds = stats::predict(fitResult, newx = newx, s = lambda, type = type)}
     # preds = predictWrapper(fitResult, newx = newx, s = lambda, type = type)}
 
@@ -143,42 +158,70 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
 #   return(predFunc(object, ...))}
 
 
-#' Make data.frame of non-zero coefficients from a glmnet model.
+
+# makeCoefDf = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
+#   coefResult = glmnet::coef.glmnet(fitResult, s = lambda)
+#
+#   if (is.list(coefResult)) {
+#     coefResultNonzero = foreach(coefSparse = coefResult) %do% {
+#       x = data.frame(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1], stringsAsFactors = FALSE)
+#       colnames(x) = c('geneId', 'coefficient')
+#       return(x)}
+#     names(coefResultNonzero) = names(coefResult)
+#     if (!is.na(classLevels[1])) {
+#       coefResult = coefResult[classLevels]
+#       coefResultNonzero = coefResultNonzero[classLevels]}
+#
+#     for (ii in 1:length(coefResult)) {
+#       colnames(coefResultNonzero[[ii]])[2] = names(coefResult)[ii]}
+#     coefDf = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
+#     idx = do.call(order, c(coefDf[,2:ncol(coefDf)], list(decreasing = decreasing)))
+#     coefDf = coefDf[idx,]
+#     coefDf[is.na(coefDf)] = 0
+#
+#   } else {
+#     coefDf = data.frame(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors = FALSE)
+#     colnames(coefDf) = c('geneId', 'coefficient')
+#     coefDf = coefDf[order(coefDf[,'coefficient'], decreasing = decreasing),]}
+#   rownames(coefDf) = NULL
+#   return(coefDf)}
+
+#' Make data.table of non-zero coefficients from a glmnet model.
 #'
-#' Make a sorted `data.frame` of the non-zero coefficients of a logistic or
+#' Make a sorted `data.table` of the non-zero coefficients of a logistic or
 #' multinomial `glmnet` model.
 #'
 #' @param fitResult `glmnet` object.
 #' @param lambda value of lambda for which to obtain coefficients.
 #' @param decreasing logical passed to `order`.
-#' @param classLevels order of columns in resulting `data.frame`.
+#' @param classLevels order of columns in resulting `data.table`.
 #'
-#' @return A `data.frame`.
+#' @return A `data.table`.
 #'
 #' @export
-makeCoefDf = function(fitResult, lambda, decreasing=TRUE, classLevels=NA) {
-  coefResult = glmnet::coef.glmnet(fitResult, s=lambda)
+makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
+  coefResult = glmnet::coef.glmnet(fitResult, s = lambda)
 
   if (is.list(coefResult)) {
-    coefResultNonzero = foreach(coefSparse=coefResult) %do% {
-      x = data.frame(rownames(coefSparse)[(coefSparse@i)+1], coefSparse[(coefSparse@i)+1], stringsAsFactors=FALSE)
-      colnames(x) = c('geneId', 'coefficient')
-      return(x)}
+    coefResultNonzero = foreach(coefSparse = coefResult) %do% {
+      x = data.table(rownames(coefSparse)[(coefSparse@i) + 1], coefSparse[(coefSparse@i) + 1])
+      setnames(x, 1:2, c('geneId', 'coefficient'))
+      x}
     names(coefResultNonzero) = names(coefResult)
     if (!is.na(classLevels[1])) {
       coefResult = coefResult[classLevels]
       coefResultNonzero = coefResultNonzero[classLevels]}
 
     for (ii in 1:length(coefResult)) {
-      colnames(coefResultNonzero[[ii]])[2] = names(coefResult)[ii]}
-    coefDf = Reduce(function(x, y) merge(x, y, by='geneId', all=TRUE), coefResultNonzero)
-    idx = do.call(order, c(coefDf[,2:ncol(coefDf)], list(decreasing=decreasing)))
-    coefDf = coefDf[idx,]
-    coefDf[is.na(coefDf)] = 0
+      setnames(coefResultNonzero[[ii]], 2, names(coefResult)[ii])}
+    coefDt = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
+    decNum = if (isTRUE(decreasing)) -1L else 1L
+    setorderv(coefDt, colnames(coefDt)[2:ncol(coefDt)], decNum, na.last = TRUE)
+    coefDt[is.na(coefDt)] = 0
 
   } else {
-    coefDf = data.frame(names(coefResult[(coefResult@i)+1,]), coefResult[(coefResult@i)+1,], stringsAsFactors=FALSE)
-    colnames(coefDf) = c('geneId', 'coefficient')
-    coefDf = coefDf[order(coefDf[,'coefficient'], decreasing=decreasing),]}
-  rownames(coefDf) = NULL
-  return(coefDf)}
+    coefDt = data.table(names(coefResult[(coefResult@i) + 1]), coefResult[(coefResult@i) + 1])
+    setnames(coefDt, c('geneId', 'coefficient'))
+    decNum = if (isTRUE(decreasing)) -1L else 1L
+    setorderv(coefDt, 'coefficient', decNum, na.last = TRUE)}
+  return(coefDt)}

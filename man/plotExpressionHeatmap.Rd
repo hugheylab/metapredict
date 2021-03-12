@@ -41,7 +41,7 @@ list must be a vector of values found in that particular column.}
 from each dataset together or separately.}
 
 \item{geneIdOrder}{Optional character array of Entrez Gene IDs specifying the order
-of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDf]{makeCoefDf()}} is used.}
+of genes. If \code{NA} (default), the order from \code{\link[=makeCoefDt]{makeCoefDt()}} is used.}
 
 \item{className}{column in sampleMetadata containing values of the response variable.}
 

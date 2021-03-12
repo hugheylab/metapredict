@@ -1,3 +1,6 @@
+# metapredict 1.1.0
+- Switched to data.table under the hood.
+
 # metapredict 1.0.4
 - Updated links in vignette to download data from the Bhattacharjee study.
 
