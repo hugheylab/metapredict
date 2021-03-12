@@ -1,4 +1,4 @@
 library(testthat)
-library(pmparser)
+library(metapredict)
 
 test_check('metapredict')
