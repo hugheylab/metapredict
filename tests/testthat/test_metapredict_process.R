@@ -1,3 +1,5 @@
+parentFolderPath = 'test_data'
+
 test_that('getSupportedPlatforms', {
   platforms = c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962',
     'GPL1053', 'GPL1073', 'GPL1261', 'GPL1291', 'GPL1293', 'GPL1390',
@@ -7,5 +9,12 @@ test_that('getSupportedPlatforms', {
     'GPL10332', 'GPL10379', 'GPL10558', 'GPL10687', 'GPL13607',
     'GPL13730', 'GPL15331', 'GPL15450', 'GPL18721', 'GPL20769')
   platformsFunc = getSupportedPlatforms()
+  expect_equal(platforms, platformsFunc$platform)
+})
+
+test_that('getStudyDataList', {
+  studyMetadata = data.frame(study = c('GSE11969', 'GSE29016'), studyDataType = c('series_matrix', 'series_matrix'), platformInfo = c('GPL7015', 'GPL6947'))
+  esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
+  esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
   expect_equal(platforms, platformsFunc$platform)
 })
