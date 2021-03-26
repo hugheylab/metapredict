@@ -10,6 +10,7 @@ testSamples = c('CL2001031606AA', 'CL2001031607AA', 'CL2001031608AA', 'CL2001031
 sampleMetadata = as.data.frame(sampleMetadata[study %in% c('GSE11969', 'GSE29016') | sample %in% testSamples,])
 
 parentFolderPath = 'test_data'
+esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
 
 test_that('getSupportedPlatforms', {
   platforms = c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962',
@@ -25,13 +26,11 @@ test_that('getSupportedPlatforms', {
 
 test_that('getStudyDataList', {
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
-  esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
   expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
 })
 
 test_that('extractExpressionData', {
-  esetList = readRDS(file.path(parentFolderPath, 'esetList.rds'))
-  ematListTest = extractExpressionData(esetList, sampleMetadata)
+  ematListTest = extractExpressionData(esetListControl, sampleMetadata)
   ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
   expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
 })
