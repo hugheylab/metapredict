@@ -1,13 +1,15 @@
 library(data.table)
-
-studyMetadataPath = system.file('extdata', 'study_metadata.csv', package = 'metapredict')
+setwd('../')
+setwd('../')
+studyMetadataPath = file.path('inst/extdata/study_metadata.csv')
 studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 
-sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package = 'metapredict')
+sampleMetadataPath = file.path('inst/extdata/sample_metadata.csv')
 sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
 setDT(sampleMetadata)
 testSamples = c('CL2001031606AA', 'CL2001031607AA', 'CL2001031608AA', 'CL2001031611AA', 'GSM748053', 'GSM748054', 'GSM748055', 'GSM748056', 'GSM748209')
 sampleMetadata = as.data.frame(sampleMetadata[study %in% c('GSE11969', 'GSE29016') | sample %in% testSamples,])
+setwd('tests/testthat')
 
 parentFolderPath = 'test_data'
 esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
