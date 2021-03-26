@@ -1,3 +1,14 @@
+library(data.table)
+
+studyMetadataPath = system.file('extdata', 'study_metadata.csv', package = 'metapredict')
+studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
+
+sampleMetadataPath = system.file('extdata', 'sample_metadata.csv', package = 'metapredict')
+sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
+setDT(sampleMetadata)
+testSamples = c('CL2001031606AA', 'CL2001031607AA', 'CL2001031608AA', 'CL2001031611AA', 'GSM748053', 'GSM748054', 'GSM748055', 'GSM748056', 'GSM748209')
+sampleMetadata = as.data.frame(sampleMetadata[study %in% c('GSE11969', 'GSE29016') | sample %in% testSamples,])
+
 parentFolderPath = 'test_data'
 
 test_that('getSupportedPlatforms', {
@@ -13,8 +24,13 @@ test_that('getSupportedPlatforms', {
 })
 
 test_that('getStudyDataList', {
-  studyMetadata = data.frame(study = c('GSE11969', 'GSE29016'), studyDataType = c('series_matrix', 'series_matrix'), platformInfo = c('GPL7015', 'GPL6947'))
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
   esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
   expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
+})
+
+test_that('getStudyDataList', {
+  ematListTest = extractExpressionData(esetList, sampleMetadata)
+  ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
+  expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
 })
