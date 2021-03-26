@@ -29,7 +29,8 @@ test_that('getStudyDataList', {
   expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
 })
 
-test_that('getStudyDataList', {
+test_that('extractExpressionData', {
+  esetList = readRDS(file.path(parentFolderPath, 'esetList.rds'))
   ematListTest = extractExpressionData(esetList, sampleMetadata)
   ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
   expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
