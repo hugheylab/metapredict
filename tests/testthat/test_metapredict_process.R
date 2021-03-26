@@ -16,5 +16,5 @@ test_that('getStudyDataList', {
   studyMetadata = data.frame(study = c('GSE11969', 'GSE29016'), studyDataType = c('series_matrix', 'series_matrix'), platformInfo = c('GPL7015', 'GPL6947'))
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
   esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
-  expect_true(all.equal(esetListTest, esetListControl))
+  expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
 })
