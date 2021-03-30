@@ -23,12 +23,12 @@ test_that('getSupportedPlatforms', {
   expect_equal(platforms, platformsFunc$platform)
 })
 
-test_that('getStudyDataList', {
-  esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
-  expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
-})
-
-test_that('extractExpressionData', {
-  ematListTest = extractExpressionData(esetListControl, sampleMetadata)
-  expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
-})
+# test_that('getStudyDataList', {
+#   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
+#   expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
+# })
+#
+# test_that('extractExpressionData', {
+#   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
+#   expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
+# })
