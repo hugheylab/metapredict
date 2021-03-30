@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: rocker/tidyverse:4.0.2
+      - image: rocker/tidyverse:4.0.0-ubuntu18.04
 
     working_directory: ~/repo
 
@@ -18,16 +18,6 @@ jobs:
               -e 'cat(sprintf("export PKG_VERSION=%s\n", dsc[,"Version"]))' \
               -e 'cat(sprintf("export PKG_TARBALL=%s_%s.tar.gz\n", dsc[,"Package"], dsc[,"Version"]))' \
               >> ${BASH_ENV}
-
-      - run:
-          name: Download update for blas issue
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y libxt6
-            git clone https://github.com/bmbolstad/preprocessCore.git
-            cd preprocessCore/
-            R CMD INSTALL --configure-args="--disable-threading" .
-            cd ../
 
 
       - run:
