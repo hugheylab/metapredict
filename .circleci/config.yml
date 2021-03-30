@@ -19,6 +19,12 @@ jobs:
               -e 'cat(sprintf("export PKG_TARBALL=%s_%s.tar.gz\n", dsc[,"Package"], dsc[,"Version"]))' \
               >> ${BASH_ENV}
 
+      - run:
+          name: Download update for blas issue
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y libxt6
+
 
       - run:
           name: Install dependencies
