@@ -1,18 +1,15 @@
 library(data.table)
-setwd('../')
-setwd('../')
-studyMetadataPath = file.path('inst/extdata/study_metadata.csv')
+parentFolderPath = 'test_data'
+studyMetadataPath = file.path(parentFolderPath, 'study_metadata.csv')
 studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 
-sampleMetadataPath = file.path('inst/extdata/sample_metadata.csv')
-sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
-setDT(sampleMetadata)
-testSamples = c('CL2001031606AA', 'CL2001031607AA', 'CL2001031608AA', 'CL2001031611AA', 'GSM748053', 'GSM748054', 'GSM748055', 'GSM748056', 'GSM748209')
-sampleMetadata = as.data.frame(sampleMetadata[study %in% c('GSE11969', 'GSE29016') | sample %in% testSamples,])
-setwd('tests/testthat')
+sampleMetadataPath = file.path(parentFolderPath, 'sample_metadata.csv')
 
-parentFolderPath = 'test_data'
+sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
+
 esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
+
+ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
 
 test_that('getSupportedPlatforms', {
   platforms = c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962',
@@ -33,6 +30,5 @@ test_that('getStudyDataList', {
 
 test_that('extractExpressionData', {
   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
-  ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
   expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
 })
