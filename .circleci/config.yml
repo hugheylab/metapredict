@@ -20,6 +20,17 @@ jobs:
               >> ${BASH_ENV}
 
       - run:
+          name: Download update for blas issue
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y libxt6
+            git clone https://github.com/bmbolstad/preprocessCore.git
+            cd preprocessCore/
+            R CMD INSTALL --configure-args="--disable-threading" .
+            cd ../
+
+
+      - run:
           name: Install dependencies
           command: |
             Rscript \
@@ -45,11 +56,11 @@ jobs:
 
       - run:
           name: Build package
-          command: R CMD build . --md5 --no-build-vignettes
+          command: R CMD build . --md5
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
+          command: R CMD check ${PKG_TARBALL}
 
       - run:
           name: Check failures
