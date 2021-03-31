@@ -1,4 +1,4 @@
-library(data.table)
+library('data.table')
 parentFolderPath = 'test_data'
 
 studyMetadataPath = file.path(parentFolderPath, 'study_metadata.csv')

@@ -1,8 +1,9 @@
 library('data.table')
 library('ggplot2')
 library('RColorBrewer')
+library('withr')
 
-withr::local_file('RPlots.pdf')
+local_file('RPlots.pdf')
 
 parentFolderPath = 'test_data'
 foldidColname = 'study'

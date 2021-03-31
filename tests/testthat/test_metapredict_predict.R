@@ -1,4 +1,4 @@
-library(data.table)
+library('data.table')
 parentFolderPath = 'test_data'
 foldidColname = 'study'
 className = 'class'
