@@ -1,5 +1,12 @@
 library(data.table)
 parentFolderPath = 'test_data'
+foldidColname = 'study'
+className = 'class'
+family = 'multinomial'
+alpha = 0.9
+discoveryStudyNames = c('Bhattacharjee', 'GSE11969', 'GSE29016')
+classLevels = c('AD', 'SQ', 'SCLC')
+
 studyMetadataPath = file.path(parentFolderPath, 'study_metadata.csv')
 studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 
@@ -10,6 +17,10 @@ sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
 esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
 
 ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
+
+ematDiscoveryControl = readRDS(file.path(parentFolderPath, 'ematDiscovery.rds'))
+
+glmnetArgsControl = readRDS(file.path(parentFolderPath, 'glmnetArgs'))
 
 test_that('getSupportedPlatforms', {
   platforms = c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962',
@@ -31,4 +42,10 @@ test_that('getStudyDataList', {
 test_that('extractExpressionData', {
   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
   expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
+})
+
+test_that('makeGlmnetArgs', {
+  glmnetArgsTest = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
+                 foldidColname = foldidColname)
+  expect_true(all.equal(glmnetArgsTest, glmnetArgsControl, check.attributes = FALSE))
 })
