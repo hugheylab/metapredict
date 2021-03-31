@@ -24,8 +24,10 @@ jobs:
           command: |
             sudo apt-get update -y
             sudo apt-get install -y libxt6
-            sudo apt update
-            sudo update-alternatives --set libblas.so.3-x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/blas/libblas.so.3
+            git clone https://github.com/bmbolstad/preprocessCore.git
+            cd preprocessCore/
+            R CMD INSTALL --configure-args="--disable-threading" .
+            cd ../
 
 
       - run:
