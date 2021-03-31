@@ -54,3 +54,21 @@ GSE30219,GSM748054,AD,Lung cancer ADK2
 GSE30219,GSM748055,AD,Lung cancer ADK3
 GSE30219,GSM748056,SQ,Lung Squamous Cell Carcinoma1
 GSE30219,GSM748209,SCLC,Small Cell Lung Carcinoma25
+Bhattacharjee,CL2001032217AA,SCLC,SMCL4T1
+Bhattacharjee,CL2001032121AA,SCLC,SMCL5937
+Bhattacharjee,CL2001031620AA,SQ,SQ2572
+Bhattacharjee,CL2001031621AA,SQ,SQ3624
+Bhattacharjee,CL2001032122AA,SQ,SQ4389
+GSE11969,GSM303110,SQ,Patient 001 with squamous cell carcinoma
+GSE11969,GSM303111,SQ,Patient 002 with squamous cell carcinoma
+GSE11969,GSM303112,SQ,Patient 003 with squamous cell carcinoma
+GSE11969,GSM303113,SQ,Patient 004 with squamous cell carcinoma
+GSE11969,GSM303145,SCLC,Patient 01 with small cell lung cancer
+GSE11969,GSM303146,SCLC,Patient 02 with small cell lung cancer
+GSE11969,GSM303147,SCLC,Patient 03 with small cell lung cancer
+GSE11969,GSM303148,SCLC,Patient 04 with small cell lung cancer
+GSE11969,GSM303149,SCLC,Patient 05 with small cell lung cancer
+GSE11969,GSM303150,SCLC,Patient 06 with small cell lung cancer
+GSE11969,GSM303151,SCLC,Patient 07 with small cell lung cancer
+GSE11969,GSM303152,SCLC,Patient 08 with small cell lung cancer
+GSE11969,GSM303153,SCLC,Patient 09 with small cell lung cancer
