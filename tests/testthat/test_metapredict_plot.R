@@ -1,4 +1,4 @@
-library(data.table)
+library('data.table')
 library('ggplot2')
 library('RColorBrewer')
 
@@ -43,11 +43,11 @@ test_that('plotCoefficients', {
   plotCoefficientsTest = plotCoefficients(fitResult, lambda, classLevels = classLevels) +
     scale_fill_brewer(type = 'qual', palette = 3) +
     theme(axis.text.y = element_text(size = 8))
-  expect_true(all.equal(plotCoefficientsTest, plotCoefficientsControl, check.attributes = FALSE))
+  expect_true(all.equal(plotCoefficientsTest$data, plotCoefficientsControl$data, check.attributes = FALSE))
 })
 
 test_that('plotExpressionHeatmap', {
   plotExpressionHeatmapTest = plotExpressionHeatmap(fitResult, lambda, ematDiscoveryControl, sampleMetadata, annoLevels,
                                                 annoColors, classLevels = classLevels, fontsize_row = 7)
-  expect_true(all.equal(plotExpressionHeatmapTest, plotExpressionHeatmapControl, check.attributes = FALSE))
+  expect_true(all.equal(plotExpressionHeatmapTest$data, plotExpressionHeatmapControl$data, check.attributes = FALSE))
 })

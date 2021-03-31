@@ -22,9 +22,20 @@ test_that('getSupportedPlatforms', {
     'GPL10332', 'GPL10379', 'GPL10558', 'GPL10687', 'GPL13607',
     'GPL13730', 'GPL15331', 'GPL15450', 'GPL18721', 'GPL20769')
   platformsFunc = getSupportedPlatforms()
-  expect_equal(platforms, platformsFunc$platform)
+  expect_true(all.equal(platforms, platformsFunc$platform))
 })
 
+test_that('getUnsupportedPlatforms', {
+  unsupPlatformsFunc = getUnsupportedPlatforms(studyMetadata)
+  expect_true(length(unsupPlatformsFunc) == 0)
+  warnFrame = data.frame(study = as.character(NA), studyDataType = as.character(NA), platformInfo = as.character(NA))
+  warnFrame$study = 'GSE11969'
+  warnFrame$studyDataType = 'series_matrix'
+  warnFrame$platformInfo = 'abc123'
+  studyMetadataWarn = rbind(studyMetadata, warnFrame)
+  unsupPlatformsFuncWarn = getUnsupportedPlatforms(studyMetadataWarn)
+  expect_true(all.equal(warnFrame$platformInfo, unsupPlatformsFuncWarn))
+})
 test_that('getStudyDataList', {
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
   expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))

@@ -162,7 +162,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
   #   .$platformInfo
 
   unsupportedPlatforms = data.table(studyMetadata)[
-    studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms())]$platformInfo
+    studyDataType == 'series_matrix' & !(platformInfo %in% getSupportedPlatforms()$platform)]$platformInfo
 
   if (length(unsupportedPlatforms) == 0) {
     cat("Whew, all microarray platforms for studies whose studyDataType == 'series_matrix' are supported.\n")
