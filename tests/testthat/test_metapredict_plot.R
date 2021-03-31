@@ -27,6 +27,8 @@ cvFit = cvFitListControl[[1]]
 fitResult = cvFit$glmnet.fit
 lambda = cvFit$lambda.min
 
+predsListControl = readRDS(file.path(parentFolderPath, 'predsList.rds'))
+
 plotCoefficientsControl = readRDS(file.path(parentFolderPath, 'plotCoefficients.rds'))
 
 annoNames = c('study', 'class')
@@ -39,6 +41,8 @@ names(annoColors[[2]]) = annoLevels[[2]]
 
 plotExpressionHeatmapControl = readRDS(file.path(parentFolderPath, 'plotExpressionHeatmap.rds'))
 
+plotClassProbsValidationControl = readRDS(file.path(parentFolderPath, 'plotClassProbsValidation.rds'))
+
 test_that('plotCoefficients', {
   plotCoefficientsTest = plotCoefficients(fitResult, lambda, classLevels = classLevels) +
     scale_fill_brewer(type = 'qual', palette = 3) +
@@ -50,4 +54,10 @@ test_that('plotExpressionHeatmap', {
   plotExpressionHeatmapTest = plotExpressionHeatmap(fitResult, lambda, ematDiscoveryControl, sampleMetadata, annoLevels,
                                                 annoColors, classLevels = classLevels, fontsize_row = 7)
   expect_true(all.equal(plotExpressionHeatmapTest$data, plotExpressionHeatmapControl$data, check.attributes = FALSE))
+})
+
+test_that('plotClassProbsValidation', {
+  plotClassProbsValidationTest = plotClassProbsValidation(predsListControl, sampleMetadata, className, classLevels, size = 1.5,
+                                                      ggplotArgs = list(scale_color_brewer(type = 'qual', palette = 3)))
+  expect_true(all.equal(plotClassProbsValidationTest$data, plotClassProbsValidationControl$data, check.attributes = FALSE))
 })
