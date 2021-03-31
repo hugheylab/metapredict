@@ -9,7 +9,7 @@ studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
 sampleMetadataPath = file.path(parentFolderPath, 'sample_metadata.csv')
 sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
 
-glmnetArgsControl = readRDS(file.path(parentFolderPath, 'glmnetArgs'))
+glmnetArgsControl = readRDS(file.path(parentFolderPath, 'glmnetArgs.rds'))
 
 test_that('makeGlmnetArgs', {
   glmnetArgsTest = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
