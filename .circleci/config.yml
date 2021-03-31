@@ -60,7 +60,8 @@ jobs:
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL}
+          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
+
 
       - run:
           name: Check failures
