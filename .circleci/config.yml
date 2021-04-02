@@ -56,11 +56,11 @@ jobs:
 
       - run:
           name: Build package
-          command: R CMD build . --md5
+          command: R CMD build . --md5 --no-build-vignettes
 
       - run:
           name: Check package
-          command: R CMD check ${PKG_TARBALL} --no-manual --no-vignettes
+          command: R CMD check ${PKG_TARBALL} --no-manual
 
 
       - run:
