@@ -1,4 +1,5 @@
 library('data.table')
+library('glmnet')
 parentFolderPath = 'test_data'
 foldidColname = 'study'
 className = 'class'
@@ -38,7 +39,7 @@ test_that('metapredictCv', {
                                 alpha = alpha, family = family, lambda.min.ratio = 0.001,
                                 keep = TRUE)
   print(setdiff(cvFitListTest, cvFitListControl))
-  # expect_true(all.equal(cvFitListTest, cvFitListControl, check.attributes = FALSE))
+  expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.000001, check.attributes = FALSE))
 })
 
 test_that('metapredict', {
@@ -46,5 +47,5 @@ test_that('metapredict', {
                           alpha = alpha, lambda = lambda, weights = glmnetArgsControl$weights,
                           family = family)
   print(setdiff(predsListTest, predsListControl))
-  # expect_true(all.equal(predsListTest, predsListControl, check.attributes = FALSE))
+  expect_true(all.equal(predsListTest, predsListControl, tolerance = 0.000001, check.attributes = FALSE))
 })
