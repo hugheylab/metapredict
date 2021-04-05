@@ -42,6 +42,7 @@ test_that('metapredictCv', {
                                 keep = TRUE)
   print(setdiff(cvFitListTest, cvFitListControl))
   expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.000001, check.attributes = FALSE))
+  set.seed(NULL)
 })
 
 test_that('metapredict', {
@@ -51,4 +52,5 @@ test_that('metapredict', {
                           family = family)
   print(setdiff(predsListTest, predsListControl))
   expect_true(all.equal(predsListTest, predsListControl, tolerance = 0.000001, check.attributes = FALSE))
+  set.seed(NULL)
 })
