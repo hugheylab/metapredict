@@ -35,6 +35,7 @@ test_that('makeGlmnetArgs', {
 })
 
 test_that('metapredictCv', {
+  set.seed(127)
   cvFitListTest = metapredictCv(ematDiscoveryControl, sampleMetadata, yName = className,
                                 weights = glmnetArgsControl$weights, foldid = glmnetArgsControl$foldid,
                                 alpha = alpha, family = family, lambda.min.ratio = 0.001,
@@ -44,6 +45,7 @@ test_that('metapredictCv', {
 })
 
 test_that('metapredict', {
+  set.seed(63)
   predsListTest = metapredict(ematListControl, studyMetadata, sampleMetadata, discoveryStudyNames,
                           alpha = alpha, lambda = lambda, weights = glmnetArgsControl$weights,
                           family = family)
