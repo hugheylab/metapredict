@@ -35,22 +35,18 @@ test_that('makeGlmnetArgs', {
 })
 
 test_that('metapredictCv', {
-  set.seed(127)
   cvFitListTest = metapredictCv(ematDiscoveryControl, sampleMetadata, yName = className,
                                 weights = glmnetArgsControl$weights, foldid = glmnetArgsControl$foldid,
                                 alpha = alpha, family = family, lambda.min.ratio = 0.001,
                                 keep = TRUE)
   print(setdiff(cvFitListTest, cvFitListControl))
   expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.000001, check.attributes = FALSE))
-  set.seed(NULL)
 })
 
 test_that('metapredict', {
-  set.seed(63)
   predsListTest = metapredict(ematListControl, studyMetadata, sampleMetadata, discoveryStudyNames,
                           alpha = alpha, lambda = lambda, weights = glmnetArgsControl$weights,
                           family = family)
   print(setdiff(predsListTest, predsListControl))
   expect_true(all.equal(predsListTest, predsListControl, tolerance = 0.000001, check.attributes = FALSE))
-  set.seed(NULL)
 })
