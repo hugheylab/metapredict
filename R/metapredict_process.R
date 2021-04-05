@@ -96,52 +96,8 @@ calcExprsByGene = function(eset, mapping) {
 #' @export
 getSupportedPlatforms = function() {
 
-  platform = c('GPL180', 'GPL341', 'GPL571', 'GPL885', 'GPL887', 'GPL890', 'GPL962',
-                'GPL1053', 'GPL1073', 'GPL1261', 'GPL1291', 'GPL1293', 'GPL1390',
-                'GPL1708', 'GPL3921', 'GPL4133', 'GPL4372', 'GPL5645', 'GPL6104',
-                'GPL6254', 'GPL6333', 'GPL6480', 'GPL6865', 'GPL6880', 'GPL6884',
-                'GPL6885', 'GPL6887', 'GPL6947', 'GPL7015', 'GPL7202', 'GPL8177',
-                'GPL10332', 'GPL10379', 'GPL10558', 'GPL10687', 'GPL13607',
-                'GPL13730', 'GPL15331', 'GPL15450', 'GPL18721', 'GPL20769')
-  mappingFunction = c('Anno', 'Direct', 'Direct', 'Direct', 'Direct', 'Direct', 'Anno',
-                       'Anno', 'Anno', 'Direct', 'Direct', 'Direct', 'Anno',
-                       'Direct', 'Direct', 'Direct', 'Direct', 'Anno', 'Direct',
-                       'Anno', 'Anno', 'Direct', 'Anno', 'Anno', 'Direct',
-                       'Anno', 'Anno', 'Anno', 'Anno', 'Direct', 'Anno',
-                       'Anno', 'Direct', 'Direct', 'Direct', 'Anno',
-                       'Direct', 'Anno', 'Anno', 'Anno', 'Anno')
-  dbName = c('org.Hs.egSYMBOL2EG', NA, NA, NA, NA, NA, 'org.Hs.egUNIGENE2EG',
-              'org.Hs.egSYMBOL2EG', 'org.Mm.egACCNUM2EG', NA, NA, NA, 'org.Hs.egREFSEQ2EG',
-              NA, NA, NA, NA, 'org.Hs.egSYMBOL2EG', NA,
-              'org.Hs.egENSEMBL2EG', 'org.Mm.egREFSEQ2EG', NA, 'org.Hs.egREFSEQ2EG', 'org.Mm.egREFSEQ2EG', NA,
-              'org.Mm.egREFSEQ2EG', 'org.Mm.egREFSEQ2EG', 'org.Hs.egREFSEQ2EG', 'org.Hs.egREFSEQ2EG', 'Direct', 'org.Hs.egREFSEQ2EG',
-              'org.Hs.egREFSEQ2EG', NA, NA, NA, 'org.Hs.egREFSEQ2EG',
-              NA, 'org.Hs.egREFSEQ2EG', 'org.Dr.egREFSEQ2EG', 'org.Hs.egREFSEQ2EG', 'org.Hs.egSYMBOL2EG')
-  interName = c('GENE_SYM', NA, NA, NA, NA, NA, 'UNIGENE',
-                 'GENE', 'GenBank', NA, NA, NA, 'GB_ACC',
-                 NA, NA, NA, NA, 'Gene Name', NA,
-                 'ENSEMBL_GENE_ID', 'RefSeq', NA, 'rep_name', 'RefSeq', NA,
-                 'RefSeq', 'RefSeq', 'RefSeq', 'GB_LIST', 'Direct', 'GB_ACC',
-                 'GB_ACC', NA, NA, NA, 'GB_ACC',
-                 NA, 'GB_ACC', 'GB_ACC', 'RefSeq', 'ORF')
-  #TODO: Pull Gene Column names and define split columns
-  geneColname = c(NA, 'ENTREZ_GENE_ID', 'ENTREZ_GENE_ID', 'GENE', 'GENE', 'GENE', NA,
-                   NA, NA, 'ENTREZ_GENE_ID', 'Entrez Gene ID', 'Entrez Gene ID', NA,
-                   'GENE', 'ENTREZ_GENE_ID', 'GENE', 'EntrezGeneID', NA, 'Entrez_Gene_ID',
-                   NA, NA, 'GENE', NA, NA, 'Entrez_Gene_ID',
-                   NA, NA, NA, NA, 'GENE', NA,
-                   NA, 'EntrezGeneID', 'Entrez_Gene_ID', 'EntrezGeneID', NA,
-                   'ENTREZ_GENE_ID', NA, NA, NA, NA)
-  splitColumn = c(NA, NA, NA, NA, NA, NA, NA,
-                  NA, 'GB_ACC', NA, NA, NA, NA,
-                  NA, NA, NA, NA, NA, NA,
-                  NA, 'GB_ACC', NA, NA, 'GB_ACC', NA,
-                  'GB_ACC', 'GB_ACC', 'GB_ACC', NA, NA, NA,
-                  NA, NA, NA, NA, NA,
-                  NA, NA, NA, 'GB_ACC', NA)
-
-  supportedPlatformsDt = data.table(platform = platform, mappingFunction = mappingFunction, dbName = dbName,
-                                    interName = interName, geneColname = geneColname, splitColumn = splitColumn)
+  supportedPlatformsPath = system.file('extdata', 'supported_platforms.csv', package = 'metapredict')
+  supportedPlatformsDt = fread(supportedPlatformsPath)
 
   return(supportedPlatformsDt)}
 
@@ -241,7 +197,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 
     platformDt = supportedPlatformsDt[platform == platformInfo,]
 
-    if (!(is.na(platformDt$splitColumn))) {
+    if (!(is.na(platformDt$splitColumn)) && platformDt$splitColumn != '') {
       featureDt[[platformDt$interName]] = sapply(
         featureDt[[platformDt$splitColumn]], function(x) strsplit(x, split = '.', fixed = TRUE)[[1]][1])
     }
