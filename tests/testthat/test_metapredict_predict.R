@@ -40,7 +40,7 @@ test_that('metapredictCv', {
                                 alpha = alpha, family = family, lambda.min.ratio = 0.001,
                                 keep = TRUE)
   print(setdiff(cvFitListTest, cvFitListControl))
-  expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.000001, check.attributes = FALSE))
+  expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.00001, check.attributes = FALSE))
 })
 
 test_that('metapredict', {
