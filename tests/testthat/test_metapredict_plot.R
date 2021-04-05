@@ -48,7 +48,7 @@ test_that('plotCoefficients', {
   plotCoefficientsTest = plotCoefficients(fitResult, lambda, classLevels = classLevels) +
     scale_fill_brewer(type = 'qual', palette = 3) +
     theme(axis.text.y = element_text(size = 8))
-  expect_true(all.equal(plotCoefficientsTest$data, plotCoefficientsControl$data, check.attributes = FALSE))
+  expect_true(all.equal(plotCoefficientsTest$data, plotCoefficientsControl$data, tolerance = 0.000001, check.attributes = FALSE))
 })
 
 test_that('plotExpressionHeatmap', {
