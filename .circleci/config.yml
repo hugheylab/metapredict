@@ -28,6 +28,7 @@ jobs:
             cd preprocessCore/
             R CMD INSTALL --configure-args="--disable-threading" .
             cd ../
+            rm -rf preprocessCore
 
 
       - run:
