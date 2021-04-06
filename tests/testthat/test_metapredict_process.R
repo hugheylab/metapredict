@@ -36,13 +36,13 @@ test_that('getUnsupportedPlatforms', {
   expect_equal(warnFrame$platformInfo, unsupPlatformsFuncWarn)
 })
 test_that('getStudyDataList', {
-  withr::local_seed(1)
+  local_seed(1)
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
   expect_equal(esetListTest, esetListControl, check.attributes = FALSE)
 })
 
 test_that('extractExpressionData', {
-  withr::local_seed(3)
+  local_seed(3)
   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
   expect_equal(ematListTest, ematListControl, check.attributes = FALSE)
 })
