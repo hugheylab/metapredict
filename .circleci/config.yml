@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: Build package
-          command: R CMD build . --md5 --no-build-vignettes
+          command: R CMD build . --md5
 
       - run:
           name: Check package
