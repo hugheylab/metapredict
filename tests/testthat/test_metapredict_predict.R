@@ -31,7 +31,7 @@ predsListControl = readRDS(file.path(parentFolderPath, 'predsList.rds'))
 test_that('makeGlmnetArgs', {
   glmnetArgsTest = makeGlmnetArgs(sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
                                   foldidColname = foldidColname)
-  expect_true(all.equal(glmnetArgsTest, glmnetArgsControl, check.attributes = FALSE))
+  expect_equal(glmnetArgsTest, glmnetArgsControl, check.attributes = FALSE)
 })
 
 test_that('metapredictCv', {
@@ -40,7 +40,7 @@ test_that('metapredictCv', {
                                 alpha = alpha, family = family, lambda.min.ratio = 0.001,
                                 keep = TRUE)
   print(setdiff(cvFitListTest, cvFitListControl))
-  expect_true(all.equal(cvFitListTest, cvFitListControl, tolerance = 0.00001, check.attributes = FALSE))
+  expect_equal(cvFitListTest, cvFitListControl, check.attributes = FALSE)
 })
 
 test_that('metapredict', {
@@ -48,5 +48,5 @@ test_that('metapredict', {
                           alpha = alpha, lambda = lambda, weights = glmnetArgsControl$weights,
                           family = family)
   print(setdiff(predsListTest, predsListControl))
-  expect_true(all.equal(predsListTest, predsListControl, tolerance = 0.000001, check.attributes = FALSE))
+  expect_equal(predsListTest, predsListControl, check.attributes = FALSE)
 })

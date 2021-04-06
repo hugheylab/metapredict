@@ -16,7 +16,7 @@ ematDiscoveryControl = readRDS(file.path(parentFolderPath, 'ematDiscovery.rds'))
 test_that('getSupportedPlatforms', {
   supportedPlatformsControl = fread(file.path(parentFolderPath, 'supportedPlatforms.csv'))
   supportedPlatformsTest = getSupportedPlatforms()
-  expect_true(all.equal(supportedPlatformsTest$platform, supportedPlatformsControl$platform, check.attributes = FALSE))
+  expect_equal(supportedPlatformsTest$platform, supportedPlatformsControl$platform, check.attributes = FALSE)
 })
 
 test_that('getUnsupportedPlatforms', {
@@ -28,14 +28,14 @@ test_that('getUnsupportedPlatforms', {
   warnFrame$platformInfo = 'abc123'
   studyMetadataWarn = rbind(studyMetadata, warnFrame)
   unsupPlatformsFuncWarn = getUnsupportedPlatforms(studyMetadataWarn)
-  expect_true(all.equal(warnFrame$platformInfo, unsupPlatformsFuncWarn))
+  expect_equal(warnFrame$platformInfo, unsupPlatformsFuncWarn)
 })
 test_that('getStudyDataList', {
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
-  expect_true(all.equal(esetListTest, esetListControl, check.attributes = FALSE))
+  expect_equal(esetListTest, esetListControl, check.attributes = FALSE)
 })
 
 test_that('extractExpressionData', {
   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
-  expect_true(all.equal(ematListTest, ematListControl, check.attributes = FALSE))
+  expect_equal(ematListTest, ematListControl, check.attributes = FALSE)
 })
