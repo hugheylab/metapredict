@@ -1,4 +1,4 @@
-library(testthat)
-library(metapredict)
+library('testthat')
+library('metapredict')
 
 test_check('metapredict')

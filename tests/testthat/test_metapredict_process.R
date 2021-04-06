@@ -1,4 +1,9 @@
+library('ggplot2')
+library('RColorBrewer')
 library('data.table')
+library('glmnet')
+library('withr')
+
 parentFolderPath = 'test_data'
 
 studyMetadataPath = file.path(parentFolderPath, 'study_metadata.csv')
@@ -31,11 +36,13 @@ test_that('getUnsupportedPlatforms', {
   expect_equal(warnFrame$platformInfo, unsupPlatformsFuncWarn)
 })
 test_that('getStudyDataList', {
+  local_seed(1)
   esetListTest = getStudyDataList(parentFolderPath, studyMetadata)
   expect_equal(esetListTest, esetListControl, check.attributes = FALSE)
 })
 
 test_that('extractExpressionData', {
+  local_seed(3)
   ematListTest = extractExpressionData(esetListControl, sampleMetadata)
   expect_equal(ematListTest, ematListControl, check.attributes = FALSE)
 })
