@@ -37,7 +37,6 @@ jobs:
             Rscript \
               -e 'repos = BiocManager::repositories("https://hugheylab.github.io/drat/")' \
               -e 'BiocManager::install("annotate")' \
-              -e 'install.packages("withr")' \
               -e 'devtools::install_dev_deps(dependencies = TRUE, repos = repos, upgrade = TRUE)'
 
       - run:
