@@ -1,22 +1,4 @@
-library('ggplot2')
-library('RColorBrewer')
-library('data.table')
-library('glmnet')
-library('withr')
 
-parentFolderPath = 'test_data'
-
-studyMetadataPath = file.path(parentFolderPath, 'study_metadata.csv')
-studyMetadata = read.csv(studyMetadataPath, stringsAsFactors = FALSE)
-
-sampleMetadataPath = file.path(parentFolderPath, 'sample_metadata.csv')
-sampleMetadata = read.csv(sampleMetadataPath, stringsAsFactors = FALSE)
-
-esetListControl = readRDS(file.path(parentFolderPath, 'esetList.rds'))
-
-ematListControl = readRDS(file.path(parentFolderPath, 'ematList.rds'))
-
-ematDiscoveryControl = readRDS(file.path(parentFolderPath, 'ematDiscovery.rds'))
 
 test_that('getSupportedPlatforms', {
   supportedPlatformsControl = fread(file.path(parentFolderPath, 'supportedPlatforms.csv'))
