@@ -65,10 +65,9 @@ jobs:
 
 
       - run:
-          name: Check failures
+          name: Check coverage percentage
           command: |
             Rscript \
-              -e "message(devtools::check_failures(path = '${PKG_NAME}.Rcheck'))" \
               -e "covr::package_coverage()"
 
       - run:
