@@ -68,7 +68,6 @@ jobs:
           name: Check coverage percentage
           command: |
             Rscript \
-              -e "install.packages('covr')" \
               -e "covr::package_coverage()"
 
       - run:
