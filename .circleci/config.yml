@@ -148,7 +148,7 @@ jobs:
                   -e "drat::insertPackage('../${PKG_TARBALL}', '.')"
                 git add src/contrib/
                 git commit -m "Updated to ${PKG_NAME} ${PKG_VERSION} via CircleCI"
-                git push -q https://jakejh:${GITHUB_TOKEN}@github.com/hugheylab/drat.git
+                git push -v -q https://jakejh:${GITHUB_TOKEN}@github.com/hugheylab/drat.git
               fi
             else
               echo "Not on master, not deploying."
