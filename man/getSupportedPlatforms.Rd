@@ -7,7 +7,7 @@
 getSupportedPlatforms()
 }
 \value{
-A character array of currently supported GPLs.
+A data.table of currently supported GPLs and relevant information.
 }
 \description{
 Get the GPLs for microarray platforms that are currently supported.

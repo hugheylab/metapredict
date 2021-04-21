@@ -36,8 +36,10 @@ Imports:
   org.Mm.eg.db (>= 3.2.3),
   pheatmap (>= 1.0.7),
   RColorBrewer (>= 1.1-2),
-  sva (>= 3.18.0),
+  sva (>= 3.18.0)
 Suggests:
+  covr,
   knitr,
-  rmarkdown
+  rmarkdown,
+  withr (>= 2.4.0)
 VignetteBuilder: knitr
