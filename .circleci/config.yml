@@ -53,6 +53,7 @@ jobs:
             wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
             mv expression_data.tar.gz?dl=1 expression_data.tar.gz
             tar -xf expression_data.tar.gz
+            rm expression_data.tar.gz
             cd ../
 
       - run:
