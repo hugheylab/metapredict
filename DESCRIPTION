@@ -38,7 +38,6 @@ Imports:
   RColorBrewer (>= 1.1-2),
   sva (>= 3.18.0)
 Suggests:
-  covr,
   knitr,
   rmarkdown,
   withr (>= 2.4.0)
