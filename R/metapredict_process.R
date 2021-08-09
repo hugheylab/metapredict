@@ -12,13 +12,6 @@
 #' @importMethodsFrom BiocGenerics as.list
 NULL
 
-globalVariables(c(
-  'studyName', 'coefSparse', 'validationStudyName', 'classLevel', '.', 'study',
-  'ii', 'studyDataType', 'platformInfo', 'geneId', 'geneIdTmp', 'coefficient',
-  'mapping', '..className', '..colnamesKeep', '..cols', '..geneColname',
-  '..old', '..probeColname', 'idx', 'prob', 'probClass', 'probeSet', 'studyRow',
-  'trueClass', 'trueClassProb', '..interName', '..matchSampleColname',
-  '..matchStudyColname'))
 
 
 fixCustomCdfGeneIds = function(geneIds) {
