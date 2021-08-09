@@ -1,3 +1,6 @@
+# metapredict 1.1.1
+- Removed `globalVariables` call to alternative method to avoid check notes.
+
 # metapredict 1.1.0
 - Switched to data.table under the hood.
 

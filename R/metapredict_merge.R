@@ -1,5 +1,6 @@
 makeMatchSampleMapping = function(metadata, subStudyNames, matchSampleColname) {
 
+  study = ..cols = ..matchSampleColname = NULL
   # if (is.unsorted(subStudyNames)) {
   #   arrangeFunc = function(x) dplyr::arrange(dplyr::desc(x))
   # } else {
@@ -47,6 +48,7 @@ mergeMatchStudyData = function(
   ematAtomicList, studyMetadataAtomic, matchStudyColname, sampleMetadataAtomic,
   matchSampleColname, mergeFunc = function(x) mean(x, na.rm = TRUE)) {
 
+  study = geneId = ..matchStudyColname = ..colnamesKeep = NULL
   ematList = list()
   sampleMetadataList = list()
   sampleMetadataAtomicDT = data.table(sampleMetadataAtomic)
@@ -136,6 +138,7 @@ mergeStudyData = function(
   ematList, sampleMetadata, batchColname = 'study', covariateName = NA,
   batchCorrection = TRUE, parPrior = TRUE) {
 
+  studyName = NULL
   sampleNames = do.call(c, lapply(ematList, colnames))
   if (!all(sampleNames %in% sampleMetadata$sample)) {
     stop('sampleMetadata must have samples corresponding to the colnames of each matrix in ematList.',

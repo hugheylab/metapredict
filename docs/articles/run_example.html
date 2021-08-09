@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -85,12 +85,12 @@
 
       
 
-      </header><script src="run_example_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="run_example_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Running a gene expression meta-analysis of lung cancer subtypes</h1>
             
-            <h4 class="date">2021-03-11</h4>
+            <h4 class="date">2021-08-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/master/vignettes/run_example.Rmd"><code>vignettes/run_example.Rmd</code></a></small>
       <div class="hidden name"><code>run_example.Rmd</code></div>
@@ -120,6 +120,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">'data.table'</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/hugheylab/metapredict">'metapredict'</a></span><span class="op">)</span>
+<span class="co">#&gt; No methods found in package 'rlang' for request: '.data' when loading 'metapredict'</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">'ggplot2'</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st">'RColorBrewer'</span><span class="op">)</span>
 
@@ -192,9 +193,9 @@
 <span class="co">#&gt; The following objects are masked from 'package:data.table':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     first, second</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     expand.grid</span>
+<span class="co">#&gt;     expand.grid, I, unname</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'IRanges'</span>
 <span class="co">#&gt; The following object is masked from 'package:data.table':</span>
@@ -204,25 +205,33 @@
 <span class="co">#&gt; Loading study GSE11969...</span>
 <span class="co">#&gt; Setting options('download.file.method.GEOquery'='auto')</span>
 <span class="co">#&gt; Setting options('GEOquery.inmemory.gpl'=FALSE)</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt; Rows: 21619 Columns: 164</span>
 <span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span>
-<span class="co">#&gt; cols(</span>
-<span class="co">#&gt;   .default = col_double()</span>
-<span class="co">#&gt; )</span>
-<span class="co">#&gt; ℹ Use `spec()` for the full column specifications.</span>
+<span class="co">#&gt; Delimiter: "\t"</span>
+<span class="co">#&gt; dbl (164): ID_REF, GSM302996, GSM302997, GSM302998, GSM302999, GSM303000, GS...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span>
+<span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
 <span class="co">#&gt; File stored at:</span>
-<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpycI0F5/GPL7015.soft</span>
+<span class="co">#&gt; /var/folders/6_/33h3txjx15x3921n4g8c7cxm0000gn/T//RtmprFIA9N/GPL7015.soft</span>
+<span class="co">#&gt; Warning in `[.data.table`(featureDt, !is.na(featureDt[[interName]]) &amp;</span>
+<span class="co">#&gt; featureDt[[interName]] != : Both 'interName' and '..interName' exist in calling</span>
+<span class="co">#&gt; scope. Please remove the '..interName' variable in calling scope for clarity.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Loading study GSE29016...</span>
-<span class="co">#&gt; </span>
+<span class="co">#&gt; Rows: 48803 Columns: 73</span>
 <span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span>
-<span class="co">#&gt; cols(</span>
-<span class="co">#&gt;   .default = col_double(),</span>
-<span class="co">#&gt;   ID_REF = col_character()</span>
-<span class="co">#&gt; )</span>
-<span class="co">#&gt; ℹ Use `spec()` for the full column specifications.</span>
+<span class="co">#&gt; Delimiter: "\t"</span>
+<span class="co">#&gt; chr  (1): ID_REF</span>
+<span class="co">#&gt; dbl (72): GSM718902, GSM718903, GSM718904, GSM718905, GSM718906, GSM718907, ...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span>
+<span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
 <span class="co">#&gt; File stored at:</span>
-<span class="co">#&gt; /var/folders/5g/ksdtq8ws2_980z39rh77bx800000gn/T//RtmpycI0F5/GPL6947.soft</span>
+<span class="co">#&gt; /var/folders/6_/33h3txjx15x3921n4g8c7cxm0000gn/T//RtmprFIA9N/GPL6947.soft</span>
+<span class="co">#&gt; Warning in `[.data.table`(featureDt, !is.na(featureDt[[interName]]) &amp;</span>
+<span class="co">#&gt; featureDt[[interName]] != : Both 'interName' and '..interName' exist in calling</span>
+<span class="co">#&gt; scope. Please remove the '..interName' variable in calling scope for clarity.</span>
 <span class="co">#&gt; Loading study GSE30219...</span>
 <span class="co">#&gt; Loading required package: hgu133plus2hsentrezgcdf</span>
 <span class="co">#&gt; </span></code></pre></div>
@@ -269,7 +278,9 @@
 
 <span class="fu"><a href="../reference/plotCoefficients.html">plotCoefficients</a></span><span class="op">(</span><span class="va">fitResult</span>, <span class="va">lambda</span>, classLevels <span class="op">=</span> <span class="va">classLevels</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">'qual'</span>, palette <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="run_example_files/figure-html/unnamed-chunk-7-1.png" width="384"></p>
 </div>
 <div id="expression-of-selected-genes-in-the-discovery-set" class="section level2">
@@ -287,7 +298,10 @@
 
 <span class="fu"><a href="../reference/plotExpressionHeatmap.html">plotExpressionHeatmap</a></span><span class="op">(</span>
   <span class="va">fitResult</span>, <span class="va">lambda</span>, <span class="va">ematDiscovery</span>, <span class="va">sampleMetadata</span>, <span class="va">annoLevels</span>, <span class="va">annoColors</span>,
-  classLevels <span class="op">=</span> <span class="va">classLevels</span>, fontsize_row <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+  classLevels <span class="op">=</span> <span class="va">classLevels</span>, fontsize_row <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
+<span class="co">#&gt; Warning in `[.data.table`(mergeDataTable(colnames(ematMerged),</span>
+<span class="co">#&gt; sampleMetadata), : Both 'cols' and '..cols' exist in calling scope. Please</span>
+<span class="co">#&gt; remove the '..cols' variable in calling scope for clarity.</span></code></pre></div>
 <p><img src="run_example_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div id="predict-subtype-for-samples-in-the-validation-dataset" class="section level2">
@@ -303,7 +317,10 @@
 <span class="co">#&gt; Standardizing Data across genes</span>
 <span class="co">#&gt; Fitting L/S model and finding priors</span>
 <span class="co">#&gt; Finding parametric adjustments</span>
-<span class="co">#&gt; Adjusting the Data</span></code></pre></div>
+<span class="co">#&gt; Adjusting the Data</span>
+<span class="co">#&gt; Warning in `[.data.table`(yDTM, , ..className): Both 'className' and</span>
+<span class="co">#&gt; '..className' exist in calling scope. Please remove the '..className' variable</span>
+<span class="co">#&gt; in calling scope for clarity.</span></code></pre></div>
 </div>
 <div id="confusion-matrix-for-validation-samples" class="section level2">
 <h2 class="hasAnchor">

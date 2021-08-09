@@ -56,6 +56,7 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
 calcConfusionValidation = function(
   predsList, lambda, sampleMetadata, className = 'class', classLevels = NA,
   each = TRUE) {
+  validationStudyName = NULL
 
   if (is.na(classLevels[1])) {
     classLevels = colnames(predsList[[1]])}

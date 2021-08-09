@@ -9,6 +9,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE}
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 5)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.retina = 4)
 ```
 

@@ -10,6 +10,7 @@
 #' @importMethodsFrom Biobase pData
 #' @importMethodsFrom Biobase phenoData
 #' @importMethodsFrom BiocGenerics as.list
+#' @importMethodsFrom rlang .data
 NULL
 
 
@@ -33,6 +34,7 @@ fixCelSampleNames = function(sampleNames) {
 
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
+  ..old = probeSet = NULL
   mapping = fread(mappingFilePath)
   old = c('Probe.Set.Name', 'Affy.Probe.Set.Name')
   mappingUnique = unique(mapping[, ..old])
@@ -43,6 +45,7 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 
 
 getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
+  ..probeColname = ..geneColname = probeSet = geneId = NULL
   mapping = featureDt[, c(..probeColname, ..geneColname)]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')), ]
   setnames(mapping, c(probeColname, geneColname), c('probeSet', 'geneId'))
@@ -52,6 +55,7 @@ getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID'
 
 
 getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
+  ..interName = probeSet = NULL
   mappingProbeIntermediate = featureDt[
     !is.na(featureDt[[interName]]) & featureDt[[interName]]!='',
     c('ID', ..interName)]
@@ -73,6 +77,7 @@ getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
 
 
 calcExprsByGene = function(eset, mapping) {
+  geneId = NULL
   geneIds = unique(mapping$geneId)
   exprsByGene = matrix(nrow = length(geneIds), ncol = ncol(eset),
                        dimnames = list(geneIds, Biobase::sampleNames(eset)))
@@ -105,6 +110,7 @@ getSupportedPlatforms = function() {
 #'
 #' @export
 getUnsupportedPlatforms = function(studyMetadata) {
+  studyDataType = platformInfo = NULL
   # unsupportedPlatforms = studyMetadata %>%
   #   dplyr::filter(studyDataType == 'series_matrix',
   #                 !(platformInfo %in% getSupportedPlatforms())) %>%
@@ -138,6 +144,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
 #'
 #' @export
 getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo) {
+  platform = NULL
   cat(sprintf('Loading study %s...\n', studyName))
   if (studyDataType %in% c('affy_geo', 'affy_custom')) {
     require(platformInfo, character.only = TRUE)
@@ -258,6 +265,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 #'
 #' @export
 getStudyDataList = function(parentFolderPath, studyMetadata) {
+  studyRow = NULL
   # esetList = foreach(ii = 1:nrow(studyMetadata)) %do% {
   #   if (any(is.na(studyMetadata[ii,]))) {
   #     NA
@@ -284,6 +292,7 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 #'
 #' @export
 extractExpressionData = function(esetList, sampleMetadata) {
+  study = studyName = NULL
   ematList = foreach(studyName = names(esetList)) %do% {
     # sampleNamesNow = dplyr::filter(sampleMetadata, study == studyName)$sample
     sampleNamesNow = data.table(sampleMetadata)[study == studyName]$sample

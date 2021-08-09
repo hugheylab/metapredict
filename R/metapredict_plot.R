@@ -20,6 +20,7 @@ plotCoefficients = function(
   fitResult, lambda, classLevels = NA, decreasing = FALSE, geneIdOrder = NA,
   org = 'org.Hs.eg') {
 
+  geneId = NULL
   # coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
   # coefDf = coefDf[coefDf$geneId != '(Intercept)',]
   coefDt = makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
@@ -31,7 +32,7 @@ plotCoefficients = function(
     geneSymbols = do.call(c, annotate::lookUp(coefDt$geneId, org, 'SYMBOL', load = TRUE))
     coefDt[, geneId := factor(
       geneId, levels = rev(geneId), labels = sprintf('%s (%s)', rev(geneSymbols), rev(geneId)))]
-    p = ggplot(coefDt) + geom_bar(aes(x = geneId, y = coefficient), stat = 'identity')
+    p = ggplot(coefDt) + geom_bar(aes(x = .data$geneId, y = .data$coefficient), stat = 'identity')
 
   } else {
     if (is.na(classLevels[1])) {
@@ -47,8 +48,8 @@ plotCoefficients = function(
     coefDtMolten[, geneId := factor(
       geneId, levels = rev(geneIds), labels = sprintf('%s (%s)', rev(geneSymbols), rev(geneIds)))]
 
-    p = ggplot(coefDtMolten) + facet_wrap(vars(class), ncol = ncol(coefDt) - 1) +
-      geom_bar(aes(x = geneId, y = coefficient, fill = class), stat = 'identity') +
+    p = ggplot(coefDtMolten) + facet_wrap(vars(.data$class), ncol = ncol(coefDt) - 1) +
+      geom_bar(aes(x = .data$geneId, y = .data$coefficient, fill = .data$class), stat = 'identity') +
       guides(fill = FALSE)}
 
   return(p + coord_flip() + labs(x = 'Gene', y = 'Coefficient') + theme_light())}
@@ -88,6 +89,7 @@ plotExpressionHeatmap = function(
   clusterTogether = FALSE, geneIdOrder = NA, className = 'class',
   classLevels = NA, org = 'org.Hs.eg', maxVal = 3, ...) {
 
+  geneId = classLevel = ..cols = NULL
   # coefDf = makeCoefDf(fitResult, lambda)
   coefDt = makeCoefDt(fitResult, lambda)
   geneIds = coefDt[geneId != '(Intercept)']$geneId
@@ -177,6 +179,7 @@ plotClassProbsCv = function(
   cvFit, lambda, ematMerged, sampleMetadata, className = 'class',
   classLevels = NA, size = 1.5, ggplotArgs = NA) {
 
+  study = trueClass = trueClassProb = idx = NULL
   sampleNames = colnames(ematMerged)
   # sm = tibble::tibble(sample = sampleNames) %>%
   #   dplyr::inner_join(sampleMetadata, by='sample')
@@ -226,8 +229,8 @@ plotClassProbsCv = function(
                     variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
-      facet_grid(rows = vars(study), cols = vars(trueClass), scales = 'free_x', space = 'free_x') +
-      geom_point(aes(x = idx, y = prob, color = probClass, shape = probClass), size = size) +
+      facet_grid(rows = vars(.data$study), cols = vars(.data$trueClass), scales = 'free_x', space = 'free_x') +
+      geom_point(aes(x = .data$idx, y = .data$prob, color = .data$probClass, shape = .data$probClass), size = size) +
       labs(x = 'Sample', y = 'Probability') + theme_light() + theme(legend.title = element_blank())
 
     if (!is.na(ggplotArgs[1])) {
@@ -260,6 +263,7 @@ plotClassProbsCv = function(
 plotClassProbsValidation = function(
   predsList, sampleMetadata, className, classLevels, size = 1.5, ggplotArgs = NA) {
 
+  study = trueClass = trueClassProb = idx = NULL
   pList = list()
   for (validationStudyName in names(predsList)) {
     dt = data.table(predsList[[validationStudyName]][, , 1], keep.rownames = 'sample')
@@ -286,8 +290,8 @@ plotClassProbsValidation = function(
                     variable.factor = FALSE, value.name = 'prob')
 
     p = ggplot(dfMolten) +
-      facet_grid(rows = vars(study), cols = vars(trueClass), scales = 'free_x', space = 'free_x') +
-      geom_point(aes(x = idx, y = prob, color = probClass, shape = probClass), size = size) +
+      facet_grid(rows = vars(.data$study), cols = vars(.data$trueClass), scales = 'free_x', space = 'free_x') +
+      geom_point(aes(x = .data$idx, y = .data$prob, color = .data$probClass, shape = .data$probClass), size = size) +
       labs(x = 'Sample', y = 'Probability') + theme_light() + theme(legend.title = element_blank())
 
     if (!is.na(ggplotArgs[1])) {

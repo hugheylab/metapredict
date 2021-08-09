@@ -112,6 +112,7 @@ metapredictCv = function(ematMerged, sampleMetadata, weights, alpha, nFolds = 10
 metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda, weights,
                        batchColname = 'study', covariateName = NA, className = 'class', type = 'response', ...) {
 
+  study = validationStudyName = ..className = NULL
   # discoverySampleNames = dplyr::filter(sampleMetadata, study %in% discoveryStudyNames)$sample
 
   sampleMetadataDT = data.table(sampleMetadata)
@@ -200,6 +201,7 @@ metapredict = function(ematList, studyMetadata, sampleMetadata, discoveryStudyNa
 #'
 #' @export
 makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
+  coefSparse = NULL
   coefResult = glmnet::coef.glmnet(fitResult, s = lambda)
 
   if (is.list(coefResult)) {
