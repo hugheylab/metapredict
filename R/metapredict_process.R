@@ -2,6 +2,7 @@
 #' @import ggplot2
 #' @import methods
 #' @importFrom foreach foreach %do% %dopar%
+#' @importFrom rlang .data
 #' @importMethodsFrom AnnotationDbi mappedkeys
 #' @importMethodsFrom Biobase experimentData
 #' @importMethodsFrom Biobase exprs
@@ -10,9 +11,7 @@
 #' @importMethodsFrom Biobase pData
 #' @importMethodsFrom Biobase phenoData
 #' @importMethodsFrom BiocGenerics as.list
-#' @importFrom rlang .data
 NULL
-
 
 
 fixCustomCdfGeneIds = function(geneIds) {
@@ -146,6 +145,7 @@ getUnsupportedPlatforms = function(studyMetadata) {
 getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo) {
   platform = NULL
   cat(sprintf('Loading study %s...\n', studyName))
+
   if (studyDataType %in% c('affy_geo', 'affy_custom')) {
     require(platformInfo, character.only = TRUE)
 
@@ -266,13 +266,6 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
 #' @export
 getStudyDataList = function(parentFolderPath, studyMetadata) {
   studyRow = NULL
-  # esetList = foreach(ii = 1:nrow(studyMetadata)) %do% {
-  #   if (any(is.na(studyMetadata[ii,]))) {
-  #     NA
-  #   } else {
-  #     getStudyData(parentFolderPath, studyMetadata$study[ii],
-  #                  studyMetadata$studyDataType[ii],
-  #                  studyMetadata$platformInfo[ii])}}
   esetList = foreach(studyRow = iterators::iter(studyMetadata, by = 'row')) %do% {
     if (any(is.na(studyRow))) {
       NA
@@ -294,7 +287,6 @@ getStudyDataList = function(parentFolderPath, studyMetadata) {
 extractExpressionData = function(esetList, sampleMetadata) {
   study = studyName = NULL
   ematList = foreach(studyName = names(esetList)) %do% {
-    # sampleNamesNow = dplyr::filter(sampleMetadata, study == studyName)$sample
     sampleNamesNow = data.table(sampleMetadata)[study == studyName]$sample
     keepIdx = colnames(esetList[[studyName]]) %in% sampleNamesNow
     exprs(esetList[[studyName]])[, keepIdx]}

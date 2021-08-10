@@ -21,8 +21,6 @@ plotCoefficients = function(
   org = 'org.Hs.eg') {
 
   geneId = NULL
-  # coefDf = makeCoefDf(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
-  # coefDf = coefDf[coefDf$geneId != '(Intercept)',]
   coefDt = makeCoefDt(fitResult, lambda, decreasing = decreasing, classLevels = classLevels)
   coefDt = coefDt[geneId != '(Intercept)']
 
@@ -38,7 +36,6 @@ plotCoefficients = function(
     if (is.na(classLevels[1])) {
       classLevels = colnames(coefDt)[2:ncol(coefDt)]}
 
-    # coefDfMolten = tidyr::gather(coefDf, key=class, value=coefficient, -geneId)
     coefDtMolten = melt(coefDt, id.vars = 'geneId', variable.name = 'class',
                         variable.factor = FALSE, value.name = 'coefficient')
     coefDtMolten[, class := factor(class, levels = classLevels)]
@@ -90,7 +87,6 @@ plotExpressionHeatmap = function(
   classLevels = NA, org = 'org.Hs.eg', maxVal = 3, ...) {
 
   geneId = classLevel = ..cols = NULL
-  # coefDf = makeCoefDf(fitResult, lambda)
   coefDt = makeCoefDt(fitResult, lambda)
   geneIds = coefDt[geneId != '(Intercept)']$geneId
   geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load = TRUE))
@@ -105,21 +101,15 @@ plotExpressionHeatmap = function(
     emat = emat[,co$order]
   } else {
     if (is.na(classLevels[1])) {
-      # sm = dplyr::filter(sampleMetadata, sample %in% colnames(ematMerged))
       sm = data.table(sampleMetadata)[sample %in% colnames(ematMerged)]
       classLevels = unique(sm[[className]])}
 
-    # ematSmallList = foreach(classLevel=classLevels) %do% {
     emat = foreach(classLevel = classLevels, .combine = cbind) %do% {
-      # sampleNames1 = sampleMetadata %>%
-      #   dplyr::filter_(lazyeval::interp(~ a==classLevel, a=as.name(className))) %>%
-      #   .$sample
       sampleNames1 = sampleMetadata$sample[sampleMetadata[[className]] == classLevel]
       x = emat[, colnames(emat) %in% sampleNames1]
       d = stats::dist(t(x))
       co = cba::order.optimal(d, stats::hclust(d)$merge)
       x = x[, co$order]}}
-    # emat = do.call(cbind, ematSmallList)}
 
   # order the genes
   if (is.na(geneIdOrder[1])) {
@@ -136,10 +126,6 @@ plotExpressionHeatmap = function(
   emat[emat > maxVal] = maxVal
   emat[emat < (-maxVal)] = -maxVal
 
-  # annotation = tibble::tibble(sample = colnames(ematMerged)) %>%
-  #   dplyr::inner_join(sampleMetadata, by='sample') %>%
-  #   dplyr::select(!!names(annoLevels)) %>%
-  #   as.data.frame()
   cols = names(annoLevels)
   annotation = as.data.frame(mergeDataTable(colnames(ematMerged), sampleMetadata)[, ..cols])
   rownames(annotation) = colnames(ematMerged)
@@ -181,8 +167,6 @@ plotClassProbsCv = function(
 
   study = trueClass = trueClassProb = idx = NULL
   sampleNames = colnames(ematMerged)
-  # sm = tibble::tibble(sample = sampleNames) %>%
-  #   dplyr::inner_join(sampleMetadata, by='sample')
   sm = mergeDataTable(sampleNames, sampleMetadata)
   studyNames = sort(unique(sm$study))
 
@@ -192,27 +176,13 @@ plotClassProbsCv = function(
   cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
   pList = list()
   for (studyName in studyNames) {
-    # sampleNamesNow = dplyr::filter(sm, study==studyName)$sample
     sampleNamesNow = sm[study == studyName]$sample
-    # df = tibble::as_tibble(cvProbs[sm$study==studyName,])
-    # df = as.data.frame(cvProbs[sm$study == studyName,])
-    # colnames(df) = names(cvFit$glmnet.fit$beta)
-    # df$study = studyName
-    # df$sample = sampleNamesNow
-    # # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
-    # df$trueClass = factor(data.table(sm)[sample %in% sampleNamesNow,][[className]], levels = classLevels)
-    #
-    # df$trueClassProb = apply(df, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))
-    #
-    # df = df[order(df$trueClass, -df$trueClassProb),]
-    # df = do.call(rbind, lapply(classLevels, function(x) df[df$trueClass == x,]))
 
     dt = data.table(cvProbs[sm$study == studyName, ])
     setnames(dt, names(cvFit$glmnet.fit$beta))
     dt[, study := studyName]
     dt[, sample := sampleNamesNow]
-    # df$trueClass = factor(dplyr::filter(sm, sample %in% sampleNamesNow)[[className]], levels=classLevels)
-    dt[, trueClass := factor(sm[sample %in% sampleNamesNow, ][[className]], levels = classLevels)]
+    dt[, trueClass := factor(sm[sample %in% sampleNamesNow, ][[className]], classLevels)]
 
     dt[, trueClassProb := apply(dt, MARGIN = 1, function(x) as.numeric(x[x['trueClass']]))]
 
@@ -224,7 +194,6 @@ plotClassProbsCv = function(
       if (any(dt$trueClass == classLevel)) {
         idxTmp = c(idxTmp, 1:(sum(dt$trueClass == classLevel)))}}
     dt[, idx := idxTmp]
-    # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
     dfMolten = melt(dt, measure.vars = classLevels, variable.name = 'probClass',
                     variable.factor = FALSE, value.name = 'prob')
 
@@ -238,8 +207,7 @@ plotClassProbsCv = function(
         p = p + ggplotArg}}
     pList[[studyName]] = p}
 
-  # g = do.call(gridExtra::arrangeGrob, c(pList, list(nrow=length(studyNames))))
-  p = cowplot::plot_grid(plotlist = pList, ncol = 1, align = 'h')
+  p = cowplot::plot_grid(plotlist = pList, ncol = 1L, align = 'h')
   return(p)}
 
 
@@ -266,9 +234,7 @@ plotClassProbsValidation = function(
   study = trueClass = trueClassProb = idx = NULL
   pList = list()
   for (validationStudyName in names(predsList)) {
-    dt = data.table(predsList[[validationStudyName]][, , 1], keep.rownames = 'sample')
-    # sm = tibble::tibble(sample = rownames(df)) %>%
-    #   dplyr::inner_join(sampleMetadata, by='sample')
+    dt = data.table(predsList[[validationStudyName]][, , 1L], keep.rownames = 'sample')
 
     sm = mergeDataTable(dt$sample, sampleMetadata)
 
@@ -285,7 +251,6 @@ plotClassProbsValidation = function(
         idxTmp = c(idxTmp, 1:(sum(dt$trueClass == classLevel)))}}
     dt[, idx := idxTmp]
 
-    # dfMolten = tidyr::gather(df, key='probClass', value='prob', !!classLevels)
     dfMolten = melt(dt, measure.vars = classLevels, variable.name = 'probClass',
                     variable.factor = FALSE, value.name = 'prob')
 
@@ -299,6 +264,5 @@ plotClassProbsValidation = function(
         p = p + ggplotArg}}
     pList[[validationStudyName]] = p}
 
-  # g = do.call(gridExtra::arrangeGrob, c(pList, list(nrow=length(predsList))))
-  p = cowplot::plot_grid(plotlist = pList, ncol = 1, align = 'h')
+  p = cowplot::plot_grid(plotlist = pList, ncol = 1L, align = 'h')
   return(p)}
