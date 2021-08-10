@@ -14,7 +14,7 @@ LazyData: TRUE
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Depends:
-  R (>= 3.2)
+  R (>= 3.5)
 Imports:
   affy (>= 1.48.0),
   annotate (>= 1.48.0),

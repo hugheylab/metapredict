@@ -10,7 +10,7 @@
 #' @importMethodsFrom Biobase pData
 #' @importMethodsFrom Biobase phenoData
 #' @importMethodsFrom BiocGenerics as.list
-#' @importMethodsFrom rlang .data
+#' @importFrom rlang .data
 NULL
 
 
