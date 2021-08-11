@@ -1,7 +1,7 @@
 Package: metapredict
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: as.person(c(
   "Jake Hughey <jakejhughey@gmail.com> [aut, cre]",
   "Josh Schoenbachler <joshschoenbachler@gmail.com> [aut]"))
@@ -14,7 +14,7 @@ LazyData: TRUE
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Depends:
-  R (>= 3.2)
+  R (>= 3.5)
 Imports:
   affy (>= 1.48.0),
   annotate (>= 1.48.0),
@@ -36,9 +36,11 @@ Imports:
   org.Mm.eg.db (>= 3.2.3),
   pheatmap (>= 1.0.7),
   RColorBrewer (>= 1.1-2),
+  rlang (>= 0.4.11),
   sva (>= 3.18.0)
 Suggests:
   knitr,
   rmarkdown,
-  withr (>= 2.4.0)
+  withr (>= 2.4.0),
+  testthat (>= 3.0.0)
 VignetteBuilder: knitr

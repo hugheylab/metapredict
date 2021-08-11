@@ -1,3 +1,6 @@
+# metapredict 1.1.1
+- Revised code to not need `globalVariables()` in order to pass R CMD check without notes.
+
 # metapredict 1.1.0
 - Switched to data.table under the hood.
 

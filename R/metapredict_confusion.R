@@ -25,10 +25,6 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
   preds = colnames(cvProbs)[apply(cvProbs, MARGIN = 1, function(x) which.max(x))]
   predictedClass = factor(preds, levels = classLevels)
 
-  # classValues = tibble::tibble(sample = colnames(ematMerged)) %>%
-  #   dplyr::inner_join(sampleMetadata) %>%
-  #   .[[className]]
-
   classValues = mergeDataTable(colnames(ematMerged), sampleMetadata)[[className]]
   trueClass = factor(classValues, levels = classLevels)
   return(table(trueClass, predictedClass))}
@@ -56,6 +52,7 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
 calcConfusionValidation = function(
   predsList, lambda, sampleMetadata, className = 'class', classLevels = NA,
   each = TRUE) {
+  validationStudyName = NULL
 
   if (is.na(classLevels[1])) {
     classLevels = colnames(predsList[[1]])}
@@ -67,9 +64,6 @@ calcConfusionValidation = function(
                                              function(x) which.max(x))]
       predictedClass = factor(predsClass, levels = classLevels)
 
-      # sm = tibble::tibble(sample = rownames(predsProb)) %>%
-      #   dplyr::inner_join(sampleMetadata, by = 'sample')
-
       sm = mergeDataTable(rownames(predsProb), sampleMetadata)
       trueClass = factor(sm[[className]], levels = classLevels)
       conf = table(trueClass, predictedClass)}
@@ -80,9 +74,6 @@ calcConfusionValidation = function(
     predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                            function(x) which.max(x))]
     predictedClass = factor(predsClass, levels = classLevels)
-
-    # sm = tibble::tibble(sample = rownames(predsProb)) %>%
-    #   dplyr::inner_join(sampleMetadata, by = 'sample')
 
     sm = mergeDataTable(rownames(predsProb), sampleMetadata)
     trueClass = factor(sm[[className]], levels = classLevels)
