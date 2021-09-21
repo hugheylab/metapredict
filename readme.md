@@ -30,12 +30,6 @@ if (!requireNamespace('BiocManager', quietly = TRUE))
 BiocManager::install('metapredict', site_repository = 'https://hugheylab.github.io/drat/')
 ```
 
-There's also a [docker image](https://hub.docker.com/r/hugheylab/hugheyverse), which has all dependencies installed.
-
-```bash
-docker pull hugheylab/hugheyverse
-```
-
 ## Usage
 
 Go through the vignettes to
