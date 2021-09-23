@@ -38,6 +38,21 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
+      - name: Install CDF packages for vignettes
+        run: |
+          Rscript \
+            -e 'source("R/metapredict_utils.R")' \
+            -e 'installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))'
+
+      - name: Download vignette folder
+        run: |
+          cd vignettes
+          wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
+          mv expression_data.tar.gz?dl=1 expression_data.tar.gz
+          tar -xf expression_data.tar.gz
+          rm expression_data.tar.gz
+          cd ../
+
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
@@ -74,6 +89,31 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: covr
+
+      - name: Download update for blas issue
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libxt6
+          git clone https://github.com/bmbolstad/preprocessCore.git
+          cd preprocessCore/
+          R CMD INSTALL --configure-args="--disable-threading" .
+          cd ../
+          rm -rf preprocessCore
+
+      - name: Install CDF packages for vignettes
+        run: |
+          Rscript \
+            -e 'source("R/metapredict_utils.R")' \
+            -e 'installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))'
+
+      - name: Download vignette folder
+        run: |
+          cd vignettes
+          wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
+          mv expression_data.tar.gz?dl=1 expression_data.tar.gz
+          tar -xf expression_data.tar.gz
+          rm expression_data.tar.gz
+          cd ../
 
       - name: Test coverage
         run: covr::codecov()
