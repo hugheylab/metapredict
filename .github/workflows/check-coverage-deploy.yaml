@@ -44,15 +44,6 @@ jobs:
           installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))
         shell: Rscript {0}
 
-      - name: Download vignette folder
-        run: |
-          cd vignettes
-          wget "https://www.dropbox.com/s/gdrbmn38261dsy7/expression_data.tar.gz?dl=1"
-          mv expression_data.tar.gz?dl=1 expression_data.tar.gz
-          tar -xf expression_data.tar.gz
-          rm expression_data.tar.gz
-          cd ../
-
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
