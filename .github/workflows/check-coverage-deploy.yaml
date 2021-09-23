@@ -40,9 +40,9 @@ jobs:
 
       - name: Install CDF packages for vignettes
         run: |
-          Rscript \
-            -e 'source("R/metapredict_utils.R")' \
-            -e 'installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))'
+          source("R/metapredict_utils.R")
+          installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))
+        shell: Rscript {0}
 
       - name: Download vignette folder
         run: |
@@ -102,9 +102,9 @@ jobs:
 
       - name: Install CDF packages for vignettes
         run: |
-          Rscript \
-            -e 'source("R/metapredict_utils.R")' \
-            -e 'installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))'
+          source("R/metapredict_utils.R")
+          installCustomCdfPackages(c("hgu95av2hsentrezgcdf", "hgu133plus2hsentrezgcdf"))
+        shell: Rscript {0}
 
       - name: Download vignette folder
         run: |
