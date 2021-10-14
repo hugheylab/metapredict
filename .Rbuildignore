@@ -7,5 +7,5 @@
 ^_pkgdown\.yml$
 ^docs$
 ^\.circleci$
-^NEWS.md$
-^.github$
+^NEWS\.md$
+^\.github$
