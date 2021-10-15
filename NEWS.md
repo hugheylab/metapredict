@@ -1,3 +1,6 @@
+# metapredict 1.1.2
+- Tweaked usage of `data.table` to avoid warnings.
+
 # metapredict 1.1.1
 - Revised code to not need `globalVariables()` in order to pass R CMD check without notes.
 

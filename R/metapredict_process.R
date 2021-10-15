@@ -33,10 +33,10 @@ fixCelSampleNames = function(sampleNames) {
 
 
 getGeneProbeMappingAffy = function(mappingFilePath) {
-  ..old = probeSet = NULL
+  probeSet = NULL
   mapping = fread(mappingFilePath)
   old = c('Probe.Set.Name', 'Affy.Probe.Set.Name')
-  mappingUnique = unique(mapping[, ..old])
+  mappingUnique = unique(mapping[, old, with = FALSE])
   mappingUnique = mappingUnique[apply(mappingUnique, MARGIN = 1, function(r) !any(is.na(r))), ]
   setnames(mappingUnique, old, c('geneId', 'probeSet'))
   mappingUnique[, probeSet := as.character(probeSet)]
@@ -44,8 +44,8 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 
 
 getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
-  ..probeColname = ..geneColname = probeSet = geneId = NULL
-  mapping = featureDt[, c(..probeColname, ..geneColname)]
+  probeSet = geneId = NULL
+  mapping = featureDt[, c(probeColname, geneColname), with = FALSE]
   mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')), ]
   setnames(mapping, c(probeColname, geneColname), c('probeSet', 'geneId'))
   mapping[, probeSet := as.character(probeSet)]
@@ -54,10 +54,10 @@ getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID'
 
 
 getGeneProbeMappingAnno = function(featureDt, dbName, interName) {
-  ..interName = probeSet = NULL
+  probeSet = NULL
   mappingProbeIntermediate = featureDt[
-    !is.na(featureDt[[interName]]) & featureDt[[interName]]!='',
-    c('ID', ..interName)]
+    !is.na(featureDt[[interName]]) & featureDt[[interName]] != '',
+    c('ID', interName), with = FALSE]
   setnames(mappingProbeIntermediate, c('ID', interName), c('probeSet', 'geneInter'))
 
   mapTmp1 = eval(parse(text = sprintf('%s.db::%s', substr(dbName, 1, 9), dbName)))
