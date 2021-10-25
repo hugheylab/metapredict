@@ -9,3 +9,4 @@
 ^\.circleci$
 ^NEWS\.md$
 ^\.github$
+^codecov\.yml$
