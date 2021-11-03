@@ -3,7 +3,7 @@
 ^.*expression_data$
 ^.*expression_data\.rds$
 ^.*expression_data\.tar.gz$
-^readme\.md$
+^README\.md$
 ^_pkgdown\.yml$
 ^docs$
 ^\.circleci$

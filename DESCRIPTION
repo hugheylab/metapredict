@@ -7,7 +7,7 @@ Authors@R: as.person(c(
   "Josh Schoenbachler <joshschoenbachler@gmail.com> [aut]"))
 Description: An approach for merging multiple datasets of genome-wide gene
   expression for predictive modeling.
-URL: https://github.com/hugheylab/metapredict
+URL: https://metapredict.hugheylab.org, https://github.com/hugheylab/metapredict
 License: GPL-2
 Encoding: UTF-8
 LazyData: TRUE

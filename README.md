@@ -2,33 +2,35 @@
 
 [![check-deploy](https://github.com/hugheylab/metapredict/workflows/check-deploy/badge.svg)](https://github.com/hugheylab/metapredict/actions)
 [![codecov](https://codecov.io/gh/hugheylab/metapredict/branch/master/graph/badge.svg?token=nRgjANwZ6s)](https://codecov.io/gh/hugheylab/metapredict)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6ff1bdb7-ea07-4c5f-9a52-f27f9eae8554/deploy-status)](https://app.netlify.com/sites/infallible-spence-3f03b0/deploys)
 
 `metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you don't want or need to run the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and to map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
 
 ## Installation
 
-If you use RStudio, go to Tools -> Global Options... -> Packages -> Add... (under Secondary repositories), then enter:
+1. Install [`BiocManager`](https://cran.r-project.org/package=BiocManager).
 
-- Name: hugheylab
-- Url: https://hugheylab.github.io/drat/
+    ```r
+    if (!requireNamespace('BiocManager', quietly = TRUE))
+      install.packages('BiocManager')
+    ```
 
-You only have to do this once. Then you can install or update the package by entering:
+1. If you use RStudio, go to Tools → Global Options... → Packages → Add... (under Secondary repositories), then enter:
 
-```R
-if (!requireNamespace('BiocManager', quietly = TRUE))
-  install.packages('BiocManager')
+    - Name: hugheylab
+    - Url: https://hugheylab.github.io/drat/
 
-BiocManager::install('metapredict')
-```
+    You only have to do this once. Then you can install or update the package by entering:
 
-Alternatively, you can install or update the package by entering:
+    ```r
+    BiocManager::install('metapredict')
+    ```
 
-```R
-if (!requireNamespace('BiocManager', quietly = TRUE))
-  install.packages('BiocManager')
+    Alternatively, you can install or update the package by entering:
 
-BiocManager::install('metapredict', site_repository = 'https://hugheylab.github.io/drat/')
-```
+    ```r
+    BiocManager::install('metapredict', site_repository = 'https://hugheylab.github.io/drat/')
+    ```
 
 ## Usage
 
