@@ -6,7 +6,8 @@ Authors@R: as.person(c(
   "Jake Hughey <jakejhughey@gmail.com> [aut, cre]",
   "Josh Schoenbachler <joshschoenbachler@gmail.com> [aut]"))
 Description: An approach for merging multiple datasets of genome-wide gene
-  expression for predictive modeling.
+  expression for predictive modeling. See Hughey and Butte (2015)
+  <doi:10.1093/nar/gkv229>.
 URL: https://metapredict.hugheylab.org, https://github.com/hugheylab/metapredict
 License: GPL-2
 Encoding: UTF-8
