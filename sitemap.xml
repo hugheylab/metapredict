@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://metapredict.hugheylab.org/404.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/articles/guide.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/articles/prepare_example.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/articles/run_example.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/authors.html</loc>
+  </url>
+  <url>
     <loc>https://metapredict.hugheylab.org/index.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/news/index.html</loc>
   </url>
   <url>
     <loc>https://metapredict.hugheylab.org/reference/calcConfusionCv.html</loc>
@@ -26,6 +47,9 @@
   </url>
   <url>
     <loc>https://metapredict.hugheylab.org/reference/getUnsupportedPlatforms.html</loc>
+  </url>
+  <url>
+    <loc>https://metapredict.hugheylab.org/reference/index.html</loc>
   </url>
   <url>
     <loc>https://metapredict.hugheylab.org/reference/installCustomCdfPackages.html</loc>
@@ -59,14 +83,5 @@
   </url>
   <url>
     <loc>https://metapredict.hugheylab.org/reference/plotExpressionHeatmap.html</loc>
-  </url>
-  <url>
-    <loc>https://metapredict.hugheylab.org/articles/guide.html</loc>
-  </url>
-  <url>
-    <loc>https://metapredict.hugheylab.org/articles/prepare_example.html</loc>
-  </url>
-  <url>
-    <loc>https://metapredict.hugheylab.org/articles/run_example.html</loc>
   </url>
 </urlset>

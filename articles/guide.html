@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hugheylab/metapredict/">
+  <a href="https://github.com/hugheylab/metapredict/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -90,24 +86,24 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Guide to preparing data for a gene expression meta-analysis</h1>
             
-            <h4 class="date">2021-11-24</h4>
+            <h4 data-toc-skip class="date">2022-02-02</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/master/vignettes/guide.Rmd"><code>vignettes/guide.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/HEAD/vignettes/guide.Rmd" class="external-link"><code>vignettes/guide.Rmd</code></a></small>
       <div class="hidden name"><code>guide.Rmd</code></div>
 
     </div>
 
     
     
-<p>This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of <a href="https://doi.org/10.1093/nar/gkv229">Hughey and Butte (2015)</a>.</p>
-<div id="find-relevant-datasets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#find-relevant-datasets" class="anchor"></a>Find relevant datasets</h2>
+<p>This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of <a href="https://doi.org/10.1093/nar/gkv229" class="external-link">Hughey and Butte (2015)</a>.</p>
+<div class="section level2">
+<h2 id="find-relevant-datasets">Find relevant datasets<a class="anchor" aria-label="anchor" href="#find-relevant-datasets"></a>
+</h2>
 <p>The first step is to find microarray datasets relevant to what you’re interested in. Most datasets will be on NCBI GEO or ArrayExpress, but not all, so it’s a good idea to also search the literature.</p>
 </div>
-<div id="create-the-table-of-study-metadata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#create-the-table-of-study-metadata" class="anchor"></a>Create the table of study metadata</h2>
+<div class="section level2">
+<h2 id="create-the-table-of-study-metadata">Create the table of study metadata<a class="anchor" aria-label="anchor" href="#create-the-table-of-study-metadata"></a>
+</h2>
 <p>The study metadata should be a comma-delimited text file, with one row for each study and at least the following columns:</p>
 <table class="table">
 <colgroup>
@@ -194,9 +190,9 @@
 </tbody>
 </table>
 </div>
-<div id="download-the-gene-expression-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#download-the-gene-expression-data" class="anchor"></a>Download the gene expression data</h2>
+<div class="section level2">
+<h2 id="download-the-gene-expression-data">Download the gene expression data<a class="anchor" aria-label="anchor" href="#download-the-gene-expression-data"></a>
+</h2>
 <p>The format of the gene expression data for each study should correspond to its <code>studyDataType</code>. All the folders and/or files with expression data should be in one parent folder.</p>
 <table class="table">
 <colgroup>
@@ -228,9 +224,9 @@
 </tbody>
 </table>
 </div>
-<div id="if-necessary-download-packages-and-files-for-mapping-affy-probe-sets-to-entrez-gene-ids" class="section level2">
-<h2 class="hasAnchor">
-<a href="#if-necessary-download-packages-and-files-for-mapping-affy-probe-sets-to-entrez-gene-ids" class="anchor"></a>If necessary, download packages and files for mapping Affy probe sets to Entrez Gene IDs</h2>
+<div class="section level2">
+<h2 id="if-necessary-download-packages-and-files-for-mapping-affy-probe-sets-to-entrez-gene-ids">If necessary, download packages and files for mapping Affy probe sets to Entrez Gene IDs<a class="anchor" aria-label="anchor" href="#if-necessary-download-packages-and-files-for-mapping-affy-probe-sets-to-entrez-gene-ids"></a>
+</h2>
 <ol style="list-style-type: decimal">
 <li>
 <p>For studies whose <code>studyDataType</code> is <code>affy_geo</code> or <code>affy_custom</code>, install the custom CDF package(s). See the <code>installCustomCdfPackages</code> documentation for details.</p>
@@ -244,14 +240,14 @@
 </li>
 </ol>
 </div>
-<div id="check-that-all-studies-whose-studydatatype-series_matrix-are-supported" class="section level2">
-<h2 class="hasAnchor">
-<a href="#check-that-all-studies-whose-studydatatype-series_matrix-are-supported" class="anchor"></a>Check that all studies whose <code>studyDataType == 'series_matrix'</code> are supported</h2>
+<div class="section level2">
+<h2 id="check-that-all-studies-whose-studydatatype-series_matrix-are-supported">Check that all studies whose <code>studyDataType == 'series_matrix'</code> are supported<a class="anchor" aria-label="anchor" href="#check-that-all-studies-whose-studydatatype-series_matrix-are-supported"></a>
+</h2>
 <ol style="list-style-type: decimal">
 <li>
 <p>Open R and execute the following commands, replacing “&lt;path to study metadata file&gt;” as appropriate.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">studyMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">'&lt;path to study metadata file&gt;'</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">studyMetadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">'&lt;path to study metadata file&gt;'</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu">metapredict</span><span class="fu">::</span><span class="fu"><a href="../reference/getUnsupportedPlatforms.html">getUnsupportedPlatforms</a></span><span class="op">(</span><span class="va">studyMetadata</span><span class="op">)</span></code></pre></div>
 </li>
 <li>
@@ -259,14 +255,14 @@
 <ol style="list-style-type: decimal">
 <li>In the <code><a href="../reference/getStudyData.html">getStudyData()</a></code> function, add another <code>else if</code> statement that tells the function how to map probes to Entrez Gene IDs for that platform. Look at the code for currently supported platforms to see examples of how this is done.</li>
 <li>Add the GPL for the microarray platform to the character vector of supported platforms in the <code><a href="../reference/getSupportedPlatforms.html">getSupportedPlatforms()</a></code> function.</li>
-<li>Submit a pull request to <a href="https://github.com/hugheylab/metapredict" class="uri">https://github.com/hugheylab/metapredict</a>, so other people can analyze data from that platform without going through the same hassle!</li>
+<li>Submit a pull request to <a href="https://github.com/hugheylab/metapredict" class="external-link uri">https://github.com/hugheylab/metapredict</a>, so other people can analyze data from that platform without going through the same hassle!</li>
 </ol>
 </li>
 </ol>
 </div>
-<div id="create-the-table-of-sample-metadata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#create-the-table-of-sample-metadata" class="anchor"></a>Create the table of sample metadata</h2>
+<div class="section level2">
+<h2 id="create-the-table-of-sample-metadata">Create the table of sample metadata<a class="anchor" aria-label="anchor" href="#create-the-table-of-sample-metadata"></a>
+</h2>
 <p>The sample metadata should be a comma-delimited text file, with one row for each sample and at least the following columns:</p>
 <table class="table">
 <colgroup>
@@ -336,11 +332,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jake Hughey, Josh Schoenbachler.</p>
+  <p></p>
+<p>Developed by Jake Hughey, Josh Schoenbachler.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -348,6 +346,8 @@
 
   
 
+
+  
 
   </body>
 </html>

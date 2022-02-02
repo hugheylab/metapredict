@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metapredict</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hugheylab/metapredict/">
+  <a href="https://github.com/hugheylab/metapredict/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -90,46 +86,46 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Preparing to run a gene expression meta-analysis of lung cancer subtypes</h1>
             
-            <h4 class="date">2021-11-24</h4>
+            <h4 data-toc-skip class="date">2022-02-02</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/master/vignettes/prepare_example.Rmd"><code>vignettes/prepare_example.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hugheylab/metapredict/blob/HEAD/vignettes/prepare_example.Rmd" class="external-link"><code>vignettes/prepare_example.Rmd</code></a></small>
       <div class="hidden name"><code>prepare_example.Rmd</code></div>
 
     </div>
 
     
     
-<p>This vignette describes how to prepare the data to run a gene expression meta-analysis of lung cancer subtypes according to the method of <a href="https://doi.org/10.1093/nar/gkv229">Hughey and Butte (2015)</a>. You will need an internet connection to download the expression data and the custom cdf packages.</p>
+<p>This vignette describes how to prepare the data to run a gene expression meta-analysis of lung cancer subtypes according to the method of <a href="https://doi.org/10.1093/nar/gkv229" class="external-link">Hughey and Butte (2015)</a>. You will need an internet connection to download the expression data and the custom cdf packages.</p>
 <p>After completing the steps in this vignette, you can move on to run the meta-analysis described at <code><a href="../articles/run_example.html">vignette('run_example')</a></code>.</p>
 <p>The meta-analysis will use data from the following four studies:</p>
 <ul>
-<li><a href="http://www.broadinstitute.org/cgi-bin/cancer/publications/view/62">Bhattacharjee</a></li>
-<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11969">GSE11969</a></li>
-<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE29016">GSE29016</a></li>
-<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30219">GSE30219</a></li>
+<li><a href="http://www.broadinstitute.org/cgi-bin/cancer/publications/view/62" class="external-link">Bhattacharjee</a></li>
+<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11969" class="external-link">GSE11969</a></li>
+<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE29016" class="external-link">GSE29016</a></li>
+<li><a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30219" class="external-link">GSE30219</a></li>
 </ul>
-<div id="instructions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#instructions" class="anchor"></a>Instructions</h2>
+<div class="section level2">
+<h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
+</h2>
 <ol style="list-style-type: decimal">
 <li>
 <p>Install the required custom CDF packages by running the following command in R.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">metapredict</span><span class="fu">::</span><span class="fu"><a href="../reference/installCustomCdfPackages.html">installCustomCdfPackages</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'hgu95av2hsentrezgcdf'</span>, <span class="st">'hgu133plus2hsentrezgcdf'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'hgu95av2hsentrezgcdf'</span>, <span class="st">'hgu133plus2hsentrezgcdf'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </li>
 <li>
 <p>Download each of the following files (we’re only downloading a subset of the Bhattacharjee data):</p>
 <ul>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz">Bhattacharjee adeno part 1</a></li>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part2.tar.gz">Bhattacharjee adeno part 2</a></li>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part3.tar.gz">Bhattacharjee adeno part 3</a></li>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part4.tar.gz">Bhattacharjee adeno part 4</a></li>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SQ.tar.gz">Bhattacharjee squamous</a></li>
-<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SMC.tar.gz">Bhattacharjee small-cell</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part1.tar.gz" class="external-link">Bhattacharjee adeno part 1</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part2.tar.gz" class="external-link">Bhattacharjee adeno part 2</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part3.tar.gz" class="external-link">Bhattacharjee adeno part 3</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_ADENO_part4.tar.gz" class="external-link">Bhattacharjee adeno part 4</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SQ.tar.gz" class="external-link">Bhattacharjee squamous</a></li>
+<li><a href="http://pubs.broadinstitute.org/mpr/projects/LUNG/LUNG_scans_SMC.tar.gz" class="external-link">Bhattacharjee small-cell</a></li>
 <li><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE11nnn/GSE11969/matrix/GSE11969_series_matrix.txt.gz">GSE11969</a></li>
 <li><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE29nnn/GSE29016/matrix/GSE29016_series_matrix.txt.gz">GSE29016</a></li>
-<li><a href="http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE30219&amp;format=file">GSE30219</a></li>
+<li><a href="http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE30219&amp;format=file" class="external-link">GSE30219</a></li>
 </ul>
 </li>
 <li><p>Create a folder called <code>metapredict_example</code>. Inside <code>metapredict_example</code>, create a folder called <code>expression_data</code>. Inside <code>expression_data</code>, create a folder called <code>Bhattacharjee</code>.</p></li>
@@ -151,11 +147,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jake Hughey, Josh Schoenbachler.</p>
+  <p></p>
+<p>Developed by Jake Hughey, Josh Schoenbachler.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -163,6 +161,8 @@
 
   
 
+
+  
 
   </body>
 </html>
