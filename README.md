@@ -4,7 +4,9 @@
 [![codecov](https://codecov.io/gh/hugheylab/metapredict/branch/master/graph/badge.svg?token=nRgjANwZ6s)](https://codecov.io/gh/hugheylab/metapredict)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6ff1bdb7-ea07-4c5f-9a52-f27f9eae8554/deploy-status)](https://app.netlify.com/sites/infallible-spence-3f03b0/deploys)
 
-`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). Even if you don't want or need to run the elastic net, `metapredict` makes it straightforward to normalize all your microarray data and to map probes from various platforms to Entrez Gene IDs. For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
+`metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
+
+If you just want to process microarray data, and don't need to combine the expression data to perform a meta-analysis, then check out [seeker](https://hugheylab.seeker.org), which makes fetching, processing, and normalizing transcriptome data even simpler.
 
 ## Installation
 
