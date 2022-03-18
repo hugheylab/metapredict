@@ -6,7 +6,7 @@
 
 `metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
 
-If you just want to process microarray data, and don't need to combine the expression data to perform a meta-analysis, then check out [seeker](https://hugheylab.seeker.org), which makes fetching, processing, and normalizing transcriptome data even simpler.
+**If you just want to process microarray data and don't need to merge the expression data to perform a meta-analysis, then check out [seeker](https://seeker.hugheylab.org), which makes fetching, processing, and normalizing transcriptome data even simpler.**
 
 ## Installation
 
