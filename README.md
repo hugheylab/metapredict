@@ -3,6 +3,7 @@
 [![check-deploy](https://github.com/hugheylab/metapredict/workflows/check-deploy/badge.svg)](https://github.com/hugheylab/metapredict/actions)
 [![codecov](https://codecov.io/gh/hugheylab/metapredict/branch/master/graph/badge.svg?token=nRgjANwZ6s)](https://codecov.io/gh/hugheylab/metapredict)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6ff1bdb7-ea07-4c5f-9a52-f27f9eae8554/deploy-status)](https://app.netlify.com/sites/infallible-spence-3f03b0/deploys)
+[![drat version](https://raw.githubusercontent.com/hugheylab/drat/gh-pages/badges/metapredict_drat_badge.svg)](https://github.com/hugheylab/drat/tree/gh-pages/src/contrib)
 
 `metapredict` enables meta-analysis of gene expression using the elastic net (i.e., `glmnet`). For technical details, please check out the [paper](https://doi.org/10.1093/nar/gkv229).
 
