@@ -9,8 +9,8 @@ vignette: >
 ---
 
 ```{r, echo = FALSE}
-Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 5)
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.retina = 4)
+Sys.setenv('VROOM_CONNECTION_SIZE' = 131072 * 5)
+knitr::opts_chunk$set(collapse = TRUE, comment = '#>', fig.retina = 4)
 ```
 
 This vignette goes through an example of a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229). Running this meta-analysis for the first time requires an internet connection, as some SOFT files must be fetched from GEO.
@@ -78,7 +78,7 @@ ematDiscovery = mergeStudyData(ematList[discoveryStudyNames], sampleMetadata)
 Before running cross-validation, we'll use the sample metadata to create the `weights` and `foldid` vectors that will be passed to `cv.glmnet`. `metapredictCv` returns a list, with one element for each value of `alpha`. Since we're doing multinomial classification (AD, SQ, and SCLC), `cv.glmnet` uses the multinomial deviance as the measure of goodness of fit (the lower the better).
 ```{r, fig.width = 5, fig.height = 4}
 glmnetArgs = makeGlmnetArgs(
-  sampleMetadata[sampleMetadata$study %in% discoveryStudyNames,],
+  sampleMetadata[sampleMetadata$study %in% discoveryStudyNames, ],
   foldidColname = foldidColname)
 
 cvFitList = metapredictCv(

@@ -31,7 +31,7 @@ installCustomCdfPackages = function(pkgs, ver = 25) {
 downloadCustomCdfMappings = function(cdf, path = '.', ver = 25) {
   if (!dir.exists(path)) {
     dir.create(path)}
-  for (ii in 1:nrow(cdf)) {
+  for (ii in seq_len(nrow(cdf))) {
     temp = tempfile()
     utils::download.file(
       sprintf('http://mbni.org/customcdf/%d.0.0/entrezg.download/%s_%d.0.0.zip',

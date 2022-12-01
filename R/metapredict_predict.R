@@ -13,8 +13,9 @@
 #'
 #' @export
 makeGlmnetArgs = function(metadata, foldidColname = 'study', sampleColname = 'sample') {
-  foldid = as.numeric(factor(metadata[[foldidColname]],
-                             labels = 1:length(unique(metadata[[foldidColname]]))))
+  foldid = as.numeric(factor(
+    metadata[[foldidColname]],
+    labels = seq_along(unique(metadata[[foldidColname]]))))
   names(foldid) = metadata[[sampleColname]]
   weights = length(unique(foldid)) /
     do.call(c, sapply(sapply(unique(foldid), function(x) sum(foldid == x)),
@@ -109,14 +110,14 @@ metapredictCv = function(
 #' @export
 metapredict = function(
   ematList, studyMetadata, sampleMetadata, discoveryStudyNames, alpha, lambda,
-  weights,batchColname = 'study', covariateName = NA, className = 'class',
+  weights, batchColname = 'study', covariateName = NA, className = 'class',
   type = 'response', ...) {
 
   study = validationStudyName = ..className = NULL
 
   sampleMetadataDT = data.table(sampleMetadata)
   discoverySampleNames = sampleMetadataDT[which(study %in% discoveryStudyNames), sample]
-  validationStudyNames = setdiff(sort(unique(sampleMetadataDT[,study])), discoveryStudyNames)
+  validationStudyNames = setdiff(sort(unique(sampleMetadataDT[, study])), discoveryStudyNames)
 
   predsList = foreach(validationStudyName = validationStudyNames) %do% {
     validationSampleNames = sampleMetadataDT[study == validationStudyName]$sample
@@ -168,7 +169,7 @@ makeCoefDt = function(fitResult, lambda, decreasing = TRUE, classLevels = NA) {
       coefResult = coefResult[classLevels]
       coefResultNonzero = coefResultNonzero[classLevels]}
 
-    for (ii in 1:length(coefResult)) {
+    for (ii in seq_along(coefResult)) {
       setnames(coefResultNonzero[[ii]], 2, names(coefResult)[ii])}
     coefDt = Reduce(function(x, y) merge(x, y, by = 'geneId', all = TRUE), coefResultNonzero)
     decNum = if (isTRUE(decreasing)) -1L else 1L

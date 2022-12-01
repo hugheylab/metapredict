@@ -46,7 +46,7 @@ getGeneProbeMappingAffy = function(mappingFilePath) {
 getGeneProbeMappingDirect = function(featureDt, geneColname, probeColname = 'ID') {
   probeSet = geneId = NULL
   mapping = featureDt[, c(probeColname, geneColname), with = FALSE]
-  mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x!='')), ]
+  mapping = mapping[apply(mapping, MARGIN = 1, function(x) all(!is.na(x) & x != '')), ]
   setnames(mapping, c(probeColname, geneColname), c('probeSet', 'geneId'))
   mapping[, probeSet := as.character(probeSet)]
   mapping[, geneId := as.character(geneId)]
@@ -195,7 +195,7 @@ getStudyData = function(parentFolderPath, studyName, studyDataType, platformInfo
     featureDf[idx] = lapply(featureDf[idx], as.character)
     featureDt = data.table(featureDf)
 
-    platformDt = supportedPlatformsDt[platform == platformInfo,]
+    platformDt = supportedPlatformsDt[platform == platformInfo, ]
 
     if (!(is.na(platformDt$splitColumn)) && platformDt$splitColumn != '') {
       featureDt[[platformDt$interName]] = sapply(

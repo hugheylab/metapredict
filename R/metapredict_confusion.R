@@ -19,7 +19,7 @@ calcConfusionCv = function(cvFit, lambda, ematMerged, sampleMetadata,
   if (is.na(classLevels[1])) {
     classLevels = names(cvFit$glmnet.fit$beta)}
 
-  cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
+  cvProbs = cvFit$fit.preval[, , which.min(abs(cvFit$lambda - lambda))]
   rownames(cvProbs) = colnames(ematMerged)
   colnames(cvProbs) = names(cvFit$glmnet.fit$beta)
   preds = colnames(cvProbs)[apply(cvProbs, MARGIN = 1, function(x) which.max(x))]
@@ -70,7 +70,7 @@ calcConfusionValidation = function(
     names(confusion) = names(predsList)
 
   } else {
-    predsProb = do.call(rbind, lapply(predsList, function(x) x[,,1]))
+    predsProb = do.call(rbind, lapply(predsList, function(x) x[, , 1]))
     predsClass = colnames(predsProb)[apply(predsProb, MARGIN = 1,
                                            function(x) which.max(x))]
     predictedClass = factor(predsClass, levels = classLevels)

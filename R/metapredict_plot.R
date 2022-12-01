@@ -98,7 +98,7 @@ plotExpressionHeatmap = function(
   if (clusterTogether) {
     d = stats::dist(t(emat))
     co = cba::order.optimal(d, stats::hclust(d)$merge)
-    emat = emat[,co$order]
+    emat = emat[, co$order]
   } else {
     if (is.na(classLevels[1])) {
       sm = data.table(sampleMetadata)[sample %in% colnames(ematMerged)]
@@ -135,8 +135,8 @@ plotExpressionHeatmap = function(
       annotation[[annoName]] = factor(annotation[[annoName]], levels = annoLevels[[annoName]])}}
 
   p = pheatmap::pheatmap(
-    emat, color=grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = 'RdBu')))(100),
-    breaks=seq(-maxVal, maxVal, length.out = 101), cluster_rows = FALSE, cluster_cols = FALSE,
+    emat, color = grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = 'RdBu')))(100),
+    breaks = seq(-maxVal, maxVal, length.out = 101), cluster_rows = FALSE, cluster_cols = FALSE,
     treeheight_row = 0, treeheight_col = 0, show_colnames = FALSE, border_color = NA,
     annotation_col = annotation, annotation_colors = annoColors, ...)
   return(p)}
@@ -173,7 +173,7 @@ plotClassProbsCv = function(
   if (is.na(classLevels[1])) {
     classLevels = sort(unique(sm[[className]]))}
 
-  cvProbs = cvFit$fit.preval[,,which.min(abs(cvFit$lambda - lambda))]
+  cvProbs = cvFit$fit.preval[, , which.min(abs(cvFit$lambda - lambda))]
   pList = list()
   for (studyName in studyNames) {
     sampleNamesNow = sm[study == studyName]$sample

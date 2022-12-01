@@ -1,3 +1,6 @@
+# metapredict 1.1.3
+- Fixed issues caught by lintr.
+
 # metapredict 1.1.2
 - Tweaked usage of `data.table` to avoid warnings.
 

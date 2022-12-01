@@ -9,7 +9,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
 ```
 
 This vignette describes how to prepare data and metadata for a gene expression meta-analysis according to the method of [Hughey and Butte (2015)](https://doi.org/10.1093/nar/gkv229).
