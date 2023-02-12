@@ -1,7 +1,7 @@
 Package: metapredict
 Type: Package
 Title: Meta-analysis of gene expression using the elastic net
-Version: 1.1.3
+Version: 1.1.4
 Authors@R: as.person(c(
   "Jake Hughey <jakejhughey@gmail.com> [aut, cre]",
   "Josh Schoenbachler <joshschoenbachler@gmail.com> [aut]"))
@@ -12,7 +12,7 @@ URL: https://metapredict.hugheylab.org, https://github.com/hugheylab/metapredict
 License: GPL-2
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends:
   R (>= 3.5)

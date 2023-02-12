@@ -47,7 +47,7 @@ plotCoefficients = function(
 
     p = ggplot(coefDtMolten) + facet_wrap(vars(.data$class), ncol = ncol(coefDt) - 1) +
       geom_bar(aes(x = .data$geneId, y = .data$coefficient, fill = .data$class), stat = 'identity') +
-      guides(fill = FALSE)}
+      guides(fill = 'none')}
 
   return(p + coord_flip() + labs(x = 'Gene', y = 'Coefficient') + theme_light())}
 
@@ -86,7 +86,7 @@ plotExpressionHeatmap = function(
   clusterTogether = FALSE, geneIdOrder = NA, className = 'class',
   classLevels = NA, org = 'org.Hs.eg', maxVal = 3, ...) {
 
-  geneId = classLevel = ..cols = NULL
+  geneId = classLevel = NULL
   coefDt = makeCoefDt(fitResult, lambda)
   geneIds = coefDt[geneId != '(Intercept)']$geneId
   geneSymbols = do.call(c, annotate::lookUp(geneIds, org, 'SYMBOL', load = TRUE))
@@ -127,7 +127,8 @@ plotExpressionHeatmap = function(
   emat[emat < (-maxVal)] = -maxVal
 
   cols = names(annoLevels)
-  annotation = as.data.frame(mergeDataTable(colnames(ematMerged), sampleMetadata)[, ..cols])
+  annotation = as.data.frame(
+    mergeDataTable(colnames(ematMerged), sampleMetadata)[, cols, with = FALSE])
   rownames(annotation) = colnames(ematMerged)
 
   for (annoName in names(annoLevels)) {

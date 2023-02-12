@@ -1,3 +1,6 @@
+# metapredict 1.1.4
+- Fixed a few issues causing test failures.
+
 # metapredict 1.1.3
 - Fixed issues caught by lintr.
 

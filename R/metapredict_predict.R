@@ -113,23 +113,25 @@ metapredict = function(
   weights, batchColname = 'study', covariateName = NA, className = 'class',
   type = 'response', ...) {
 
-  study = validationStudyName = ..className = NULL
+  study = validationStudyName = NULL
 
   sampleMetadataDT = data.table(sampleMetadata)
-  discoverySampleNames = sampleMetadataDT[which(study %in% discoveryStudyNames), sample]
-  validationStudyNames = setdiff(sort(unique(sampleMetadataDT[, study])), discoveryStudyNames)
+  discoverySampleNames = sampleMetadataDT[
+    which(study %in% discoveryStudyNames), sample]
+  validationStudyNames = setdiff(
+    sort(unique(sampleMetadataDT[, study])), discoveryStudyNames)
 
   predsList = foreach(validationStudyName = validationStudyNames) %do% {
     validationSampleNames = sampleMetadataDT[study == validationStudyName]$sample
 
     ematListNow = ematList[c(discoveryStudyNames, validationStudyName)]
-    ematMergedDiscVal = mergeStudyData(ematListNow, sampleMetadata,
-                                       batchColname = batchColname,
-                                       covariateName = covariateName)
+    ematMergedDiscVal = mergeStudyData(
+      ematListNow, sampleMetadata, batchColname = batchColname,
+      covariateName = covariateName)
     ematMergedDisc = ematMergedDiscVal[, discoverySampleNames]
 
     yDTM = mergeDataTable(discoverySampleNames, sampleMetadataDT)
-    yDTM2 = yDTM[, ..className]
+    yDTM2 = yDTM[, className, with = FALSE]
     y = as.matrix(yDTM2)
 
     fitResult = glmnet::glmnet(
